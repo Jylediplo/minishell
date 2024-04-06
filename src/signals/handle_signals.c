@@ -6,34 +6,38 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 04:05:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/06 15:08:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char tab[2][10] = {"EXPORT", "exit"};
 
 void	handler(int sig, siginfo_t *siginfo, void *unused)
 {
     (void)siginfo;
 	(void)unused;
     
+	current_sig = sig;
 	if (sig == SIGINT)
-    {
-		printf("signal value: %d\n", siginfo->si_signo);
-    }
+	{
+		write(1, "\n", 1);
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
+	}
 }
 
-void    handle_signals(struct sigaction *catch)
+void    handle_signals(void)
 {
-	sigemptyset(catch.sa_mask);
-	*catch.sa_flags = SA_SIGINFO;
-	*catch.sa_sigaction = handler;
-	if ((sigaction(SIGUSR1, catch, 0)) == -1)
+    struct sigaction    catch;
+
+	sigemptyset(&catch.sa_mask);
+	catch.sa_flags = SA_SIGINFO;
+	catch.sa_sigaction = handler;
+	if ((sigaction(SIGUSR1, &catch, 0)) == -1)
 		return ;
-	if ((sigaction(SIGUSR2, catch, 0)) == -1)
+	if ((sigaction(SIGUSR2, &catch, 0)) == -1)
 		return ;
-	if ((sigaction(SIGINT, catch, 0)) == -1)
+	if ((sigaction(SIGINT, &catch, 0)) == -1)
 		return ;
 }
