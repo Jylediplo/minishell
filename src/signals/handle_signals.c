@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 03:20:58 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/06 04:05:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,19 @@ void	handler(int sig, siginfo_t *siginfo, void *unused)
     
 	if (sig == SIGINT)
     {
-        printf("process killed\n");
-        exit(1);
+		printf("signal value: %d\n", siginfo->si_signo);
     }
 }
 
-void    handle_signals(void)
+void    handle_signals(struct sigaction *catch)
 {
-    struct sigaction    catch;
-
-	sigemptyset(&catch.sa_mask);
-	catch.sa_flags = SA_SIGINFO;
-	catch.sa_sigaction = handler;
-	if ((sigaction(SIGUSR1, &catch, 0)) == -1)
+	sigemptyset(catch.sa_mask);
+	*catch.sa_flags = SA_SIGINFO;
+	*catch.sa_sigaction = handler;
+	if ((sigaction(SIGUSR1, catch, 0)) == -1)
 		return ;
-	if ((sigaction(SIGUSR2, &catch, 0)) == -1)
+	if ((sigaction(SIGUSR2, catch, 0)) == -1)
 		return ;
-	if ((sigaction(SIGINT, &catch, 0)) == -1)
+	if ((sigaction(SIGINT, catch, 0)) == -1)
 		return ;
 }

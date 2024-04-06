@@ -7,6 +7,6 @@
 #include <readline/readline.h>
 //signal
 #include <signal.h>
-void    handle_signals(void);
+void    handle_signals(struct sigaction *catch);
 
 #endif

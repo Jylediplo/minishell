@@ -1,7 +1,7 @@
 NAME = minishell
 
-SRCS = ./main.c \
-	   ./signals/handle_signals.c
+SRCS = main.c \
+	   signals/handle_signals.c
 
 OBJS = $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -10,12 +10,13 @@ OBJ_D = objects/
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+INCLUDEDIR = includes
 HEADER = minishell.h
 
 all:
 	@make --no-print-directory $(NAME)
 
-$(OBJ_D)%.o: $(SRC_D)%.c includes/minishell.h
+$(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/minishell.h
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
