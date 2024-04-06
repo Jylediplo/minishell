@@ -7,5 +7,6 @@
 #include <readline/readline.h>
 //signal
 #include <signal.h>
+void    handle_signals(void);
 
 #endif

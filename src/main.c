@@ -18,12 +18,10 @@ int  main(void)
 
     while (1)
     {
-    command = readline("Super prompt > ");
-    printf("command : %s \n", command);
-    free(command);
+        command = readline("Super prompt > ");
+        printf("command : %s \n", command);
+        handle_signals();
+        free(command);
     }
     return (0);
 }
-
-
-char tab[2][10] = {"EXPORT", "EXIT"};

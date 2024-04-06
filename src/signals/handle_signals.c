@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 03:09:45 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/06 03:20:58 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	handler(int sig, siginfo_t *siginfo, void *unused)
 void    handle_signals(void)
 {
     struct sigaction    catch;
-    
+
 	sigemptyset(&catch.sa_mask);
 	catch.sa_flags = SA_SIGINFO;
 	catch.sa_sigaction = handler;
