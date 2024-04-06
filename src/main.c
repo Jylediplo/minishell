@@ -30,6 +30,7 @@ int  main(void)
 			free(command);
 			break ;
 		}
+		manage_history(command);
         free(command);
     }
     return (0);

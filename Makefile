@@ -3,7 +3,8 @@ CC 					= cc
 CFLAGS 				= -Wall -Wextra -Werror
 
 SRCS 				= main.c \
-	   				signals/handle_signals.c
+	   				signals/handle_signals.c \
+					history/manage_history.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
