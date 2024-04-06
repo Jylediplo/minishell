@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 16:19:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/06 17:08:36 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ int  main(void)
 
     while (1)
     {
-        command = readline("Super prompt > ");
         handle_signals();
-		if (current_sig == 2)
+        command = readline("Super prompt > ");
+		if (!ft_strncmp(command, "\n", 1))
+			continue ;
+		if (!ft_strncmp(command, "exit", 4))
 		{
-			printf("The programme will now exit.\n");
+			write(1, "exit\n", 5);
 			free(command);
 			break ;
 		}

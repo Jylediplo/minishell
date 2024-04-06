@@ -37,9 +37,11 @@ $(OBJ_D):
 	@mkdir -p $(OBJ_D)
 
 clean:
+	@make clean -C libft
 	rm -rf $(OBJ_D)
 
 fclean: clean
+	rm -f libft/libft.a
 	rm -f $(NAME)
 
 re: fclean all

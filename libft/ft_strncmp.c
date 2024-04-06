@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 15:57:19 by pantoine          #+#    #+#             */
-/*   Updated: 2023/11/14 16:15:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/06 17:07:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (0);
 }
-/*
-#include <stdio.h>
-int	main(void)
-{
-	printf("%d", ft_strncmp("LULE", "LUL", 3));
-	return (0);
-}*/
