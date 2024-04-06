@@ -1,27 +1,37 @@
-NAME = minishell
+NAME 				= minishell
+CC 					= cc
+CFLAGS 				= -Wall -Wextra -Werror
 
-SRCS = main.c \
-	   signals/handle_signals.c
+SRCS 				= main.c \
+	   				signals/handle_signals.c
 
-OBJS = $(SRCS:%.c=$(OBJ_D)%.o)
+OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
-SRC_D = src/
-OBJ_D = objects/
+SRC_D 				= src/
+OBJ_D 				= objects/
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-INCLUDEDIR = includes
-HEADER = minishell.h
+ifeq ($(shell uname), Darwin)
+READLINEDIR 		= $(shell brew --prefix readline)
+endif
+INCLUDEDIR 			= includes
+CFLAGS				+= -I$(READLINEDIR)/include
+LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
+LIBFT				= -lft -L./libft
 
-all:
+HEADERS 			= minishell.h
+
+all: libft
 	@make --no-print-directory $(NAME)
 
 $(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/minishell.h
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
-$(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
+$(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
+	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE)
+
+libft:	
+	@make --no-print-directory -C libft
 
 $(OBJ_D):
 	@mkdir -p $(OBJ_D)
@@ -34,4 +44,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft

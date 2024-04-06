@@ -6,24 +6,25 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 04:07:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/06 16:19:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int	current_sig = 0;
+
 int  main(void)
 {
-    char				*command;
-    struct sigaction    catch;
+    char	*command;
 
     while (1)
     {
         command = readline("Super prompt > ");
-        printf("command : %s \n", command);
-        handle_signals(&catch);
-		if (catch.sa_sigaction.si_signo == 2)
+        handle_signals();
+		if (current_sig == 2)
 		{
+			printf("The programme will now exit.\n");
 			free(command);
 			break ;
 		}

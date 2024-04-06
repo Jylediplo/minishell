@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
+/*   Updated: 2024/04/06 14:50:48 by pantoine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
@@ -7,6 +19,10 @@
 #include <readline/readline.h>
 //signal
 #include <signal.h>
-void    handle_signals(struct sigaction *catch);
+//basic i/o
+#include <unistd.h>
+
+extern int	current_sig;
+void		handle_signals(void);
 
 #endif
