@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/06 16:17:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/07 13:57:31 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	handler(int sig, siginfo_t *siginfo, void *unused)
 {
-    (void)siginfo;
+	(void)siginfo;
 	(void)unused;
-    
-	current_sig = sig;
+	g_current_sig = sig;
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
@@ -27,9 +26,9 @@ void	handler(int sig, siginfo_t *siginfo, void *unused)
 	}
 }
 
-void    handle_signals(void)
+void	handle_signals(void)
 {
-    struct sigaction    catch;
+	struct sigaction	catch;
 
 	sigemptyset(&catch.sa_mask);
 	catch.sa_flags = SA_SIGINFO;
