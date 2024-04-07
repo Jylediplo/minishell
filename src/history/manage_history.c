@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 17:29:39 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/07 17:27:47 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/07 17:34:34 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_history_error(t_list **list)
 	ft_lstclear(list, free_history_data);
 	exit(1);
 }
-//test pour git
+//test pour git 1
 void	manage_history(char *command, t_list **list)
 {
 	t_history	*data;
