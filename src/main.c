@@ -16,8 +16,10 @@ int	current_sig = 0;
 
 int  main(void)
 {
-    char	*command;
+	t_list		*list;
+    char		*command;
 
+	list = NULL;
     while (1)
     {
         handle_signals();
@@ -27,10 +29,13 @@ int  main(void)
 		if (!ft_strncmp(command, "exit", 4) && ft_strlen(command) == 4)
 		{
 			write(1, "exit\n", 5);
+            ft_lstclear(&list, free_history_data);
 			free(command);
 			break ;
 		}
-		manage_history(command);
+		manage_history(command, &list);
+        if (!ft_strncmp(command, "history", 7) && ft_strlen(command) == 7)
+            ft_lst_display(list);
         free(command);
     }
     return (0);
