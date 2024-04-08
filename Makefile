@@ -16,7 +16,7 @@ READLINEDIR 		= $(shell brew --prefix readline)
 endif
 INCLUDEDIR 			= includes
 CFLAGS				+= -I$(READLINEDIR)/include
-LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
+LIBREADLINE			= -ltermcap -lreadline -lhistory -L $(READLINEDIR)/lib
 LIBFT				= -lft -L./libft
 
 HEADERS 			= minishell.h

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/07 13:56:31 by lefabreg         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:11:01 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 # include <signal.h>
 // basic i/o
 # include <unistd.h>
+# include <fcntl.h>
+# include <termcap.h>
+//# include <term.h>
 // libft
 # include "../libft/libft.h"
 
