@@ -14,12 +14,15 @@
 
 int	g_current_sig = 0;
 
-void	create_term(void)
+void	create_term(char **envp)
 {
 	char	*termtype;
 	char	term_buff[2048];
 	int		status;
+	// char	*clear;
 
+
+	(void)envp;
 	termtype = getenv("TERM");
 	if (!termtype)
 		printf("terminal type not found\n");
@@ -27,19 +30,53 @@ void	create_term(void)
 	if (!status)
 		printf("Terminal type not defined\n");
 	else if (status < 0)
-		printf("Could not access termcap database");	
-	else
-		printf("Getent value: %s\n", term_buff);
-	tputs(tgetstr("cl", NULL), 1, putchar);
+		printf("Could not access termcap database\n");	
+	// else
+	// 	printf("Getent value: %s\n", term_buff);
+	// clear = tgetstr("cl", NULL);
+    // if (clear != NULL) {
+    //     tputs(clear, 1, putchar);
+    // }
+
+
+    if (!isatty(STDOUT_FILENO)) {
+        fprintf(stderr, "STDOUT is not a terminal\n");
+        exit(EXIT_FAILURE);
+    }
+ struct termios old_termios;
+
+    if (tcgetattr(STDOUT_FILENO, &old_termios) == -1) {
+        perror("tcgetattr");
+        exit(EXIT_FAILURE);
+    }
+
+    struct termios new_termios = old_termios;
+    //new_termios.c_lflag &= ~(ICANON);
+    if (tcsetattr(STDOUT_FILENO, TCSANOW, &new_termios) == -1) {
+        perror("tcsetattr");
+        exit(EXIT_FAILURE);
+    }
+
+
+    printf("New terminal initialized\n");
+	// if (tcsetattr(STDOUT_FILENO, TCSANOW, &old_termios) == -1) {
+    //     perror("tcsetattr");
+    //     exit(EXIT_FAILURE);
+    // }
+
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
 	char	*command;
 
 	list = NULL;
-	create_term();
+	(void)argc;
+	(void)argv;
+char *path = ttyname(0);
+	printf("%s\n", path);
+	create_term(envp);
 	while (1)
 	{
 		handle_signals();
@@ -59,6 +96,13 @@ int	main(void)
 		manage_history(command, &list);
 		if (!ft_strncmp(command, "history", 7) && ft_strlen(command) == 7)
 			ft_lst_display(list);
+		if (!ft_strncmp(command, "./minishell", 11) && ft_strlen(command) == 11)
+		{
+			pid_t id;
+			id = fork();
+			if (!id)
+				execve("./minishell", ft_split("./minishell", ' '), envp);
+		}
 		free(command);
 	}
 	return (0);
