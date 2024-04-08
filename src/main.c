@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/08 17:08:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:56:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
 	char	*command;
+	pid_t id;
 
 	list = NULL;
 	(void)argc;
 	(void)argv;
-char *path = ttyname(0);
+	char *path = ttyname(0);
 	printf("%s\n", path);
 	create_term(envp);
 	while (1)
@@ -98,10 +99,11 @@ char *path = ttyname(0);
 			ft_lst_display(list);
 		if (!ft_strncmp(command, "./minishell", 11) && ft_strlen(command) == 11)
 		{
-			pid_t id;
 			id = fork();
 			if (!id)
 				execve("./minishell", ft_split("./minishell", ' '), envp);
+			else
+				wait(NULL);
 		}
 		free(command);
 	}
