@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/08 18:54:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:20:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ extern int	g_current_sig;
 void		handle_signals(void);
 
 // history
-typedef struct s_history
-{
-	int		nb;
-	char	*line;
-}			t_history;
-
-void		manage_history(char *command, t_list **list);
-void		ft_lst_display(t_list *lst);
+// typedef struct s_history
+// {
+// 	int		nb;
+// 	char	*line;
+// }			t_history;
+//
+// void		manage_history(char *command, t_list **list);
+// void		ft_lst_display(t_list *lst);
 void		free_history_data(void *data);
 
 #endif

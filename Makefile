@@ -4,7 +4,6 @@ CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
 	   				signals/handle_signals.c \
-					history/manage_history.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -16,7 +15,8 @@ READLINEDIR 		= $(shell brew --prefix readline)
 endif
 INCLUDEDIR 			= includes
 CFLAGS				+= -I$(READLINEDIR)/include
-LIBREADLINE			= -ltermcap -lreadline -lhistory -L $(READLINEDIR)/lib
+LIBTERMCAP			= -ltermcap
+LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
 LIBFT				= -lft -L./libft
 
 HEADERS 			= minishell.h
@@ -29,7 +29,7 @@ $(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/minishell.h
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
 $(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
-	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE)
+	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE) $(LIBTERMCAP)
 
 libft:	
 	@make --no-print-directory -C libft
