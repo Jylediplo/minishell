@@ -60,7 +60,7 @@ int	mainloop(int argc, char **argv, char **envp)
 	while (1)
 	{
 		handle_signals();
-		command = readline("Super prompt > ");
+		command = readline("🐚 Super prompt ➜ ");
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);
@@ -87,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	printf("%s\n", path);
 	create_term(envp);
+	restore_history();
 	mainloop(argc, argv, envp);
 	return (0);
 }

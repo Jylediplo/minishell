@@ -4,6 +4,9 @@ CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
 	   				signals/handle_signals.c \
+					history/manage_history.c \
+					get_next_line/get_next_line.c \
+					get_next_line/get_next_line_utils.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 

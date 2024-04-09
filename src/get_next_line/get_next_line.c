@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/25 20:54:46 by jyjy              #+#    #+#             */
-/*   Updated: 2024/04/09 16:20:20 by lefabreg         ###   ########lyon.fr   */
+/*   Created: 2024/04/09 16:57:21 by lefabreg          #+#    #+#             */
+/*   Updated: 2024/04/09 17:09:39 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*manage_line_with_n_for_buffer(char *buffer, size_t index)
 {

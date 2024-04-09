@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   manage_history.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/25 17:12:25 by jyjy              #+#    #+#             */
-/*   Updated: 2024/04/09 16:19:12 by lefabreg         ###   ########lyon.fr   */
+/*   Created: 2024/04/09 12:35:45 by lefabreg          #+#    #+#             */
+/*   Updated: 2024/04/09 18:58:56 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-size_t	index_for_n(char *buffer)
+void    restore_history(void)
 {
-	size_t	i;
-	size_t	is_n;
+    char    *line;
+    int fd;
 
-	i = 0;
-	is_n = 0;
-	if (!buffer)
-		return (0);
-	while (buffer[i] != '\0')
-	{
-		if (buffer[i] == '\n')
-		{
-			is_n = 1;
-			i++;
-			break ;
-		}
-		i++;
-	}
-	if (!is_n)
-		return (0);
-	return (i);
+    fd = open(".history", O_RDONLY);
+    if (fd == -1)
+        perror("fd :");
+    line = get_next_line(fd);
+    printf("")
 }
