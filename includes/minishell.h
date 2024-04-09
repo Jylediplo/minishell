@@ -27,24 +27,23 @@
 # include <termcap.h>
 # include <termios.h>
 # include <sys/wait.h>
-//# include <term.h>
 // libft
 # include "../libft/libft.h"
+
+typedef struct  s_shell
+{
+    int     argc;
+    char    **argv;
+    char    **envp;
+}   t_shell;
 
 /// functions prototype
 // signals
 extern int	g_current_sig;
 void		handle_signals(void);
 
-// history
-// typedef struct s_history
-// {
-// 	int		nb;
-// 	char	*line;
-// }			t_history;
-//
-// void		manage_history(char *command, t_list **list);
-// void		ft_lst_display(t_list *lst);
 void		free_history_data(void *data);
 
+// env variables
+char    **copy_env(char **envp);
 #endif

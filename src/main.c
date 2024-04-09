@@ -31,7 +31,7 @@ void	create_term(char **envp)
 	else if (status < 0)
 		printf("Could not access termcap database\n");
 	else
-		printf("Getent value: %s\n", term_buff);
+		printf("success\n");
 	clear = tgetstr("cl", NULL);
 	if (clear != NULL)
 		tputs(clear, 1, putchar);
@@ -45,18 +45,19 @@ void	handle_minishell_cmd(char *command, char **envp)
 	{
 		id = fork();
 		if (!id)
-			execve("./minishell", ft_split("./minishell", ' '), envp);
+		{
+			if (execve(command, ft_split(command, ' '), envp) == -1)
+				perror("minishell");
+		}
 		else
 			wait(NULL);
 	}
 }
 
-int	mainloop(int argc, char **argv, char **envp)
+int	mainloop(t_shell *shell)
 {
 	char	*command;
 
-	(void)argc;
-	(void)argv;
 	while (1)
 	{
 		handle_signals();
@@ -72,21 +73,35 @@ int	mainloop(int argc, char **argv, char **envp)
 			free(command);
 			break ;
 		}
-		handle_minishell_cmd(command, envp);
+		handle_minishell_cmd(command, shell->envp);
 		free(command);
 	}
 	return (0);
 }
 
+void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
+{
+	shell->argc = argc;
+	shell->argv = argv;
+	shell->envp = envp;
+	shell->envp = copy_env(shell->envp);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	*path;
+	t_shell	shell;
+	int		i;
 
-	path = ttyname(0);
-	(void)argv;
-	(void)argc;
-	printf("%s\n", path);
-	create_term(envp);
-	mainloop(argc, argv, envp);
+	i = 0;
+	init_shell(argc, argv, envp, &shell);
+	create_term(shell.envp);
+	//mainloop(&shell);
+	i = 0;
+	while (shell.envp[i])
+	{
+		printf("%s\n", shell.envp[i]);
+		free(shell.envp[i++]);
+	}
+	free(shell.envp);
 	return (0);
 }
