@@ -8,6 +8,7 @@ SRCS 				= main.c \
 					history/manage_list.c \
 					get_next_line/get_next_line.c \
 					get_next_line/get_next_line_utils.c \
+					parsing/parsing.c
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 

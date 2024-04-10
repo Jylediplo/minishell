@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/10 13:33:11 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/10 14:08:25 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 // signals
 extern int	g_current_sig;
 void		handle_signals(void);
+
+//parsing
+void    parse(char *command);
 
 // history
 typedef struct s_data_h
