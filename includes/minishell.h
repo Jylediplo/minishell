@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/09 12:20:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:17:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ void		handle_signals(void);
 
 void		free_history_data(void *data);
 
-// env variables
+// env variables and export functions
 char    **copy_env(char **envp);
+int    export_envar(t_shell *shell, char *to_change);
+char	*handle_quoted_sequence(t_shell *shell, char *newvalue, int *size_evar, char type);
+int		parse_evar(t_shell *shell, char *newvalue);
 #endif

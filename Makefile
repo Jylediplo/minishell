@@ -5,6 +5,7 @@ CFLAGS 				= -Wall -Wextra -Werror -g
 SRCS 				= main.c \
 	   				signals/handle_signals.c \
 					builtins/specials.c \
+					builtins/export.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/09 12:20:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/10 23:29:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 {
 	shell->argc = argc;
 	shell->argv = argv;
-	shell->envp = envp;
-	shell->envp = copy_env(shell->envp);
+	shell->envp = copy_env(envp);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -96,12 +95,10 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(argc, argv, envp, &shell);
 	create_term(shell.envp);
 	//mainloop(&shell);
+	parse_evar(&shell, "\"hel\'l\'o world\"...wh\'a\'tsup?");	
 	i = 0;
 	while (shell.envp[i])
-	{
-		printf("%s\n", shell.envp[i]);
 		free(shell.envp[i++]);
-	}
 	free(shell.envp);
 	return (0);
 }
