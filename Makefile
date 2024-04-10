@@ -5,6 +5,7 @@ CFLAGS 				= -Wall -Wextra -Werror -g
 SRCS 				= main.c \
 	   				signals/handle_signals.c \
 					history/manage_history.c \
+					history/manage_list.c \
 					get_next_line/get_next_line.c \
 					get_next_line/get_next_line_utils.c \
 

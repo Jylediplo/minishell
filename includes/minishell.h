@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/10 13:12:46 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/10 13:33:11 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_history
 void	ft_lst_display(t_list *lst);
 void    free_history_data(void	*data);
 void    restore_history(t_history *history);
+void	handle_history_error(t_list **list);
+void    add_to_list(char *command, t_history *history);
 void    add_to_history(char *command, t_history *history);
 //get_next_line
 
