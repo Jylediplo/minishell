@@ -53,10 +53,13 @@ void	handle_minishell_cmd(char *command, char **envp)
 
 int	mainloop(int argc, char **argv, char **envp)
 {
+	t_history	history;
 	char	*command;
 
 	(void)argc;
 	(void)argv;
+	history.list = NULL;
+	restore_history(&history);
 	while (1)
 	{
 		handle_signals();
@@ -69,10 +72,14 @@ int	mainloop(int argc, char **argv, char **envp)
 		if (!ft_strncmp(command, "exit", 4) && ft_strlen(command) == 4)
 		{
 			write(1, "exit\n", 5);
+			add_to_history(command, &history);
+			ft_lstclear(&history.list, free_history_data);
 			free(command);
 			break ;
 		}
-		add_to_history(command);
+		add_to_history(command, &history);
+		if (!ft_strncmp(command, "history", 7) && ft_strlen(command) == 7)
+			ft_lst_display(history.list);
 		handle_minishell_cmd(command, envp);
 		free(command);
 	}
@@ -88,7 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	printf("%s\n", path);
 	//create_term(envp);
-	restore_history();
 	mainloop(argc, argv, envp);
 	return (0);
 }
