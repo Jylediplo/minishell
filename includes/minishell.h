@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/09 18:51:10 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/10 12:19:39 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,14 @@ void		handle_signals(void);
 
 // history
 void    restore_history(void);
+typedef struct s_history
+{
+    int fd;
+    t_list  *list;
+}   t_hystory;
 
+void    add_to_history(char *command);
 //get_next_line
-
-void test(void);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10

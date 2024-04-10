@@ -72,6 +72,7 @@ int	mainloop(int argc, char **argv, char **envp)
 			free(command);
 			break ;
 		}
+		add_to_history(command);
 		handle_minishell_cmd(command, envp);
 		free(command);
 	}
@@ -86,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	printf("%s\n", path);
-	create_term(envp);
+	//create_term(envp);
 	restore_history();
 	mainloop(argc, argv, envp);
 	return (0);
