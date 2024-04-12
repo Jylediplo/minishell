@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/12 03:46:52 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/12 06:35:39 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ typedef struct s_data_q
 {
     int index;
     char type;
+    int next;
+    int match;
 
 } t_data_q;
 
@@ -63,6 +65,8 @@ void    store_quotes(t_quote *quote)
             quote->data[j] = malloc(sizeof(t_data_q) * 1);
             quote->data[j]->index = i;
             quote->data[j]->type = quote->cmd[i];
+            quote->data[j]->next = 0;
+            quote->data[j]->match = 0;
             j++;
         }
         i++;
@@ -76,26 +80,39 @@ void display_tab(t_quote *quote)
 
     while (quote->data[count])
     {
-        printf("index : %d || type : %c\n", quote->data[count]->index, quote->data[count]->type);
+        printf("index : %d || type : %c || next : %d\n", quote->data[count]->index, quote->data[count]->type, quote->data[count]->next);
         count++;
     }
 }
 
 
-void    build_sentence(t_quote *quote)
+void    link_quotes(t_quote *quote)
 {
-   // int i;
-    char *line;
-   // i = 0;
+    int i;
+    int len;
+    int j;
+    
+    len = 0;
+    while(quote->data[len])
+        len++;
+    i = 0;
+    while (quote->data[i])
+    {
+        j = i + 1;
+        while (j < (len))
+        {
+            if ((quote->data[i]->type == quote->data[j]->type) && (!(quote->data[i]->match)))
+            {
+                quote->data[i]->next = quote->data[j]->index;
+                quote->data[j]->match = 1;
+                break;
+            }
+            j++;
+        }
+        i++;
+    }
+    printf("%d", quote->data[0]->next);
 
-    // while (quote->data[i])
-    // {
-    //     line = ft_substr(quote->cmd, i, quote->data[i]->index);
-    //     break;
-    // }
-    int len = quote->data[1]->index - quote->data[0]->index;
-    line = ft_substr(quote->cmd, quote->data[0]->index += 1, len);
-    printf("line : %s\n", line);
 }
 
 void    quotes_manager(char *command)
@@ -105,8 +122,7 @@ void    quotes_manager(char *command)
     quote.cmd = command;
     check_db(&quote);
     store_quotes(&quote);
-    display_tab(&quote);
-    //printf("line : %s\n", quote.cmd);
+    // display_tab(&quote);
     if (!quote.size)
     {
        printf("%s\n", quote.cmd);
@@ -117,7 +133,8 @@ void    quotes_manager(char *command)
         printf("invalid quotes !\n");
         return ;
     }
-    build_sentence(&quote);
+    link_quotes(&quote);
+    display_tab(&quote);
 }
 
 void    parse(char *command)
