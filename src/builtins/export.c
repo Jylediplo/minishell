@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 11:42:01 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/10 23:40:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:33:36 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 // {
 // }
 //
+void	init_evar(t_evar *evar, char *newvalue)
+{
+	evar->size_evar = 0;
+	evar->single_qchar = ft_strchr(newvalue, '\'');
+	evar->double_qchar = ft_strchr(newvalue, '\"');
+	evar->newvalue = newvalue;
+}
+
 /*
  *	Start on a quote (either ' or ") and go through the string until a matching quote is found.
  *	Count all characters and handle dollar expansion with getent(VAR).
@@ -23,22 +31,61 @@
  *	after the call to the function.
  *	Example:
  *		newvar = "hello 'world!'"'test'
- *		-> size_evar will increase by 13 (since we include the last quote)
- *		-> Returned pointer will be 'test'.
+ *		-> size_evar will increase by 14, or up until the second ".
+ *		-> Returned pointer will be 'test'; it must always be AFTER the matched quote.
  *	newvar can then be sent again in the loop to parse 'test'.
  */
-char	*handle_quoted_sequence(t_shell *shell, char *newvalue, int *size_evar, char type)
+char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 {
-	(void)shell;
-	while (*newvalue != type)	
+	if (!ft_strchr(evar->newvalue + 1, quotetype))
+		return (NULL);
+	while (*evar->newvalue != quotetype)
 	{
-		if (*newvalue == '$' && type == '\"')
-			continue ;//dollar_expansion();
-		*size_evar += 1;
-		newvalue += 1;
+		evar->newvalue++;
+		evar->size_evar++;
 	}
-	newvalue += 1;
-	return (newvalue);
+	evar->newvalue++;
+	while (*evar->newvalue != quotetype)	
+	{
+		if (*evar->newvalue == '$' && quotetype == '\"')
+			continue ;//dollar_expansion();
+		evar->size_evar++;
+		evar->newvalue += 1;
+	}
+	if (*evar->newvalue)
+		evar->newvalue += 1;
+	return (evar->newvalue);
+}
+
+/*
+ * First step of exporting a new env variable, we get the size of the env var through this function.
+ * It skips quotes which must be skipped and counts space required for dollar expansions (if any).
+ * This function does not have a return value since we are directly changing the value value inside the struct
+ * pointer. However, result must sill be checked after it is called since a -1 value indicates an unclosed quote.
+ */
+void	get_evar_size(t_evar *evar)
+{
+	while (*evar->newvalue)
+	{
+		if ((!evar->double_qchar && evar->single_qchar) || (evar->double_qchar > evar->single_qchar && evar->single_qchar))
+			evar->newvalue = parse_quoted_sequence(evar, '\'');
+		else if ((evar->double_qchar && !evar->single_qchar) || (evar->double_qchar < evar->single_qchar && evar->double_qchar))
+			evar->newvalue = parse_quoted_sequence(evar, '\"');
+		else if (!evar->double_qchar && !evar->single_qchar)
+		{
+			evar->newvalue++;
+			evar->size_evar++;
+		}
+		if (!evar->newvalue)
+		{
+			evar->size_evar = -1;
+			break ;
+		}
+		if (!*evar->newvalue)
+			break ;
+		evar->double_qchar = ft_strchr(evar->newvalue, '\"');
+		evar->single_qchar = ft_strchr(evar->newvalue, '\'');
+	}
 }
 
 /*
@@ -53,54 +100,13 @@ char	*handle_quoted_sequence(t_shell *shell, char *newvalue, int *size_evar, cha
  * Step 3:
  *		Return the parsed newvalue.
 */ 
-int	parse_evar(t_shell *shell, char *newvalue)
+int	set_new_evar(t_shell *shell, char *newvalue)
 {
-	int		size_evar;
+	t_evar	evar;
 
-	size_evar = 0;
-	while (*newvalue)
-	{
-		if (!ft_strchr(newvalue, '\"') && ft_strchr(newvalue, '\''))
-		{
-			if (!ft_strchr(newvalue + 1, '\''))
-				return (1); //unclosed quote sequence
-			// SKIP AND COUNT UNTIL CHAR IS MET
-			newvalue = handle_quoted_sequence(shell, ft_strchr(newvalue, '\'') + 1, &size_evar, '\'');
-			if (!newvalue)
-				break ;
-		}
-		else if (ft_strchr(newvalue, '\"') && !ft_strchr(newvalue, '\''))
-		{
-			if (!ft_strchr(newvalue + 1, '\"'))
-				return (1); //unclosed quote sequence
-			// SKIP AND COUNT UNTIL CHAR IS MET
-			newvalue = handle_quoted_sequence(shell, ft_strchr(newvalue, '\"') + 1, &size_evar, '\"');
-			if (!newvalue)
-				break ;
-		}
-		else if (ft_strchr(newvalue, '\"') < ft_strchr(newvalue, '\''))
-		{
-			if (!ft_strchr(newvalue + 1, '\"'))
-				return (1); //unclosed quote sequence
-			// SKIP AND COUNT UNTIL CHAR IS MET
-			newvalue = handle_quoted_sequence(shell, ft_strchr(newvalue, '\"') + 1, &size_evar, '\"');
-			if (!newvalue)
-				break ;
-		}
-		else if (ft_strchr(newvalue, '\"') > ft_strchr(newvalue, '\''))
-		{
-			if (!ft_strchr(newvalue + 1, '\''))
-				return (1); //unclosed quote sequence
-			// SKIP AND COUNT UNTIL CHAR IS MET
-			newvalue = handle_quoted_sequence(shell, ft_strchr(newvalue + 1, '\''), &size_evar, '\'');
-			if (!newvalue)
-				break ;
-		}
-		else
-		{
-			newvalue++;
-			size_evar++;
-		}
-	}
-	return (size_evar);
+	(void)shell;
+	init_evar(&evar, newvalue);
+	get_evar_size(&evar);
+	printf("Evar size: %d\n", evar.size_evar);
+	return (0);
 }

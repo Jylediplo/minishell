@@ -95,7 +95,9 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(argc, argv, envp, &shell);
 	create_term(shell.envp);
 	//mainloop(&shell);
-	parse_evar(&shell, "\"hel\'l\'o world\"...wh\'a\'tsup?");	
+	set_new_evar(&shell, "\"hel\'\'\'l\'\'\'o world\"...wh\"\'\"\'aaaa\'\"\'\"tsup?");	
+	set_new_evar(&shell, "\"bonjour..\"ok la team");
+	set_new_evar(&shell, "\'bon\"\"\"jou\"\"\"\'\'r..\'ok la team");
 	i = 0;
 	while (shell.envp[i])
 		free(shell.envp[i++]);

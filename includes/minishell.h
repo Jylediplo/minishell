@@ -30,6 +30,15 @@
 // libft
 # include "../libft/libft.h"
 
+typedef struct s_evar
+{
+	int		size_evar;
+	char	current_parsed_quote;
+	char	*newvalue;
+	char	*single_qchar;
+	char	*double_qchar;
+	char	*dol_expansion;
+}	t_evar;
 typedef struct  s_shell
 {
     int     argc;
@@ -46,7 +55,6 @@ void		free_history_data(void *data);
 
 // env variables and export functions
 char    **copy_env(char **envp);
-int    export_envar(t_shell *shell, char *to_change);
-char	*handle_quoted_sequence(t_shell *shell, char *newvalue, int *size_evar, char type);
-int		parse_evar(t_shell *shell, char *newvalue);
+int    	export_envar(t_shell *shell, char *to_change);
+int		set_new_evar(t_shell *shell, char *newvalue);
 #endif
