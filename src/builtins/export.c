@@ -12,10 +12,51 @@
 
 #include "../../includes/minishell.h"
 
-// void	dollar_expansion(t_shell *shell, char *newvalue)
-// {
-// }
-//
+int	allowed_in_braces(char c)
+{
+	if (c != '\'' && c != '\"' && c != ' ')
+		return (1);
+	return (0);
+}
+
+void	size_dol_substitution(t_evar *evar)
+{
+	int		size_expanded_var;
+
+	size_expanded_var = 0;
+	evar->newvalue++;
+	if (*evar->newvalue == '{')
+	{
+		evar->newvalue++;
+		while (*evar->newvalue != '}')
+		{
+			if (!allowed_in_braces(*evar->newvalue))
+				size_expanded_var = 0;
+			evar->newvalue++;
+			size_expanded_var++;
+		}
+	}
+	else if (*evar->newvalue != '{')
+	{
+		while (*evar->newvalue != ' ' && *evar->newvalue != '\"')
+		{
+			evar->newvalue++;
+			size_expanded_var++;
+		}
+	}
+	evar->dol_expansion_variable = (char *)malloc(sizeof(char) * (size_expanded_var + 1));
+	if (!evar->dol_expansion_variable)
+		return ;
+	ft_memcpy(evar->dol_expansion_variable, evar->newvalue - size_expanded_var, size_expanded_var);
+	evar->dol_expansion_variable[size_expanded_var] = '\0';
+	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
+	if (evar->dol_expansion_value)
+		evar->size_evar += ft_strlen(evar->dol_expansion_value);
+	if (*evar->newvalue == '}')
+		evar->newvalue++;
+	free(evar->dol_expansion_variable);
+}
+
 void	init_evar(t_evar *evar, char *newvalue)
 {
 	evar->size_evar = 0;
@@ -48,9 +89,12 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 	while (*evar->newvalue != quotetype)	
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
-			continue ;//dollar_expansion();
-		evar->size_evar++;
-		evar->newvalue += 1;
+			size_dol_substitution(evar);
+		else
+		{
+			evar->size_evar++;
+			evar->newvalue += 1;
+		}
 	}
 	if (*evar->newvalue)
 		evar->newvalue += 1;

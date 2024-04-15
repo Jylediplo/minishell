@@ -33,11 +33,11 @@
 typedef struct s_evar
 {
 	int		size_evar;
-	char	current_parsed_quote;
 	char	*newvalue;
 	char	*single_qchar;
 	char	*double_qchar;
-	char	*dol_expansion;
+	char	*dol_expansion_variable;
+	char	*dol_expansion_value;
 }	t_evar;
 typedef struct  s_shell
 {
