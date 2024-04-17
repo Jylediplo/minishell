@@ -753,3 +753,7 @@ ok
 ok
 "ok"   leo
 exit
+ok
+"ok"
+''ok''
+exit

@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/18 00:42:21 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/04/18 00:43:58 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void  manage_quotes(char *command)
         return ;
     }
     output[output_index] = '\0';
-    //printf("commmand : %s\n", output);
+    printf("commmand : %s\n", output);
 	free(output);
 }
 
