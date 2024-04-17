@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*                                                                           */
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 11:42:01 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/11 10:33:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:57:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 int	allowed_in_braces(char c)
 {
-	if (c != '\'' && c != '\"' && c != ' ')
+	if (c != '\'' && c != '\"' && c != ' ' && c != '{')
 		return (1);
 	return (0);
 }
 
 void	size_dol_substitution(t_evar *evar)
 {
-	int		size_expanded_var;
-
-	size_expanded_var = 0;
+	evar->size_expanded_var = 0;
 	evar->newvalue++;
 	if (*evar->newvalue == '{')
 	{
@@ -31,24 +29,30 @@ void	size_dol_substitution(t_evar *evar)
 		while (*evar->newvalue != '}')
 		{
 			if (!allowed_in_braces(*evar->newvalue))
-				size_expanded_var = 0;
-			evar->newvalue++;
-			size_expanded_var++;
+			{
+				evar->error = BAD_SUBSTITUTION;
+				return ;
+			}
+			else
+			{
+				evar->newvalue++;
+				evar->size_expanded_var++;
+			}
 		}
 	}
 	else if (*evar->newvalue != '{')
 	{
-		while (*evar->newvalue != ' ' && *evar->newvalue != '\"')
+		while (*evar->newvalue != ' ' && *evar->newvalue != '\"' && *evar->newvalue)
 		{
 			evar->newvalue++;
-			size_expanded_var++;
+			evar->size_expanded_var++;
 		}
 	}
-	evar->dol_expansion_variable = (char *)malloc(sizeof(char) * (size_expanded_var + 1));
+	evar->dol_expansion_variable = (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
 		return ;
-	ft_memcpy(evar->dol_expansion_variable, evar->newvalue - size_expanded_var, size_expanded_var);
-	evar->dol_expansion_variable[size_expanded_var] = '\0';
+	ft_memcpy(evar->dol_expansion_variable, evar->newvalue - evar->size_expanded_var, evar->size_expanded_var);
+	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
 	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 		evar->size_evar += ft_strlen(evar->dol_expansion_value);
@@ -60,9 +64,13 @@ void	size_dol_substitution(t_evar *evar)
 void	init_evar(t_evar *evar, char *newvalue)
 {
 	evar->size_evar = 0;
+	evar->id_toset = 0;
+	evar->id_copy = 0;
 	evar->single_qchar = ft_strchr(newvalue, '\'');
 	evar->double_qchar = ft_strchr(newvalue, '\"');
 	evar->newvalue = newvalue;
+	evar->newvalue_toset = NULL;
+	evar->error = NONE;
 }
 
 /*
@@ -82,14 +90,19 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 		return (NULL);
 	while (*evar->newvalue != quotetype)
 	{
-		evar->newvalue++;
-		evar->size_evar++;
+		if (*evar->newvalue == '$')
+			size_dol_substitution(evar);
+		else
+		{
+			evar->newvalue++;
+			evar->size_evar++;
+		}
 	}
 	evar->newvalue++;
 	while (*evar->newvalue != quotetype)	
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
-			size_dol_substitution(evar);
+				size_dol_substitution(evar);
 		else
 		{
 			evar->size_evar++;
@@ -117,12 +130,17 @@ void	get_evar_size(t_evar *evar)
 			evar->newvalue = parse_quoted_sequence(evar, '\"');
 		else if (!evar->double_qchar && !evar->single_qchar)
 		{
-			evar->newvalue++;
-			evar->size_evar++;
+			if (*evar->newvalue == '$')
+				size_dol_substitution(evar);
+			else
+			{
+				evar->newvalue++;
+				evar->size_evar++;
+			}
 		}
 		if (!evar->newvalue)
 		{
-			evar->size_evar = -1;
+			evar->error = UNCLOSED_QUOTE;
 			break ;
 		}
 		if (!*evar->newvalue)
@@ -151,6 +169,18 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 	(void)shell;
 	init_evar(&evar, newvalue);
 	get_evar_size(&evar);
-	printf("Evar size: %d\n", evar.size_evar);
+	if (evar.error != NONE)
+	{
+		evar_error_message(&evar);
+		return (1);
+	}
+	evar.newvalue_copy = ft_strdup(newvalue);
+	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));	
+	if (!evar.newvalue_toset)
+		return (1);
+	get_evar(&evar);
+	printf("New evar value: %s\n", evar.newvalue_toset);
+	free(evar.newvalue_copy);
+	free(evar.newvalue_toset);
 	return (0);
 }

@@ -6,6 +6,8 @@ SRCS 				= main.c \
 	   				signals/handle_signals.c \
 					builtins/specials.c \
 					builtins/export.c \
+					builtins/export_utils.c \
+					builtins/handle_errors.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
