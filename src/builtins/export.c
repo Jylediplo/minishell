@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../includes/evars.h"
 
 int	allowed_in_braces(char c)
 {
@@ -73,6 +73,11 @@ void	init_evar(t_evar *evar, char *newvalue)
 	evar->error = NONE;
 }
 
+void	increase_size_evar(t_evar *evar)
+{
+	evar->newvalue++;
+	evar->size_evar++;
+}
 /*
  *	Start on a quote (either ' or ") and go through the string until a matching quote is found.
  *	Count all characters and handle dollar expansion with getent(VAR).
@@ -87,16 +92,21 @@ void	init_evar(t_evar *evar, char *newvalue)
 char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 {
 	if (!ft_strchr(evar->newvalue + 1, quotetype))
+	{
+		evar->error = UNCLOSED_QUOTE;
 		return (NULL);
+	}
 	while (*evar->newvalue != quotetype)
 	{
 		if (*evar->newvalue == '$')
 			size_dol_substitution(evar);
-		else
+		else if (*evar->newvalue == ' ')
 		{
-			evar->newvalue++;
-			evar->size_evar++;
+			evar->error = STOP;
+			return (NULL);
 		}
+		else
+			increase_size_evar(evar);
 	}
 	evar->newvalue++;
 	while (*evar->newvalue != quotetype)	
@@ -104,34 +114,48 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 		if (*evar->newvalue == '$' && quotetype == '\"')
 				size_dol_substitution(evar);
 		else
-		{
-			evar->size_evar++;
-			evar->newvalue += 1;
-		}
+			increase_size_evar(evar);
 	}
 	if (*evar->newvalue)
 		evar->newvalue += 1;
+	evar->quotetype = '\0';
 	return (evar->newvalue);
 }
 
-/*
- * First step of exporting a new env variable, we get the size of the env var through this function.
- * It skips quotes which must be skipped and counts space required for dollar expansions (if any).
- * This function does not have a return value since we are directly changing the value value inside the struct
- * pointer. However, result must sill be checked after it is called since a -1 value indicates an unclosed quote.
- */
+void	start_quote_sequence(t_evar *evar)
+{
+	if ((!evar->double_qchar && evar->single_qchar)
+		|| (evar->double_qchar > evar->single_qchar && evar->single_qchar))
+	{
+		evar->quotetype = '\'';
+		return ;
+	}
+	else if ((evar->double_qchar && !evar->single_qchar)
+		|| (evar->double_qchar < evar->single_qchar && evar->double_qchar))
+	{
+		evar->quotetype = '\"';
+		return ;
+	}
+	return ;
+	
+}
+
 void	get_evar_size(t_evar *evar)
 {
 	while (*evar->newvalue)
 	{
-		if ((!evar->double_qchar && evar->single_qchar) || (evar->double_qchar > evar->single_qchar && evar->single_qchar))
-			evar->newvalue = parse_quoted_sequence(evar, '\'');
-		else if ((evar->double_qchar && !evar->single_qchar) || (evar->double_qchar < evar->single_qchar && evar->double_qchar))
-			evar->newvalue = parse_quoted_sequence(evar, '\"');
+		start_quote_sequence(evar);
+		if (evar->quotetype)
+			evar->newvalue = parse_quoted_sequence(evar, evar->quotetype);
 		else if (!evar->double_qchar && !evar->single_qchar)
 		{
 			if (*evar->newvalue == '$')
 				size_dol_substitution(evar);
+			else if (*evar->newvalue == ' ')
+			{
+				evar->error = STOP;
+				break ;
+			}
 			else
 			{
 				evar->newvalue++;
@@ -139,11 +163,6 @@ void	get_evar_size(t_evar *evar)
 			}
 		}
 		if (!evar->newvalue)
-		{
-			evar->error = UNCLOSED_QUOTE;
-			break ;
-		}
-		if (!*evar->newvalue)
 			break ;
 		evar->double_qchar = ft_strchr(evar->newvalue, '\"');
 		evar->single_qchar = ft_strchr(evar->newvalue, '\'');
@@ -169,7 +188,7 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 	(void)shell;
 	init_evar(&evar, newvalue);
 	get_evar_size(&evar);
-	if (evar.error != NONE)
+	if (evar.error != NONE && evar.error != STOP)
 	{
 		evar_error_message(&evar);
 		return (1);
@@ -179,7 +198,7 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 	if (!evar.newvalue_toset)
 		return (1);
 	get_evar(&evar);
-	printf("New evar value: %s\n", evar.newvalue_toset);
+	printf("\nNew evar value: >%s<\n", evar.newvalue_toset);
 	free(evar.newvalue_copy);
 	free(evar.newvalue_toset);
 	return (0);

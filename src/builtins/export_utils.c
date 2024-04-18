@@ -6,11 +6,11 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:32:52 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/17 16:00:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/17 19:18:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../includes/evars.h"
 
 void	expand_dol(t_evar *evar)
 {
@@ -52,6 +52,11 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype)
 	{
 		if (evar->newvalue_copy[evar->id_copy] == '$')
 			expand_dol(evar);
+		else if (evar->newvalue_copy[evar->id_copy] == ' ')
+		{
+			evar->error = STOP;
+			return ;
+		}
 		else
 			evar->newvalue_toset[evar->id_toset++] = evar->newvalue_copy[evar->id_copy++];
 	}
@@ -73,14 +78,15 @@ void	get_evar(t_evar *evar)
 	evar->double_qchar = ft_strchr(evar->newvalue_copy + evar->id_copy, '\"');
 	while (evar->newvalue_copy[evar->id_copy])
 	{
-		if ((!evar->double_qchar && evar->single_qchar) || (evar->double_qchar > evar->single_qchar && evar->single_qchar))
-			copy_quoted_sequence(evar, '\'');
-		else if ((evar->double_qchar && !evar->single_qchar) || (evar->double_qchar < evar->single_qchar && evar->double_qchar))
-			copy_quoted_sequence(evar, '\"');
+		start_quote_sequence(evar);
+		if (evar->quotetype)
+			evar->newvalue = copy_quoted_sequence(evar, evar->quotetype);
 		else if (!evar->double_qchar && !evar->single_qchar)
 		{
 			if (evar->newvalue_copy[evar->id_copy] == '$')
 				expand_dol(evar);
+			else if (evar->newvalue_copy[evar->id_copy] == ' ')
+				break ;
 			else
 				evar->newvalue_toset[evar->id_toset++] = evar->newvalue_copy[evar->id_copy++];
 		}

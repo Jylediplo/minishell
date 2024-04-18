@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:25:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/10 12:20:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:45:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char    **copy_env(char **envp)
+char	**copy_env(char **envp)
 {
     char    **res;
     char    len;
