@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/17 17:56:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:37:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(argc, argv, envp, &shell);
 	create_term(shell.envp);
 	//mainloop(&shell);
-	set_new_evar(&shell, "\"hel\'\'\'l\'\'o wo rld\"...wh\"\'a\"\'aaaa\'\"\'\"tsup     ${SHLVL}");
-	set_new_evar(&shell, "${HOME}");
+	set_new_evar(&shell, "\"hel\'\'\'l\'\'o wo rld\".'${SHLVL}'$$$SHLVL_..wh\"\'a\"\'aaaa\'\"\'\"tsup$SHLVL"); //INFINITE LOOP AFTER SECOND SHLVL CALL
+	set_new_evar(&shell, "$HOME");
 	i = 0;
 	while (shell.envp[i])
 		free(shell.envp[i++]);

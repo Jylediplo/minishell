@@ -19,6 +19,11 @@ int	allowed_in_braces(char c)
 	return (0);
 }
 
+void	set_err_status(t_evar *evar, int status)
+{
+	evar->error = status;
+}
+
 void	size_dol_substitution(t_evar *evar)
 {
 	evar->size_expanded_var = 0;
@@ -29,10 +34,7 @@ void	size_dol_substitution(t_evar *evar)
 		while (*evar->newvalue != '}')
 		{
 			if (!allowed_in_braces(*evar->newvalue))
-			{
-				evar->error = BAD_SUBSTITUTION;
-				return ;
-			}
+				return (set_err_status(evar, BAD_SUBSTITUTION));
 			else
 			{
 				evar->newvalue++;
@@ -42,7 +44,7 @@ void	size_dol_substitution(t_evar *evar)
 	}
 	else if (*evar->newvalue != '{')
 	{
-		while (*evar->newvalue != ' ' && *evar->newvalue != '\"' && *evar->newvalue)
+		while (allowed_in_substitution(*evar->newvalue)) //CHECK ALL VALID IDENTIFIERS
 		{
 			evar->newvalue++;
 			evar->size_expanded_var++;
@@ -50,7 +52,7 @@ void	size_dol_substitution(t_evar *evar)
 	}
 	evar->dol_expansion_variable = (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
-		return ;
+		return (set_err_status(evar, MALLOC));
 	ft_memcpy(evar->dol_expansion_variable, evar->newvalue - evar->size_expanded_var, evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
 	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
@@ -66,8 +68,7 @@ void	init_evar(t_evar *evar, char *newvalue)
 	evar->size_evar = 0;
 	evar->id_toset = 0;
 	evar->id_copy = 0;
-	evar->single_qchar = ft_strchr(newvalue, '\'');
-	evar->double_qchar = ft_strchr(newvalue, '\"');
+	find_next_quotes(evar, newvalue, 0);
 	evar->newvalue = newvalue;
 	evar->newvalue_toset = NULL;
 	evar->error = NONE;
@@ -78,6 +79,7 @@ void	increase_size_evar(t_evar *evar)
 	evar->newvalue++;
 	evar->size_evar++;
 }
+
 /*
  *	Start on a quote (either ' or ") and go through the string until a matching quote is found.
  *	Count all characters and handle dollar expansion with getent(VAR).
@@ -92,37 +94,30 @@ void	increase_size_evar(t_evar *evar)
 char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 {
 	if (!ft_strchr(evar->newvalue + 1, quotetype))
-	{
-		evar->error = UNCLOSED_QUOTE;
-		return (NULL);
-	}
-	while (*evar->newvalue != quotetype)
+		return (set_err_status(evar, UNCLOSED_QUOTE), NULL);
+	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
 	{
 		if (*evar->newvalue == '$')
 			size_dol_substitution(evar);
 		else if (*evar->newvalue == ' ')
-		{
-			evar->error = STOP;
-			return (NULL);
-		}
+			return (set_err_status(evar, STOP), NULL);
 		else
 			increase_size_evar(evar);
 	}
 	evar->newvalue++;
-	while (*evar->newvalue != quotetype)	
+	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
-				size_dol_substitution(evar);
+			size_dol_substitution(evar);
 		else
 			increase_size_evar(evar);
 	}
 	if (*evar->newvalue)
 		evar->newvalue += 1;
-	evar->quotetype = '\0';
 	return (evar->newvalue);
 }
 
-void	start_quote_sequence(t_evar *evar)
+void	get_next_quotetype(t_evar *evar)
 {
 	if ((!evar->double_qchar && evar->single_qchar)
 		|| (evar->double_qchar > evar->single_qchar && evar->single_qchar))
@@ -136,36 +131,31 @@ void	start_quote_sequence(t_evar *evar)
 		evar->quotetype = '\"';
 		return ;
 	}
+	evar->quotetype = '\0';
 	return ;
-	
 }
 
 void	get_evar_size(t_evar *evar)
 {
 	while (*evar->newvalue)
 	{
-		start_quote_sequence(evar);
+		get_next_quotetype(evar);
 		if (evar->quotetype)
 			evar->newvalue = parse_quoted_sequence(evar, evar->quotetype);
-		else if (!evar->double_qchar && !evar->single_qchar)
+		else if (!evar->quotetype)
 		{
 			if (*evar->newvalue == '$')
 				size_dol_substitution(evar);
 			else if (*evar->newvalue == ' ')
-			{
-				evar->error = STOP;
-				break ;
-			}
+				return (set_err_status(evar, STOP));
 			else
-			{
-				evar->newvalue++;
-				evar->size_evar++;
-			}
+				increase_size_evar(evar);
 		}
+		if (evar->error == BAD_SUBSTITUTION)
+			return ;
 		if (!evar->newvalue)
-			break ;
-		evar->double_qchar = ft_strchr(evar->newvalue, '\"');
-		evar->single_qchar = ft_strchr(evar->newvalue, '\'');
+			return ;
+		find_next_quotes(evar, evar->newvalue, 0);
 	}
 }
 
@@ -180,7 +170,7 @@ void	get_evar_size(t_evar *evar)
  *		Use the newly created buffer to fill it with a quote and dollar expanded version of newvalue.
  * Step 3:
  *		Return the parsed newvalue.
-*/ 
+*/
 int	set_new_evar(t_shell *shell, char *newvalue)
 {
 	t_evar	evar;
@@ -193,12 +183,13 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 		evar_error_message(&evar);
 		return (1);
 	}
+	evar.error = NONE;
 	evar.newvalue_copy = ft_strdup(newvalue);
-	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));	
+	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));
 	if (!evar.newvalue_toset)
 		return (1);
 	get_evar(&evar);
-	printf("\nNew evar value: >%s<\n", evar.newvalue_toset);
+	printf("New evar value: >%s<\n", evar.newvalue_toset);
 	free(evar.newvalue_copy);
 	free(evar.newvalue_toset);
 	return (0);

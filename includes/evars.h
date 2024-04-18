@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/17 19:16:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:37:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,11 @@ typedef struct  s_shell
 }   t_shell;
 int		set_new_evar(t_shell *shell, char *newvalue);
 void	get_evar(t_evar *evar);
+void	find_next_quotes(t_evar *evar, char *string, int index);
 int		allowed_in_braces(char c);
-void	start_quote_sequence(t_evar *evar);
+int		allowed_in_substitution(char c);
+void	set_err_status(t_evar *evar, int status);
+void	get_next_quotetype(t_evar *evar);
 void	evar_error_message(t_evar *evar);
 
 #endif
