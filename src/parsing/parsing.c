@@ -3,71 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/18 00:43:58 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/04/18 12:52:08 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 
-void  manage_quotes(char *command)
+typedef struct s_quote
 {
-
-    int input_length = (int)ft_strlen(command);
-    int output_index = 0;
-    int quote_open = 0;
-	int i;
+    int input_length;
+    int output_index;
+    int quote_open;
+    int i;
     char current_quote;
+    char *output;
+} t_quote;
 
-    char* output = (char*)malloc(1000 * sizeof(char));
-    if (output == NULL)
-	{
+void init_cmd(t_quote *cmd, char *command)
+{
+    cmd->input_length = (int)ft_strlen(command);
+    cmd->i = 0;
+    cmd->quote_open = 0;
+    cmd->output_index = 0;
+    cmd->output = malloc(sizeof(char) * (cmd->input_length + 1));
+    if (!cmd->output)
+    {
         printf("Memory allocation failed.\n");
         exit(1);
     }
-	i = 0;
-    while (i < input_length) {
-        if (command[i] == '"' || command[i] == '\'') {
-            if (!quote_open)
-			{
-                quote_open = 1;
-                current_quote = command[i];
-            } else if (current_quote == command[i])
-			{
-                quote_open = 0;
-            } else
-			{
-                output[output_index++] = command[i];
-            }
-        }
-		else
-		{
-            if (quote_open)
-			{
-                output[output_index++] = command[i];
-            } else if (command[i] != ' ')
-			{
-				output[output_index++] = command[i];
-			}else
-			{
-            	if (output_index > 0 && output[output_index - 1] != ' ')
-				{
-                    output[output_index++] = command[i];
-            	}
-            }
-        }
-		i++;
+}
+void current_is_quote(t_quote *cmd, char *command)
+{
+    if (!cmd->quote_open)
+    {
+        cmd->quote_open = 1;
+        cmd->current_quote = command[cmd->i];
     }
-    if (quote_open) {
+    else if (cmd->current_quote == command[cmd->i])
+        cmd->quote_open = 0;
+    else
+        cmd->output[cmd->output_index++] = command[cmd->i];
+}
+
+void current_is_not_quote(t_quote *cmd, char *command)
+{
+    if (cmd->quote_open)
+        cmd->output[cmd->output_index++] = command[cmd->i];
+    else if (command[cmd->i] != ' ')
+        cmd->output[cmd->output_index++] = command[cmd->i];
+    else
+	{
+        if (cmd->output_index > 0 && cmd->output[cmd->output_index - 1] != ' ')
+            cmd->output[cmd->output_index++] = command[cmd->i];
+    }
+}
+
+void  manage_quotes(char *command)
+{
+    t_quote cmd;
+
+    init_cmd(&cmd, command);    
+    while (cmd.i < cmd.input_length)
+    {
+        if (command[cmd.i] == '"' || command[cmd.i] == '\'')
+            current_is_quote(&cmd, command);
+		else
+           current_is_not_quote(&cmd, command);
+		cmd.i++;
+    }
+    if (cmd.quote_open)
+    {
+        free(cmd.output);
         printf("Error: Quote not properly closed.\n");
         return ;
     }
-    output[output_index] = '\0';
-    printf("commmand : %s\n", output);
-	free(output);
+    cmd.output[cmd.output_index] = '\0';
+    printf("commmand : %s\n", cmd.output);
+	free(cmd.output);
 }
 
 void parse(char *command)
