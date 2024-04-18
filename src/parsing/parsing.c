@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/18 18:45:18 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 19:38:20 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void parse(char *command)
     i = 0;
     cmds.list = NULL;
 	sentence = manage_quotes(command);
-   // printf("command : %s\n", sentence);
+    printf("command : %s\n", sentence);
     split = ft_split(sentence, ' ');
     free(sentence);
     while(split[i])
