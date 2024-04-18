@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/18 12:52:08 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:45:18 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void current_is_not_quote(t_quote *cmd, char *command)
     }
 }
 
-void  manage_quotes(char *command)
+char *manage_quotes(char *command)
 {
     t_quote cmd;
 
@@ -79,14 +79,97 @@ void  manage_quotes(char *command)
     {
         free(cmd.output);
         printf("Error: Quote not properly closed.\n");
-        return ;
+        return NULL;
     }
     cmd.output[cmd.output_index] = '\0';
-    printf("commmand : %s\n", cmd.output);
-	free(cmd.output);
+   // printf("commmand : %s\n", cmd.output);
+	return (cmd.output);
+}
+
+typedef struct s_d
+{
+    int index;
+    char **cmd;
+} t_d;
+
+typedef struct s_cmd
+{
+    t_list  *list;
+    t_list  *node;
+    int size;
+    t_d   *data;
+}   t_cmd;
+
+void add_data(t_cmd *cmds, int index, char **split)
+{
+    int i;
+    i = 0;
+    
+    int j;
+    j = 0;
+    cmds->data->cmd = malloc(sizeof(char *) * (index + 1));
+    cmds->data->index = 0;
+    while (i < index)
+    {
+        cmds->data->cmd[i] = malloc(sizeof(char) * (ft_strlen(split[i]) + 1));
+        cmds->data->cmd[i] = split[i];
+        i++;
+    }
+}
+
+void handle_cmd(char **split, t_cmd *cmds)
+{
+    int i;
+    int index_previous;
+
+    index_previous = 0;
+    i = 0;
+    while (split[i])
+    {
+        if (!ft_strncmp(split[i], "|", 1))
+        {
+            if (i == (cmds->size - 1))
+                printf("invalid |\n");
+            printf("here\n");
+            if (!index_previous)
+            {
+                //create node;
+                // cmds->data = malloc(sizeof(t_d));
+                // add_data(cmds, i, split);
+                // cmds->node = ft_lstnew((void *)cmds->data);
+                // char **index;
+                // index = ((t_d *)cmds->node->content)->cmd;
+                index_previous = i;
+            }
+            else
+            {
+                
+            }
+        }
+        i++;
+    }
 }
 
 void parse(char *command)
 {
-	manage_quotes(command);
+    char *sentence;
+    char **split;
+    t_cmd cmds;
+    int i;
+
+    i = 0;
+    cmds.list = NULL;
+	sentence = manage_quotes(command);
+   // printf("command : %s\n", sentence);
+    split = ft_split(sentence, ' ');
+    free(sentence);
+    while(split[i])
+        i++;
+    cmds.size = i;
+    handle_cmd(split, &cmds);
 }
+//grep "  "
+//char *
+// ls -la | grep " "
+//[ls] [-la]
+// [grep] [32]
