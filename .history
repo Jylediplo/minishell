@@ -915,3 +915,217 @@ history
 "''"
 "'efefe'"
 exit
+ok
+"ok"
+'ok;
+'ok'
+""ok""
+""ok""
+exit
+ok
+ok
+exit
+ok
+ok
+ok
+ok
+ls
+ls
+exit
+ok
+ls
+grep
+""
+"a"
+exit
+""
+""
+echo ""
+echo a
+echo "a"
+exit
+ok
+ok ok
+ok ls | oui
+ls -la | grep "ok"
+ls -la | grep ""
+ok | suite | comd 1 cmd2 | ok
+ok | suite | comd 1 cmd2 | ok |
+""
+"ok"
+ok ""
+ok "" ""leo""
+ls
+ls
+echo
+echo a
+ls
+df
+exit
+ok
+ls
+ls -la
+exit
+ls -la
+ls -la | grep "a
+ls -la | grep "a"
+exit
+ok
+ok k
+ls -la
+exit
+ok
+ls -la
+ls -la | grep "a"
+exit
+ok
+ok oui
+ok oui
+ok oui | oui
+exit
+ok
+ok | deuxieem
+ok | deuxieem | oui
+exit
+ok
+ok oui
+ls -la
+oui non | grep "a"
+exit
+ouu
+ouu | frs
+exit
+k
+ok oui
+ls -la
+ls -la | grep "a"
+exit
+ok oui
+ok oui | grep
+ok oui | grep "a"
+ok oui |grep "a"
+ok oui | grep "a"
+exit
+ok
+oui
+ls
+ls -la
+ls -la | grep "a"
+ls -la | grep "h"
+exit
+ok
+oui
+ls
+ls -la
+ls -la | grep
+ls -la | grep "h"
+ls
+echo
+echo ""
+echo "leo"
+echo "leo oui"
+echo "leo oui" | grep "o"
+exit
+ls
+ls -la | grep "ou"
+exit
+oui
+ls
+ls -la
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "b"
+exit
+ls -la | grep "a"
+exit
+oui
+
+
+
+
+
+
+
+oui
+
+ls -la | grep
+ls -la | grep "h"
+exit
+ok
+ok
+ok
+ls -la
+ls -la | grep "oui"
+exit
+oui
+
+
+
+ls
+ls -la | grep "h"
+exit
+ok
+
+ls -la | grep "a"
+ls -la | grep "a"
+oui
+
+exit
+oui
+
+
+ls -la
+ls -la | grep "a"
+ls -la |grep "a"
+ls -la |grep "a"
+echo "oui"
+exit
+echo "oui"
+exit
+oui
+
+exit
+oui
+ls
+ls -la
+echo a
+echo "ok"
+echo "home"
+echo "'leo'"
+echo "'leo'" 
+echo "'leo'" | grep "l"
+echo leo | grep z
+exit
+echo leo | grep z
+ok
+echo leo | grep z
+exit
+echo leo | grep z
+
+
+
+
+exit
+echo leo | grep z
+ls
+cat | ls | cat
+exit
+ok
+ls
+ls -la
+ls -la |
+ls -la | grep b
+ls -la | grep h
+ls -la | grep z
+ls -la | grep "w"
+exit
+oui
+ls
+ls -la
+ls -la | grep "l"
+exit
+ls -la | grep "h"
+ls -la | grep "h"
+ls -la | grep "h"
+ls -la | grep "h"
+exit

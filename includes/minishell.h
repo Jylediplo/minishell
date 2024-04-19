@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/10 14:08:25 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/19 17:30:40 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ extern int	g_current_sig;
 void		handle_signals(void);
 
 //parsing
-void    parse(char *command);
+void    parse(char *command, char **envp);
 
 // history
 typedef struct s_data_h
@@ -73,5 +73,17 @@ char	*manage_line_with_n_for_line(char *buffer, size_t index);
 char	*read_line(int fd, char *buffer, char *previous_line, int *bytes_read);
 char	*helper(int fd, char *buffer, int bytes_read);
 size_t	index_for_n(char *buffer);
+
+
+
+//pipex de zeub (c est mon ancien vraiment pas ouf)
+
+void manage_path(char *cmd, char **envp);
+char  *correct_path(char *argv, char **local_path);
+char *find_path(char **envp);
+int find_str(char *to_find, char *str);
+void error(char *file, char **to_free1, char **to_free2);
+void free_split(char **str);
+
 
 #endif

@@ -64,7 +64,7 @@ int	mainloop(int argc, char **argv, char **envp)
 	{
 		handle_signals();
 		command = readline("🐚 Super prompt ➜ ");
-		parse(command);
+		parse(command, envp);
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);
@@ -94,7 +94,6 @@ int	main(int argc, char **argv, char **envp)
 	//path = ttyname(0);
 	(void)argv;
 	(void)argc;
-	(void)envp;
 	//create_term(envp);
 	mainloop(argc, argv, envp);
 	return (0);

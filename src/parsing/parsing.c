@@ -6,12 +6,42 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/18 19:38:20 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/19 18:43:36 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+char *my_strtok(char *s, char *delim) {
+    static char *last;
+    char *tok;
+
+    if (s == NULL && (s = last) == NULL)
+        return NULL;
+
+    while (*s && ft_strchr(delim, *s))
+        s++;
+// si fin de la string return null
+    if (!*s) { 
+        last = NULL;
+        return (NULL);
+    }
+    // debut du token ici
+    tok = s; 
+
+    // trouve la fin du token
+    while (*s && !ft_strchr(delim, *s))
+        s++;
+//si delimiteur trouve go dans le if
+    if (*s)
+    { 
+        *s = '\0'; 
+        last = s + 1; // passe au prochain caractere pour prochain appel
+    }
+    else 
+        last = NULL; // si fin de string, last mis a null
+    return (tok);
+}
 
 typedef struct s_quote
 {
@@ -82,94 +112,117 @@ char *manage_quotes(char *command)
         return NULL;
     }
     cmd.output[cmd.output_index] = '\0';
-   // printf("commmand : %s\n", cmd.output);
 	return (cmd.output);
 }
 
-typedef struct s_d
-{
-    int index;
-    char **cmd;
-} t_d;
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-typedef struct s_cmd
-{
-    t_list  *list;
-    t_list  *node;
-    int size;
-    t_d   *data;
-}   t_cmd;
-
-void add_data(t_cmd *cmds, int index, char **split)
-{
-    int i;
-    i = 0;
-    
-    int j;
-    j = 0;
-    cmds->data->cmd = malloc(sizeof(char *) * (index + 1));
-    cmds->data->index = 0;
-    while (i < index)
+void execute_command(char* command, int input_fd, int output_fd, char **envp, int i) {
+    (void)i;
+    int pid = fork();
+    if (pid < 0) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
     {
-        cmds->data->cmd[i] = malloc(sizeof(char) * (ft_strlen(split[i]) + 1));
-        cmds->data->cmd[i] = split[i];
-        i++;
+        if (input_fd != STDIN_FILENO)
+        {
+            dup2(input_fd, STDIN_FILENO);
+            close(input_fd);
+        }
+        if (output_fd != STDOUT_FILENO)
+        {
+            dup2(output_fd, STDOUT_FILENO);
+            close(output_fd);
+        }
+        manage_path(command, envp);
+        perror("execve");
+        exit(EXIT_FAILURE);
     }
 }
 
-void handle_cmd(char **split, t_cmd *cmds)
-{
-    int i;
-    int index_previous;
+#define MAX_COMMANDS 10
+#define MAX_ARGS 10
 
-    index_previous = 0;
+void parse_and_execute(char* input, char **envp)
+{
+    char* commands[MAX_COMMANDS];
+    int num_commands = 0;
+    char* token;
+    char* delim = "|";
+    int i;
+
     i = 0;
-    while (split[i])
+    //tok pour gerer chaque command entre les pipes;
+    //a chaque call se decale a la commande apres le pipe
+    token = strtok(input, delim);
+    while (token != NULL && num_commands < MAX_COMMANDS)
     {
-        if (!ft_strncmp(split[i], "|", 1))
+        commands[num_commands++] = token;
+        token = strtok(NULL, delim);
+    }
+
+    int pipes[MAX_COMMANDS - 1][2];
+    while (i < num_commands - 1)
+    {
+        if (pipe(pipes[i]) == -1)
         {
-            if (i == (cmds->size - 1))
-                printf("invalid |\n");
-            printf("here\n");
-            if (!index_previous)
-            {
-                //create node;
-                // cmds->data = malloc(sizeof(t_d));
-                // add_data(cmds, i, split);
-                // cmds->node = ft_lstnew((void *)cmds->data);
-                // char **index;
-                // index = ((t_d *)cmds->node->content)->cmd;
-                index_previous = i;
-            }
-            else
-            {
-                
-            }
+            perror("pipe");
+            exit(EXIT_FAILURE);
         }
         i++;
     }
-}
-
-void parse(char *command)
-{
-    char *sentence;
-    char **split;
-    t_cmd cmds;
-    int i;
 
     i = 0;
-    cmds.list = NULL;
-	sentence = manage_quotes(command);
-    printf("command : %s\n", sentence);
-    split = ft_split(sentence, ' ');
-    free(sentence);
-    while(split[i])
+    //boucle pour gerer chaque commande avec sses pipes d entree et de sortie
+    while (i < num_commands)
+    {
+        if (i == 0)
+        {
+            //si premiere commande , stdin mais sortie sera le prochain pipe
+            execute_command(commands[i], STDIN_FILENO, pipes[i][1], envp, i);
+        }
+        else if (i == num_commands - 1)
+        {
+            //si derniere commande l entree et le pipe de sortie d avant et la sortie la standard
+            execute_command(commands[i], pipes[i - 1][0], STDOUT_FILENO, envp, i);
+        }
+        else
+        {
+            //ici gere toutes les commqndes intermediaires
+            execute_command(commands[i], pipes[i - 1][0], pipes[i][1], envp, i);
+        }
         i++;
-    cmds.size = i;
-    handle_cmd(split, &cmds);
+    }
+    i = 0;
+    //close les pipes
+    while (i < num_commands - 1)
+    {
+        close(pipes[i][0]);
+        close(pipes[i][1]);
+        i++;
+    }
+    // attends to les child process finissent
+    i = 0;
+    while (i < num_commands)
+    {
+        wait(NULL);
+        i++;
+    }
 }
-//grep "  "
-//char *
-// ls -la | grep " "
-//[ls] [-la]
-// [grep] [32]
+
+
+void parse(char *command, char **envp)
+{
+    char *sentence;
+	sentence = manage_quotes(command);
+   // printf("sentence : %s\n", sentence);
+   
+    parse_and_execute(sentence, envp);
+    free(sentence);
+}
