@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/19 18:43:36 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/19 19:05:51 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,7 @@ char *manage_quotes(char *command)
 	return (cmd.output);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-
-void execute_command(char* command, int input_fd, int output_fd, char **envp, int i) {
-    (void)i;
+void execute_command(char* command, int input_fd, int output_fd, char **envp) {
     int pid = fork();
     if (pid < 0) {
         perror("fork");
@@ -185,17 +178,17 @@ void parse_and_execute(char* input, char **envp)
         if (i == 0)
         {
             //si premiere commande , stdin mais sortie sera le prochain pipe
-            execute_command(commands[i], STDIN_FILENO, pipes[i][1], envp, i);
+            execute_command(commands[i], STDIN_FILENO, pipes[i][1], envp);
         }
         else if (i == num_commands - 1)
         {
             //si derniere commande l entree et le pipe de sortie d avant et la sortie la standard
-            execute_command(commands[i], pipes[i - 1][0], STDOUT_FILENO, envp, i);
+            execute_command(commands[i], pipes[i - 1][0], STDOUT_FILENO, envp);
         }
         else
         {
             //ici gere toutes les commqndes intermediaires
-            execute_command(commands[i], pipes[i - 1][0], pipes[i][1], envp, i);
+            execute_command(commands[i], pipes[i - 1][0], pipes[i][1], envp);
         }
         i++;
     }

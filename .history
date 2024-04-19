@@ -1129,3 +1129,127 @@ ls -la | grep "h"
 ls -la | grep "h"
 ls -la | grep "h"
 exit
+ls
+ls -la
+ls -la | grep "h"
+ls
+ls
+ls
+ls | cat
+ls | cat | grep "o"
+ls | cat | grep "o"
+echo "oui"
+exit
+echo "oui"
+exit
+oui
+ls
+ls -la
+ls -la
+ls -la | grep "2"
+ls
+
+
+
+
+
+ls
+
+ls
+
+ls
+
+ls
+
+ls
+
+
+ls
+
+ls
+
+exit
+ok
+exit
+o
+o
+oo
+ls
+
+ls
+ls -l
+ls -la
+ls
+ls
+ls | cat
+
+
+
+
+
+ls
+ls \
+ls |
+ls | grep a
+ls | grep a
+ls | grep a
+
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+ls | grep a
+exit
+ok
+"ok
+"ok"
+echo hello
+echo -n hello
+cls
+ls
+pwd
+cd includes/
+ls
+pwd
+echo $?
+echo - "" "  " hello
+echo "" "  " hello
+echo "  " hello
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+ps -a
+ps -a | grep "cat"
+ps -a | grep "cat"
+exit
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+efe
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+ps -a | grep "cat"
+ps -a | grep "cat"
+fef
+okfose
+cat <<
+cat << ok
+exit
+ls |
+ok
+""ok"""
+"""ok"""
+exit
+"ok"
+ls | grep o
+exit
