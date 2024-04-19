@@ -24,43 +24,16 @@ void	set_err_status(t_evar *evar, int status)
 	evar->error = status;
 }
 
-void	size_dol_substitution(t_evar *evar)
+void	increase_expanded_var_size(t_evar *evar)
 {
-	evar->size_expanded_var = 0;
+	evar->size_expanded_var++;
 	evar->newvalue++;
-	if (*evar->newvalue == '{')
-	{
-		evar->newvalue++;
-		while (*evar->newvalue != '}')
-		{
-			if (!allowed_in_braces(*evar->newvalue))
-				return (set_err_status(evar, BAD_SUBSTITUTION));
-			else
-			{
-				evar->newvalue++;
-				evar->size_expanded_var++;
-			}
-		}
-	}
-	else if (*evar->newvalue != '{')
-	{
-		while (allowed_in_substitution(*evar->newvalue)) //CHECK ALL VALID IDENTIFIERS
-		{
-			evar->newvalue++;
-			evar->size_expanded_var++;
-		}
-	}
-	evar->dol_expansion_variable = (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
-	if (!evar->dol_expansion_variable)
-		return (set_err_status(evar, MALLOC));
-	ft_memcpy(evar->dol_expansion_variable, evar->newvalue - evar->size_expanded_var, evar->size_expanded_var);
-	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
-	if (evar->dol_expansion_value)
-		evar->size_evar += ft_strlen(evar->dol_expansion_value);
-	if (*evar->newvalue == '}')
-		evar->newvalue++;
-	free(evar->dol_expansion_variable);
+}
+
+void	increase_size_evar(t_evar *evar)
+{
+	evar->newvalue++;
+	evar->size_evar++;
 }
 
 void	init_evar(t_evar *evar, char *newvalue)
@@ -72,12 +45,6 @@ void	init_evar(t_evar *evar, char *newvalue)
 	evar->newvalue = newvalue;
 	evar->newvalue_toset = NULL;
 	evar->error = NONE;
-}
-
-void	increase_size_evar(t_evar *evar)
-{
-	evar->newvalue++;
-	evar->size_evar++;
 }
 
 /*
@@ -105,7 +72,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 			increase_size_evar(evar);
 	}
 	evar->newvalue++;
-	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
+	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION && evar->error != MALLOC)
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
 			size_dol_substitution(evar);
@@ -151,9 +118,7 @@ void	get_evar_size(t_evar *evar)
 			else
 				increase_size_evar(evar);
 		}
-		if (evar->error == BAD_SUBSTITUTION)
-			return ;
-		if (!evar->newvalue)
+		if (evar->error == BAD_SUBSTITUTION || evar->error == MALLOC || !evar->newvalue) //last cond if UNCLOSED_QUOTE or STOP
 			return ;
 		find_next_quotes(evar, evar->newvalue, 0);
 	}
@@ -189,7 +154,8 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 	if (!evar.newvalue_toset)
 		return (1);
 	get_evar(&evar);
-	printf("New evar value: >%s<\n", evar.newvalue_toset);
+	if (evar.error != MALLOC)
+		printf("New evar value: >%s<\n", evar.newvalue_toset);
 	free(evar.newvalue_copy);
 	free(evar.newvalue_toset);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:32:52 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/18 17:32:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:29:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,53 +35,6 @@ char	current_char(t_evar *evar)
 	return (evar->newvalue_copy[evar->id_copy]);
 }
 
-void	substitute_var(t_evar *evar)
-{
-	evar->dol_expansion_variable
-		= (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
-	if (!evar->dol_expansion_variable)
-		return (set_err_status(evar, MALLOC));
-	ft_memcpy(evar->dol_expansion_variable,
-		evar->newvalue_copy - evar->size_expanded_var + evar->id_copy,
-		evar->size_expanded_var);
-	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
-	if (evar->dol_expansion_value)
-	{
-		ft_memcpy(evar->newvalue_toset + evar->id_toset,
-			evar->dol_expansion_value,
-			ft_strlen(evar->dol_expansion_value));
-		evar->id_toset += ft_strlen(evar->dol_expansion_value);
-	}
-	if (current_char(evar) == '}')
-		evar->id_copy++;
-	free(evar->dol_expansion_variable);
-}
-
-void	expand_dol(t_evar *evar)
-{
-	evar->size_expanded_var = 0;
-	evar->id_copy++;
-	if (current_char(evar) == '{')
-	{
-		evar->id_copy++;
-		while (current_char(evar) != '}')
-		{
-			evar->id_copy++;
-			evar->size_expanded_var++;
-		}
-	}
-	else if (current_char(evar) != '{')
-	{
-		while (allowed_in_substitution(current_char(evar)))
-		{
-			evar->id_copy++;
-			evar->size_expanded_var++;
-		}
-	}
-	substitute_var(evar);
-}
-
 void	copy_quoted_sequence(t_evar *evar, char quotetype)
 {
 	while (current_char(evar) != quotetype)
@@ -92,6 +45,8 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype)
 			return (set_err_status(evar, STOP));
 		else
 			copy_char(evar);
+		if (evar->error == MALLOC)
+			return ;
 	}
 	evar->id_copy++;
 	while (current_char(evar) != quotetype)
@@ -100,6 +55,8 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype)
 			expand_dol(evar);
 		else
 			copy_char(evar);
+		if (evar->error == MALLOC)
+			return ;
 	}
 	if (current_char(evar))
 		evar->id_copy++;
@@ -128,9 +85,7 @@ void	get_evar(t_evar *evar)
 			else
 				copy_char(evar);
 		}
-		if (evar->error == STOP)
-			return ;
-		if (!evar->newvalue_copy)
+		if (evar->error == STOP || evar->error == MALLOC)
 			return ;
 		find_next_quotes(evar, evar->newvalue_copy, evar->id_copy);
 	}

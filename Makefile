@@ -8,6 +8,7 @@ SRCS 				= main.c \
 					builtins/export.c \
 					builtins/export_utils.c \
 					builtins/handle_errors.c \
+					builtins/export_substitutions.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 

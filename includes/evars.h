@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/18 19:37:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:28:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,20 @@ void	get_evar(t_evar *evar);
 void	find_next_quotes(t_evar *evar, char *string, int index);
 int		allowed_in_braces(char c);
 int		allowed_in_substitution(char c);
-void	set_err_status(t_evar *evar, int status);
 void	get_next_quotetype(t_evar *evar);
 void	evar_error_message(t_evar *evar);
+void	increase_expanded_var_size(t_evar *evar);
+void	increase_size_evar(t_evar *evar);
+char	current_char(t_evar *evar);
+void	copy_char(t_evar *evar);
 
+//export_substitutions.c
+void	size_dol_substitution(t_evar *evar);
+void	get_expanded_size(t_evar *evar);
+void	expand_dol(t_evar *evar);
+void	substitute_var(t_evar *evar);
+
+//handle_errors.c
+void	malloc_error_dol(t_evar *evar);
+void	set_err_status(t_evar *evar, int status);
 #endif
