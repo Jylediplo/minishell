@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/19 21:20:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/21 00:26:43 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,17 @@ void	get_expanded_size(t_evar *evar)
 	free(evar->dol_expansion_variable);
 }
 
-void	size_dol_substitution(t_evar *evar)
+int	count_single_dollar(t_evar *evar, int inside)
+{
+	if (!evar->size_expanded_var && (inside || !evar->quotetype))
+	{
+		evar->size_evar++;
+		return (1);
+	}
+	return (0);
+}
+
+void	size_dol_substitution(t_evar *evar, int inside)
 {
 	evar->size_expanded_var = 0;
 	evar->newvalue++;
@@ -49,11 +59,8 @@ void	size_dol_substitution(t_evar *evar)
 	{
 		while (allowed_in_substitution(*evar->newvalue)) //CHECK ALL VALID IDENTIFIERS
 			increase_expanded_var_size(evar);
-		if (!evar->size_expanded_var) //single dollar sign
-		{
-			evar->size_evar++;
+		if (count_single_dollar(evar, inside))//single dollar
 			return ;
-		}
 	}
 	get_expanded_size(evar);
 }
@@ -81,7 +88,18 @@ void	substitute_var(t_evar *evar)
 	free(evar->dol_expansion_variable);
 }
 
-void	expand_dol(t_evar *evar)
+int	copy_single_dollar(t_evar *evar, int inside)
+{
+	if (!evar->size_expanded_var && (inside || !evar->quotetype)) //single dollar
+	{
+		evar->id_copy--;
+		copy_char(evar);
+		return (1);
+	}
+	return (0);
+}
+
+void	expand_dol(t_evar *evar, int inside)
 {
 	evar->size_expanded_var = 0;
 	evar->id_copy++;
@@ -101,12 +119,8 @@ void	expand_dol(t_evar *evar)
 			evar->id_copy++;
 			evar->size_expanded_var++;
 		}
-		if (!evar->size_expanded_var) //single dollar sign
-		{
-			evar->id_copy--;
-			copy_char(evar);
+		if (copy_single_dollar(evar, inside))
 			return ;
-		}
 	}
 	substitute_var(evar);
 }

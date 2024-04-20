@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/19 21:33:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/20 12:06:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,9 @@ int	main(int argc, char **argv, char **envp)
 	//mainloop(&shell);
 	set_new_evar(&shell, "\"hel\'\'\'l\'\'o wo rld\".'${SHLVL}'\"$\"$$SHLVL$SHLVL_.wh\"\'a\"\'aaaa\'\"\'\"tsup$SHLVL");
 	set_new_evar(&shell, "$HOME");
-	set_new_evar(&shell, "\"$\"");
+	set_new_evar(&shell, "$HO ME");
+	set_new_evar(&shell, "$ HO ME");
+	set_new_evar(&shell, "$");
 	i = 0;
 	while (shell.envp[i])
 		free(shell.envp[i++]);

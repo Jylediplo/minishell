@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/17 17:07:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:53:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@
 // libft
 # include "../libft/libft.h"
 
+# ifndef T_SHELL
+#  define T_SHELL
 typedef struct  s_shell
 {
     int     argc;
     char    **argv;
     char    **envp;
 }   t_shell;
+# endif
 
 /// functions prototype
 // signals
@@ -47,5 +50,5 @@ void		free_history_data(void *data);
 // env variables and export functions
 char    **copy_env(char **envp);
 int    	export_envar(t_shell *shell, char *to_change);
-int		set_new_evar(t_shell *shell, char *newvalue);
+char	*set_new_evar(t_shell *shell, char *newvalue);
 #endif

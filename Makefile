@@ -7,8 +7,8 @@ SRCS 				= main.c \
 					builtins/specials.c \
 					builtins/export.c \
 					builtins/export_utils.c \
-					builtins/handle_errors.c \
 					builtins/export_substitutions.c \
+					builtins/handle_errors.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -51,5 +51,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+testexport:
+	@make SRCS="$(filter-out main.c, $(SRCS) tests/export_tests.c tests/get_next_line/get_next_line.c tests/get_next_line/get_next_line_utils.c tests/export_main_test.c)"
 
 .PHONY: all clean fclean re libft

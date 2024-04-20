@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 10:32:52 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/19 21:29:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/21 00:26:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	allowed_in_substitution(char c)
 {
-	if (!c)
-		return (0);
 	if ((c >= 48 && c <= 57)
 		|| (c >= 65 && c <= 90)
 		|| (c == 95)
@@ -40,7 +38,7 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype)
 	while (current_char(evar) != quotetype)
 	{
 		if (current_char(evar) == '$')
-			expand_dol(evar);
+			expand_dol(evar, 0);
 		else if (current_char(evar) == ' ')
 			return (set_err_status(evar, STOP));
 		else
@@ -52,7 +50,7 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype)
 	while (current_char(evar) != quotetype)
 	{
 		if (current_char(evar) == '$' && quotetype == '\"')
-			expand_dol(evar);
+			expand_dol(evar, 1);
 		else
 			copy_char(evar);
 		if (evar->error == MALLOC)
@@ -79,7 +77,7 @@ void	get_evar(t_evar *evar)
 		else if (!evar->double_qchar && !evar->single_qchar)
 		{
 			if (current_char(evar) == '$')
-				expand_dol(evar);
+				expand_dol(evar, 0);
 			else if (current_char(evar) == ' ')
 				break ;
 			else

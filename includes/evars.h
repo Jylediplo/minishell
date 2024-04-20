@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/19 21:28:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/21 00:26:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,16 @@ typedef struct s_evar
 	char	*dol_expansion_variable;
 	char	*dol_expansion_value;
 }	t_evar;
+# ifndef T_SHELL
+#  define T_SHELL
 typedef struct  s_shell
 {
     int     argc;
     char    **argv;
     char    **envp;
 }   t_shell;
-int		set_new_evar(t_shell *shell, char *newvalue);
+# endif
+char	*set_new_evar(t_shell *shell, char *newvalue);
 void	get_evar(t_evar *evar);
 void	find_next_quotes(t_evar *evar, char *string, int index);
 int		allowed_in_braces(char c);
@@ -59,9 +62,9 @@ char	current_char(t_evar *evar);
 void	copy_char(t_evar *evar);
 
 //export_substitutions.c
-void	size_dol_substitution(t_evar *evar);
+void	size_dol_substitution(t_evar *evar, int inside);
 void	get_expanded_size(t_evar *evar);
-void	expand_dol(t_evar *evar);
+void	expand_dol(t_evar *evar, int inside);
 void	substitute_var(t_evar *evar);
 
 //handle_errors.c

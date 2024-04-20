@@ -65,7 +65,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
 	{
 		if (*evar->newvalue == '$')
-			size_dol_substitution(evar);
+			size_dol_substitution(evar, 0);
 		else if (*evar->newvalue == ' ')
 			return (set_err_status(evar, STOP), NULL);
 		else
@@ -75,7 +75,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION && evar->error != MALLOC)
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
-			size_dol_substitution(evar);
+			size_dol_substitution(evar, 1);
 		else
 			increase_size_evar(evar);
 	}
@@ -112,7 +112,7 @@ void	get_evar_size(t_evar *evar)
 		else if (!evar->quotetype)
 		{
 			if (*evar->newvalue == '$')
-				size_dol_substitution(evar);
+				size_dol_substitution(evar, 0);
 			else if (*evar->newvalue == ' ')
 				return (set_err_status(evar, STOP));
 			else
@@ -136,7 +136,7 @@ void	get_evar_size(t_evar *evar)
  * Step 3:
  *		Return the parsed newvalue.
 */
-int	set_new_evar(t_shell *shell, char *newvalue)
+char	*set_new_evar(t_shell *shell, char *newvalue)
 {
 	t_evar	evar;
 
@@ -146,17 +146,16 @@ int	set_new_evar(t_shell *shell, char *newvalue)
 	if (evar.error != NONE && evar.error != STOP)
 	{
 		evar_error_message(&evar);
-		return (1);
+		return (NULL);
 	}
 	evar.error = NONE;
 	evar.newvalue_copy = ft_strdup(newvalue);
 	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));
 	if (!evar.newvalue_toset)
-		return (1);
+		return (NULL);
 	get_evar(&evar);
-	if (evar.error != MALLOC)
-		printf("New evar value: >%s<\n", evar.newvalue_toset);
+	if (evar.error == MALLOC)
+		ft_putstr_fd("Malloc error, can't display string\n", 2);
 	free(evar.newvalue_copy);
-	free(evar.newvalue_toset);
-	return (0);
+	return (evar.newvalue_toset);
 }
