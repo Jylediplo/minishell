@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:00:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/19 19:05:51 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/20 23:21:07 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,19 @@ void current_is_quote(t_quote *cmd, char *command)
 void current_is_not_quote(t_quote *cmd, char *command)
 {
     if (cmd->quote_open)
+    {
         cmd->output[cmd->output_index++] = command[cmd->i];
+    }
     else if (command[cmd->i] != ' ')
+    {
         cmd->output[cmd->output_index++] = command[cmd->i];
+    }
     else
-	{
+    {
         if (cmd->output_index > 0 && cmd->output[cmd->output_index - 1] != ' ')
+        {
             cmd->output[cmd->output_index++] = command[cmd->i];
+        }
     }
 }
 
@@ -115,9 +121,11 @@ char *manage_quotes(char *command)
 	return (cmd.output);
 }
 
-void execute_command(char* command, int input_fd, int output_fd, char **envp) {
+void execute_command(char* command, int input_fd, int output_fd, char **envp)
+{
     int pid = fork();
-    if (pid < 0) {
+    if (pid < 0)
+    {
         perror("fork");
         exit(EXIT_FAILURE);
     }
@@ -153,11 +161,11 @@ void parse_and_execute(char* input, char **envp)
     i = 0;
     //tok pour gerer chaque command entre les pipes;
     //a chaque call se decale a la commande apres le pipe
-    token = strtok(input, delim);
+    token = my_strtok(input, delim);
     while (token != NULL && num_commands < MAX_COMMANDS)
     {
         commands[num_commands++] = token;
-        token = strtok(NULL, delim);
+        token = my_strtok(NULL, delim);
     }
 
     int pipes[MAX_COMMANDS - 1][2];
@@ -187,7 +195,7 @@ void parse_and_execute(char* input, char **envp)
         }
         else
         {
-            //ici gere toutes les commqndes intermediaires
+            //ici gere toutes les commandes intermediaires
             execute_command(commands[i], pipes[i - 1][0], pipes[i][1], envp);
         }
         i++;
@@ -209,13 +217,13 @@ void parse_and_execute(char* input, char **envp)
     }
 }
 
-
 void parse(char *command, char **envp)
 {
+    (void)envp;
     char *sentence;
 	sentence = manage_quotes(command);
-   // printf("sentence : %s\n", sentence);
-   
-    parse_and_execute(sentence, envp);
+    printf("sentence : %s\n", sentence);
+    // parse_and_execute(sentence, envp);
+    // printf("ended properly\n");
     free(sentence);
 }

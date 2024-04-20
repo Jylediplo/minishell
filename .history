@@ -1253,3 +1253,191 @@ exit
 "ok"
 ls | grep o
 exit
+echo "oui"
+exit
+echo "oui"
+exit
+echo "oui"
+echo "oui" | grep o
+
+
+
+
+echo "oui"
+
+
+
+echo "oui"
+ls -la | grep a 
+exit
+echo "oui"
+ls -la | grep o
+echo "leo"
+oui
+ls -l | grep aide
+exit
+ok
+ls -la
+ls -la | grep
+ls -la | grep a
+exit
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+valgrind
+valgrind ./minishell 
+exit
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "ok"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "o"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+ls -la | grep "a"
+exit
+ls -la
+ls
+ls
+ls -la
+ls -la 
+ls -la | grep "a"
+ls -la | grep "h"
+exit
+echo """"leo
+echo """ "leo
+echo """  "leo
+""" "leo
+""""leo
+"""    "leo
+echo """    "leo
+exit
+echo """ "leo
+exit
+echo """ "leo
+exit
+""" "leo
+echo """ "leo
+exit
+echo """ "leo
+exit
+echo " leo"
+exit
+coucou
+echo "leo
+echo "leo"
+echo " leo"
+exit
+echo - "" "  " hello
+exit
+echo - "" "  " hello
+echo - "" "  " hello
+exit
+echo - "" "  " hello
+exit
+echo ""
+echo - "" "  " hello
+echo - ""
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+echo - "     " | cat -e
+echo - " " | cat -e
+exit
+echo - " " | cat -e
+echo - "coucou"
+echo -     "coucou"
+exit
+"leo"
+"$leo"
+""leo""
+"""$leo"""
+"'""$leo""'"
+exit
+"'""$leo""'"
+make
+"'""$leo""'"
+make
+exit
+"'""$leo""'"
+$
+exit
+"oui"
+$"oui"
+exit
+$"oui"
+exit
+$"oui"
+exit
+$"oui"
+exit
+$"oui"
+exit
+$"oui"
+exit
+$"
+$""
+$"" | cat -e
+exit
+$"" | cat -e
+"leo"
+"$leo"
+$""
+$"leo"
+$"leo
+$"leo"
+exit
+${}
+$bite
+exit
+$ok
+$okbdb
+$okbdbbrrobkdrobkr
+$okbdbbrrobkdrobkr"ok"
+$ok
+exit
+$ok
+exit
+${leo}
+${leo
+${leo
+${leo}
+$leo
+{$leo}
+${leo}
+exit
+"ok"
+"'"ok"'"
+""ok""
+exit
