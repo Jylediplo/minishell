@@ -4,10 +4,12 @@ CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
 	   				signals/handle_signals.c \
-					builtins/specials.c \
-					builtins/export.c \
+					builtins/export_main.c \
+					builtins/export_getsize.c \
+					builtins/export_setnew.c \
 					builtins/export_utils.c \
 					builtins/export_substitutions.c \
+					builtins/export_substitutions_utils.c \
 					builtins/handle_errors.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
@@ -24,16 +26,16 @@ LIBTERMCAP			= -ltermcap
 LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
 LIBFT				= -lft -L./libft
 
-HEADERS 			= minishell.h
+HEADERS 			= minishell.h \
 
 all: libft
 	@make --no-print-directory $(NAME)
 
-$(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/minishell.h
+$(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/$(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
-$(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
+$(NAME): $(OBJ_D) $(OBJS) Makefile $(INCLUDEDIR)/$(HEADERS) libft/libft.a
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE) $(LIBTERMCAP)
 
 libft:	
@@ -53,6 +55,7 @@ fclean: clean
 re: fclean all
 
 testexport:
+	HEADERS="$(HEADERS) export_tests.h"
 	@make SRCS="$(filter-out main.c, $(SRCS) tests/export_tests.c tests/get_next_line/get_next_line.c tests/get_next_line/get_next_line_utils.c tests/export_main_test.c)"
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft testexport

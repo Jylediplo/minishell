@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/21 00:26:43 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:13:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	get_expanded_size(t_evar *evar)
 	if (!evar->dol_expansion_variable)
 		return (set_err_status(evar, MALLOC));
 	ft_memcpy(evar->dol_expansion_variable,
-		   evar->newvalue - evar->size_expanded_var,
-		   evar->size_expanded_var);
+		evar->newvalue - evar->size_expanded_var,
+		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
 	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
@@ -28,16 +28,6 @@ void	get_expanded_size(t_evar *evar)
 	if (*evar->newvalue == '}')
 		evar->newvalue++;
 	free(evar->dol_expansion_variable);
-}
-
-int	count_single_dollar(t_evar *evar, int inside)
-{
-	if (!evar->size_expanded_var && (inside || !evar->quotetype))
-	{
-		evar->size_evar++;
-		return (1);
-	}
-	return (0);
 }
 
 void	size_dol_substitution(t_evar *evar, int inside)
@@ -57,9 +47,9 @@ void	size_dol_substitution(t_evar *evar, int inside)
 	}
 	else if (*evar->newvalue != '{')
 	{
-		while (allowed_in_substitution(*evar->newvalue)) //CHECK ALL VALID IDENTIFIERS
+		while (allowed_in_substitution(*evar->newvalue))
 			increase_expanded_var_size(evar);
-		if (count_single_dollar(evar, inside))//single dollar
+		if (count_single_dollar(evar, inside))
 			return ;
 	}
 	get_expanded_size(evar);
@@ -86,17 +76,6 @@ void	substitute_var(t_evar *evar)
 	if (current_char(evar) == '}')
 		evar->id_copy++;
 	free(evar->dol_expansion_variable);
-}
-
-int	copy_single_dollar(t_evar *evar, int inside)
-{
-	if (!evar->size_expanded_var && (inside || !evar->quotetype)) //single dollar
-	{
-		evar->id_copy--;
-		copy_char(evar);
-		return (1);
-	}
-	return (0);
 }
 
 void	expand_dol(t_evar *evar, int inside)

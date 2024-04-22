@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 11:24:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/20 17:00:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:29:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ void	copy_current(void)
 	}
 	close(test_file);
 	close(temp);
+	unlink("docs/.temp.md");
 }
 
-int	test_export(t_shell *shell, char *(*parser)(t_shell *, char *))
+int	test_export(char *(*parser)(char *))
 {
 	char	**inputs;
 	char	*to_test;
@@ -121,7 +122,7 @@ int	test_export(t_shell *shell, char *(*parser)(t_shell *, char *))
 	i = 0;
 	while (inputs[i])
 	{
-		parsed_string = parser(shell, inputs[i++]);
+		parsed_string = parser(inputs[i++]);
 		if (!parsed_string)
 			break ;
 		write(test_file, parsed_string, ft_strlen(parsed_string));

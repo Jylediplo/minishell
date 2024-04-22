@@ -1,42 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
+/*   export_substitutions_utils.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 11:05:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 11:09:53 by pantoine         ###   ########.fr       */
+/*   Created: 2024/04/22 11:11:40 by pantoine          #+#    #+#             */
+/*   Updated: 2024/04/22 11:12:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-int	allowed_in_substitution(char c)
+int	count_single_dollar(t_evar *evar, int inside)
 {
-	if ((c >= 48 && c <= 57)
-		|| (c >= 65 && c <= 90)
-		|| (c == 95)
-		|| (c >= 97 && c <= 122))
+	if (!evar->size_expanded_var && (inside || !evar->quotetype))
+	{
+		evar->size_evar++;
 		return (1);
+	}
 	return (0);
 }
 
-int	allowed_in_braces(char c)
+int	copy_single_dollar(t_evar *evar, int inside)
 {
-	if (c != '\'' && c != '\"' && c != ' ' && c != '{')
+	if (!evar->size_expanded_var && (inside || !evar->quotetype))
+	{
+		evar->id_copy--;
+		copy_char(evar);
 		return (1);
+	}
 	return (0);
-}
-
-void	increase_expanded_var_size(t_evar *evar)
-{
-	evar->size_expanded_var++;
-	evar->newvalue++;
-}
-
-void	increase_size_evar(t_evar *evar)
-{
-	evar->newvalue++;
-	evar->size_evar++;
 }

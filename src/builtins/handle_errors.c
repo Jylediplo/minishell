@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/19 21:26:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:08:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,3 +40,7 @@ void	malloc_error_dol(t_evar *evar)
 	evar->newvalue_toset = NULL;
 }
 
+void	set_err_status(t_evar *evar, int status)
+{
+	evar->error = status;
+}

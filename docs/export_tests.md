@@ -25,9 +25,11 @@
 
 `${SHLVL}$""$"$"$`
 
-`'ah'${HOM}$`
+`'ah'${HOM}`
 
-`oh...$"""$"ok...'   'hehe$SHL_VL$HOME..--..$SHLVL`
+`oh...$"lol""$"ok...'   'hehe$SHL_VL$HOME..--..$SHLVL`
+
+`$`
 ## OUTPUT
 `/home/pantoine`
 
@@ -55,7 +57,9 @@
 
 `2$$`
 
-`ah$`
+`ah`
 
-`oh...$ok...   hehe/home/pantoine..--..2`
+`oh...lol$ok...   hehe/home/pantoine..--..2`
+
+`$`
 
