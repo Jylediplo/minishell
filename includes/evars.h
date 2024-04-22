@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:26:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:51:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,9 @@ void	expand_dol(t_evar *evar, int inside);
 void	substitute_var(t_evar *evar);
 
 //export_substitutions_utils.c
+int		is_whitespace(char c);
 int		count_single_dollar(t_evar *evar, int inside);
 int		copy_single_dollar(t_evar *evar, int inside);
-int		get_exitsig_size(t_evar *evar);
-int		copy_exitsig_value(t_evar *evar);
 
 //export_sub_lastsig.c
 int		get_exitsig_size(t_evar *evar);

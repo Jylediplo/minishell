@@ -6,11 +6,22 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:11:40 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:26:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:51:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
+
+int	is_whitespace(char c)
+{
+	if (c == '\f'
+		|| c == '\n'
+		|| c == '\r'
+		|| c == '\t'
+		|| c == '\v')
+		return (1);
+	return (0);
+}
 
 int	count_single_dollar(t_evar *evar, int inside)
 {

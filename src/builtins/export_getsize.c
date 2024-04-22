@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 13:21:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:52:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 	{
 		if (*evar->newvalue == '$')
 			size_dol_substitution(evar, 0);
-		else if (*evar->newvalue == ' ')
+		else if (is_whitespace(*evar->newvalue))
 			return (set_err_status(evar, STOP), NULL);
 		else
 			increase_size_evar(evar);
@@ -80,7 +80,7 @@ void	get_evar_size(t_evar *evar)
 		{
 			if (*evar->newvalue == '$')
 				size_dol_substitution(evar, 0);
-			else if (*evar->newvalue == ' ')
+			else if (is_whitespace(*evar->newvalue))
 				return (set_err_status(evar, STOP));
 			else
 				increase_size_evar(evar);

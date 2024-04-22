@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:05:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:17:42 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:57:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ int	allowed_in_braces(char c)
 {
 	if (c != '\''
 		&& c != '\"'
-		&& c != ' '
-		&& c != '\t'
-		&& c != '\v'
-		&& c != '{')
+		&& c != '{'
+		&& !is_whitespace(c))
 		return (1);
 	return (0);
 }
