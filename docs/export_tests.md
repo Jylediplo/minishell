@@ -21,15 +21,37 @@
 
 `"hel'''l''o wo rld".'"'EHEHEH'LOL"""'"".wh"'a"'aaaa'"'"tsup`
 
-`"hel'''l''o wo rld".'${SHLVL}'"$"$$""SHLVL$SHLVL_.wh"'a"'aaaa'"'"tsup$SHLVL`
+`"hel'${SHLVL}''l''o wo rld".'${SHLVL}'"$"""SHLVL$SHLVL_.wh"'a"'aaaa'"'"tsup$SHLVL`
+
+`"hel'${SHLVL}''l''o wo rld".'${SHLVL}'"$"$""SHLVL$SH_$?$HOMELVL_.wh"'a"'aaaa'"'"tsup$SHLVL`
+
+`"hel'${SHLVL}''l''o wo rld".'${SHLVL}'"$"$""SHLVL$SH_${?}$HOMELVL_.wh"'a"'aaaa'"'"tsup$SHLVL`
 
 `${SHLVL}$""$"$"$`
 
+`hello"guys"`
+
 `'ah'${HOM}`
 
-`oh...$"lol""$"ok...'   'hehe$SHL_VL$HOME..--..$SHLVL`
+`oh...$"lol""$"ok...'  '"$? $?"' 'hehe$SHL_VL$HOME..--..$SHLVL`
 
-`$`
+`$""$"${?}"$"$'?'"`
+
+`$""$"${?}"$"$'?'"$"?"`
+
+`$""$"${?}"$"$'?'"$"${?}questionmark"`
+
+`${?}waouh`
+
+`$?' 'waouh`
+
+`$??waouh`
+
+`$?$?waouh`
+
+`$?_`
+
+`???$?????`
 ## OUTPUT
 `/home/pantoine`
 
@@ -53,13 +75,35 @@
 
 `hel'''l''o wo rld."EHEHEHLOL""".wh'aaaaa'tsup`
 
-`hel'''l''o wo rld.${SHLVL}$SHLVL.wh'aaaaa'tsup2`
+`hel'2''l''o wo rld.${SHLVL}$SHLVL.wh'aaaaa'tsup2`
+
+`hel'2''l''o wo rld.${SHLVL}$SHLVL0.wh'aaaaa'tsup2`
+
+`hel'2''l''o wo rld.${SHLVL}$SHLVL0.wh'aaaaa'tsup2`
 
 `2$$`
 
+`helloguys`
+
 `ah`
 
-`oh...lol$ok...   hehe/home/pantoine..--..2`
+`oh...lol$ok...  0 0 hehe/home/pantoine..--..2`
 
-`$`
+`0$'?'`
+
+`0$'?'?`
+
+`0$'?'0questionmark`
+
+`0waouh`
+
+`0 waouh`
+
+`0?waouh`
+
+`00waouh`
+
+`0_`
+
+`???0????`
 

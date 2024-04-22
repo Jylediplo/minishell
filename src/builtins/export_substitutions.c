@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 11:13:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:24:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	get_expanded_size(t_evar *evar)
 {
+	if (get_exitsig_size(evar))
+		return ;
 	evar->dol_expansion_variable
 		= (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
@@ -49,6 +51,8 @@ void	size_dol_substitution(t_evar *evar, int inside)
 	{
 		while (allowed_in_substitution(*evar->newvalue))
 			increase_expanded_var_size(evar);
+		if (*evar->newvalue == '?')
+			return (trigger_exitsig_size_handler(evar));
 		if (count_single_dollar(evar, inside))
 			return ;
 	}
@@ -57,6 +61,8 @@ void	size_dol_substitution(t_evar *evar, int inside)
 
 void	substitute_var(t_evar *evar)
 {
+	if (copy_exitsig_value(evar))
+		return ;
 	evar->dol_expansion_variable
 		= (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
@@ -86,18 +92,14 @@ void	expand_dol(t_evar *evar, int inside)
 	{
 		evar->id_copy++;
 		while (current_char(evar) != '}')
-		{
-			evar->id_copy++;
-			evar->size_expanded_var++;
-		}
+			increase_expanded_var_size_and_index(evar);
 	}
 	else if (current_char(evar) != '{')
 	{
 		while (allowed_in_substitution(current_char(evar)))
-		{
-			evar->id_copy++;
-			evar->size_expanded_var++;
-		}
+			increase_expanded_var_size_and_index(evar);
+		if (current_char(evar) == '?')
+			return (trigger_exitsig_copy_handler(evar));
 		if (copy_single_dollar(evar, inside))
 			return ;
 	}

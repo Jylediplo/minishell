@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 13:18:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:26:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 
+extern int	g_current_sig;
 typedef struct s_evar
 {
 	enum
@@ -60,6 +61,7 @@ void	copy_char(t_evar *evar);
 int		allowed_in_substitution(char c);
 int		allowed_in_braces(char c);
 void	increase_expanded_var_size(t_evar *evar);
+void	increase_expanded_var_size_and_index(t_evar *evar);
 void	increase_size_evar(t_evar *evar);
 
 //export_substitutions.c
@@ -71,6 +73,14 @@ void	substitute_var(t_evar *evar);
 //export_substitutions_utils.c
 int		count_single_dollar(t_evar *evar, int inside);
 int		copy_single_dollar(t_evar *evar, int inside);
+int		get_exitsig_size(t_evar *evar);
+int		copy_exitsig_value(t_evar *evar);
+
+//export_sub_lastsig.c
+int		get_exitsig_size(t_evar *evar);
+int		copy_exitsig_value(t_evar *evar);
+void	trigger_exitsig_copy_handler(t_evar *evar);
+void	trigger_exitsig_size_handler(t_evar *evar);
 
 //handle_errors.c
 void	evar_error_message(t_evar *evar);

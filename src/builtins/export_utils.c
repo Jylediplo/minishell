@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:05:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 11:09:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:17:42 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,12 @@ int	allowed_in_substitution(char c)
 
 int	allowed_in_braces(char c)
 {
-	if (c != '\'' && c != '\"' && c != ' ' && c != '{')
+	if (c != '\''
+		&& c != '\"'
+		&& c != ' '
+		&& c != '\t'
+		&& c != '\v'
+		&& c != '{')
 		return (1);
 	return (0);
 }
@@ -33,6 +38,12 @@ void	increase_expanded_var_size(t_evar *evar)
 {
 	evar->size_expanded_var++;
 	evar->newvalue++;
+}
+
+void	increase_expanded_var_size_and_index(t_evar *evar)
+{
+	evar->id_copy++;
+	evar->size_expanded_var++;
 }
 
 void	increase_size_evar(t_evar *evar)

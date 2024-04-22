@@ -12,5 +12,11 @@ La jyj.
 1) **Export**
     
     -   Accepted input: normal strings, strings with quotes, env variables...
-    -   Dollar substitutions: currently working with braces and no braces. Only environment variables are currently substituted.
+    -   Dollar substitutions
+
+            1) $ followed by "" or '': display nothing
+            2) $ followed by a string: return value if env. variable, nothing otherwise
+            3) $ foll
+
     -   A single `$` will output `$`.
+    -   `$$$` will output `$$$`.
