@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 11:24:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 13:29:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 20:03:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,14 @@ int	test_export(char *(*parser)(char *))
 	while (inputs[i])
 	{
 		parsed_string = parser(inputs[i++]);
-		if (!parsed_string)
-			break ;
-		write(test_file, parsed_string, ft_strlen(parsed_string));
-		write(test_file, "\n", 1);
-		free(parsed_string);
+		if (parsed_string)
+		{
+			write(test_file, parsed_string, ft_strlen(parsed_string));
+			write(test_file, "\n\n", 2);
+			free(parsed_string);
+		}
+		else
+			write(test_file, "`NULL`\n\n", 8);
 	}
 	close(test_file);
 	i = 0;

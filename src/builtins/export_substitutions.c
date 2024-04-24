@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:24:00 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 20:01:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	size_dol_substitution(t_evar *evar, int inside)
 		evar->newvalue++;
 		while (*evar->newvalue != '}')
 		{
-			if (!allowed_in_braces(*evar->newvalue))
+			if (!valid_identifier_char(*evar->newvalue))
 				return (set_err_status(evar, BAD_SUBSTITUTION));
 			else
 				increase_expanded_var_size(evar);
