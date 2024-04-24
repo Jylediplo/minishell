@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 15:37:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:36:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,38 @@ int	valid_identifier(char *identifier, char operator)
 	return (1);
 }
 
-void	get_next_operator(t_evar *evar)
-{
-	if ((!evar->change_evar.plus_str && evar->change_evar.equal_str)
-		|| (evar->change_evar.plus_str > evar->change_evar.equal_str
-		&& evar->change_evar.equal_str))
-		evar->change_evar.operator = '=';
-	else if ((evar->change_evar.plus_str && !evar->change_evar.equal_str)
-		|| (evar->change_evar.plus_str < evar->change_evar.equal_str
-		&& evar->change_evar.equal_str))
-		evar->change_evar.operator = '+';
-	else
-		evar->change_evar.operator = '\0';
-}
-
-void	init_change_evar(t_evar *evar, char *parsed_command)
+int	get_next_operator(t_evar *evar, char *parsed_command)
 {
 	evar->change_evar.plus_str = NULL;
 	evar->change_evar.equal_str = NULL;
 	evar->change_evar.append = 0;
 	evar->change_evar.plus_str = ft_strchr(parsed_command, '+');
 	evar->change_evar.equal_str = ft_strchr(parsed_command, '=');
-	get_next_operator(evar);
+	if ((!evar->change_evar.plus_str && evar->change_evar.equal_str)
+		|| (evar->change_evar.plus_str > evar->change_evar.equal_str
+		&& evar->change_evar.equal_str))
+		evar->change_evar.operator = '=';
+	else if ((evar->change_evar.plus_str < evar->change_evar.equal_str)
+		&& evar->change_evar.equal_str)
+		evar->change_evar.operator = '+';
+	else if (evar->change_evar.plus_str && !evar->change_evar.equal_str)
+	{
+		set_err_status(evar, INVALID_IDENTIFIER);
+		evar->change_evar.operator = '\0';
+		return (1);
+	}
+	else
+		evar->change_evar.operator = '\0';
+	return (0);
+}
+
+void	init_change_evar(t_evar *evar, char *parsed_command)
+{
+	if (get_next_operator(evar, parsed_command))
+	{
+		evar_error_message(evar);
+		return ;
+	}
 	if (evar->change_evar.operator)
 	{
 		if (evar->change_evar.operator == '+')

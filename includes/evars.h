@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 15:43:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 18:38:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_evar
 		BAD_SUBSTITUTION,
 		UNCLOSED_QUOTE,
 		STOP,
+		INVALID_IDENTIFIER,
 	}	error;
 	struct
 	{
@@ -39,6 +40,7 @@ typedef struct s_evar
 	int		size_expanded_var;
 	int		id_toset;
 	int		id_copy;
+	int		questionmarks;
 	char	quotetype;
 	char	*newvalue;
 	char	*newvalue_copy;

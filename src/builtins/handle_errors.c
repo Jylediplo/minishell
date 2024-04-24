@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 11:08:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:50:36 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,13 @@
 void	evar_error_message(t_evar *evar)
 {
 	if (evar->error == MALLOC)
-	{
-		printf("error !!\n");
 		ft_putstr_fd("error: malloc failure\n", 2);
-	}
 	else if (evar->error == BAD_SUBSTITUTION)
-	{
-		printf("error !!\n");
 		ft_putstr_fd("error: bad substitution\n", 2);
-	}
 	else if (evar->error == UNCLOSED_QUOTE)
-	{
-		printf("error !!\n");
 		ft_putstr_fd("error: unclosed quote detected\n", 2);
-	}
+	else if (evar->error == INVALID_IDENTIFIER)
+		ft_putstr_fd("error: not a valid identifier\n", 2);
 }
 
 void	malloc_error_dol(t_evar *evar)
