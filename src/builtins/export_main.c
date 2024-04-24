@@ -6,11 +6,12 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 11:19:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:06:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "../../includes/evars.h"
 
 char	**copy_env(char **envp)
 {
@@ -38,14 +39,20 @@ char	**copy_env(char **envp)
 	return (res);
 }
 
-int	export_envar(t_shell *shell, char *newvalue)
+/*
+*	Input must be a string starting on the first character of the new variable.
+*	For the new variable to be a valid identifier, it must only contain letters, numbers and underscores.
+*/
+int	export_envar(t_shell *shell, char *exportcommand)
 {
-	int	i;
+	char	*parsed_command;
+	t_evar	evar;
 
 	(void)shell;
-	i = 0;
-	(void)i;
-	if (!ft_strchr(newvalue, '='))
+	parsed_command = parse_evar(exportcommand);
+	if (!parsed_command)
 		return (1);
+	init_change_evar(&evar, parsed_command);
+	free(parsed_command);
 	return (0);
 }

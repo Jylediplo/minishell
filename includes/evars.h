@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:51:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 15:43:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ typedef struct s_evar
 		UNCLOSED_QUOTE,
 		STOP,
 	}	error;
+	struct
+	{
+		int		append;
+		char	*plus_str;
+		char	*equal_str;
+		char	operator;
+	}	change_evar;
 	int		size_evar;
 	int		size_expanded_var;
 	int		id_toset;
@@ -81,8 +88,16 @@ int		copy_exitsig_value(t_evar *evar);
 void	trigger_exitsig_copy_handler(t_evar *evar);
 void	trigger_exitsig_size_handler(t_evar *evar);
 
+//export_identifier.c
+int		valid_identifier(char *identifier, char operator);
+int		valid_identifier_char(char c);
+void	init_change_evar(t_evar *evar, char *parsed_command);
+
 //handle_errors.c
 void	evar_error_message(t_evar *evar);
 void	malloc_error_dol(t_evar *evar);
 void	set_err_status(t_evar *evar, int status);
+
+//export_main.c
+int		export_envar(t_shell *shell, char *exportcommand);
 #endif

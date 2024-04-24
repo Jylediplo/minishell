@@ -6,11 +6,12 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/20 12:06:41 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:09:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/evars.h"
 
 int	g_current_sig = 0;
 
@@ -93,13 +94,10 @@ int	main(int argc, char **argv, char **envp)
 
 	i = 0;
 	init_shell(argc, argv, envp, &shell);
-	create_term(shell.envp);
+	//create_term(shell.envp);
 	//mainloop(&shell);
-	set_new_evar(&shell, "\"hel\'\'\'l\'\'o wo rld\".'${SHLVL}'\"$\"$$SHLVL$SHLVL_.wh\"\'a\"\'aaaa\'\"\'\"tsup$SHLVL");
-	set_new_evar(&shell, "$HOME");
-	set_new_evar(&shell, "$HO ME");
-	set_new_evar(&shell, "$ HO ME");
-	set_new_evar(&shell, "$");
+	export_envar(&shell, "\"\"''PATH'+=    'bon\"${SHLVL}ok?\"jour");
+	export_envar(&shell, "PATHa=+");
 	i = 0;
 	while (shell.envp[i])
 		free(shell.envp[i++]);
