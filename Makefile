@@ -11,6 +11,7 @@ SRCS 				= main.c \
 					builtins/export_substitutions.c \
 					builtins/export_substitutions_utils.c \
 					builtins/export_sub_lastsig.c \
+					builtins/export_sub_lastsig_utils.c \
 					builtins/export_identifier.c \
 					builtins/handle_errors.c \
 

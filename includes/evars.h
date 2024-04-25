@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 18:38:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:52:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ int		get_exitsig_size(t_evar *evar);
 int		copy_exitsig_value(t_evar *evar);
 void	trigger_exitsig_copy_handler(t_evar *evar);
 void	trigger_exitsig_size_handler(t_evar *evar);
+
+//export_sub_lastsig_utils.c
+int		handle_questionmarks_in_braces_size(t_evar *evar);
+int		handle_questionmarks_in_braces_copy(t_evar *evar);
+int		is_legal_sigsub_count(t_evar *evar);
+int		is_legal_sigsub_copy(t_evar *evar);
 
 //export_identifier.c
 int		valid_identifier(char *identifier, char operator);

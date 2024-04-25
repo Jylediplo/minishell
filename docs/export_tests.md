@@ -57,6 +57,10 @@
 
 `''HOME+="   LOOOOOL $?"sltjyjy' comment ca va?'`
 
+`${ ?}`
+
+`${? okok}`
+
 `${?? okok}`
 ## OUTPUT
 `/home/pantoine`
@@ -85,7 +89,7 @@
 
 `hel'2''l''o wo rld.${SHLVL}$SHLVL0.wh'aaaaa'tsup2`
 
-`NULL`
+`hel'2''l''o wo rld.${SHLVL}$SHLVL0.wh'aaaaa'tsup2`
 
 `2$$`
 
@@ -95,13 +99,13 @@
 
 `oh...lol$ok...  0 0 hehe/home/pantoine..--..2`
 
-`NULL`
+`0$'?'`
 
-`NULL`
+`0$'?'?`
 
-`NULL`
+`0$'?'0questionmark`
 
-`NULL`
+`0waouh`
 
 `0 waouh`
 
@@ -118,4 +122,8 @@
 `HOME+=   LOOOOOL 0sltjyjy comment ca va?`
 
 `NULL`
+
+`NULL`
+
+`0`
 

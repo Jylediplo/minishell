@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 20:06:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:53:42 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ int	get_exitsig_size(t_evar *evar)
 	if (evar->size_expanded_var != 1
 		&& *(evar->newvalue - evar->size_expanded_var) != '?')
 		return (0);
+	if (!handle_questionmarks_in_braces_size(evar))
+		return (1);
+	if (*evar->newvalue == '}')
+		evar->newvalue++;
 	sigvalue = ft_itoa(g_current_sig);
 	if (!sigvalue)
 	{
@@ -27,8 +31,6 @@ int	get_exitsig_size(t_evar *evar)
 	}
 	evar->size_evar += ft_strlen(sigvalue);
 	free(sigvalue);
-	if (*evar->newvalue == '}')
-		evar->newvalue++;
 	return (1);
 }
 
@@ -39,6 +41,10 @@ int	copy_exitsig_value(t_evar *evar)
 	if (evar->size_expanded_var != 1
 		&& evar->newvalue_copy[evar->id_copy - evar->size_expanded_var] != '?')
 		return (0);
+	if (!handle_questionmarks_in_braces_copy(evar))
+		return (1);
+	if (current_char(evar) == '}')
+		evar->id_copy++;
 	sigvalue = ft_itoa(g_current_sig);
 	if (!sigvalue)
 	{
@@ -49,8 +55,6 @@ int	copy_exitsig_value(t_evar *evar)
 		sigvalue,
 		ft_strlen(sigvalue));
 	evar->id_toset += ft_strlen(sigvalue);
-	if (current_char(evar) == '}')
-		evar->id_copy++;
 	free(sigvalue);
 	return (1);
 }

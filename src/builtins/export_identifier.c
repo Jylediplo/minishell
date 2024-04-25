@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 17:36:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:56:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	get_next_operator(t_evar *evar, char *parsed_command)
 	evar->change_evar.equal_str = ft_strchr(parsed_command, '=');
 	if ((!evar->change_evar.plus_str && evar->change_evar.equal_str)
 		|| (evar->change_evar.plus_str > evar->change_evar.equal_str
-		&& evar->change_evar.equal_str))
+			&& evar->change_evar.equal_str))
 		evar->change_evar.operator = '=';
 	else if ((evar->change_evar.plus_str < evar->change_evar.equal_str)
 		&& evar->change_evar.equal_str)
