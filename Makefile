@@ -13,6 +13,7 @@ SRCS 				= main.c \
 					builtins/export_sub_lastsig.c \
 					builtins/export_sub_lastsig_utils.c \
 					builtins/export_identifier.c \
+					builtins/export_identifier_utils.c \
 					builtins/handle_errors.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)

@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
+/*   export_identifier_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 11:05:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 10:59:29 by pantoine         ###   ########.fr       */
+/*   Created: 2024/04/26 12:15:55 by pantoine          #+#    #+#             */
+/*   Updated: 2024/04/26 14:13:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	increase_expanded_var_size(t_evar *evar)
+char	*save_next_evar(t_evar *evar)
 {
-	evar->size_expanded_var++;
-	evar->newvalue++;
-}
-
-void	increase_expanded_var_size_and_index(t_evar *evar)
-{
-	evar->id_copy++;
-	evar->size_expanded_var++;
-}
-
-void	increase_size_evar(t_evar *evar)
-{
-	evar->newvalue++;
-	evar->size_evar++;
+	while (is_whitespace(*evar->newvalue))
+		evar->newvalue++;
+	if (!*evar->newvalue)
+	{
+		evar->set_next = NULL;
+		set_err_status(evar, STOP);
+		return (NULL);
+	}
+	evar->set_next = evar->newvalue;
+	set_err_status(evar, STOP);
+	return (NULL);
 }

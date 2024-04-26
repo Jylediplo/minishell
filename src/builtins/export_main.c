@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 14:06:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:45:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,18 @@ int	export_envar(t_shell *shell, char *exportcommand)
 	t_evar	evar;
 
 	(void)shell;
-	parsed_command = parse_evar(exportcommand);
+	parsed_command = parse_evar(&evar, exportcommand);
 	if (!parsed_command)
 		return (1);
 	init_change_evar(&evar, parsed_command);
 	free(parsed_command);
+	while (evar.set_next)
+	{
+		parsed_command = parse_evar(&evar, evar.set_next);
+		if (!parsed_command)
+			return (1);
+		init_change_evar(&evar, parsed_command);
+		free(parsed_command);
+	}
 	return (0);
 }

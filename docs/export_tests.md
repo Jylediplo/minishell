@@ -62,6 +62,10 @@
 `${? okok}`
 
 `${?? okok}`
+
+`${?? okok}"me? nothing, huh... just hanging around!"`
+
+`${?}bonjour atous...`
 ## OUTPUT
 `/home/pantoine`
 
@@ -126,4 +130,10 @@
 `NULL`
 
 `0`
+
+`0me? nothing, huh... just hanging around!`
+
+`0bonjour`
+
+`atous...`
 

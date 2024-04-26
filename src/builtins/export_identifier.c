@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/25 19:56:28 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:56:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	valid_identifier_char(char c)
 
 int	valid_identifier(char *identifier, char operator)
 {
-	if (*identifier >= '0' && *identifier <= '9')
+	if ((*identifier >= '0' && *identifier <= '9')
+		|| *identifier == operator)
 		return (0);
 	while (*identifier && *identifier != operator)
 	{
@@ -76,5 +77,5 @@ void	init_change_evar(t_evar *evar, char *parsed_command)
 			printf("Name <%s> is invalid\n", parsed_command);
 	}
 	else
-		printf("No operators detected !!\n");
+		printf("No operators detected !! This variable will be added to envp, but typing 'env' will not show it. You can access see it with 'echo'.\n");
 }

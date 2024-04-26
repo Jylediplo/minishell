@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/25 19:52:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:14:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_evar
 	char	*double_qchar;
 	char	*dol_expansion_variable;
 	char	*dol_expansion_value;
+	char	*set_next;
 }	t_evar;
 # ifndef T_SHELL
 #  define T_SHELL
@@ -59,7 +60,7 @@ typedef struct  s_shell
     char    **envp;
 }   t_shell;
 # endif
-char	*parse_evar(char *newvalue);
+char	*parse_evar(t_evar *evar, char *newvalue);
 void	get_evar(t_evar *evar);
 void	find_next_quotes(t_evar *evar, char *string, int index);
 void	get_next_quotetype(t_evar *evar);
@@ -67,8 +68,6 @@ char	current_char(t_evar *evar);
 void	copy_char(t_evar *evar);
 
 //export_utils.c
-int		allowed_in_substitution(char c);
-int		allowed_in_braces(char c);
 void	increase_expanded_var_size(t_evar *evar);
 void	increase_expanded_var_size_and_index(t_evar *evar);
 void	increase_size_evar(t_evar *evar);
@@ -100,6 +99,9 @@ int		is_legal_sigsub_copy(t_evar *evar);
 int		valid_identifier(char *identifier, char operator);
 int		valid_identifier_char(char c);
 void	init_change_evar(t_evar *evar, char *parsed_command);
+
+//export_identifier_utils.c
+char	*save_next_evar(t_evar *evar);
 
 //handle_errors.c
 void	evar_error_message(t_evar *evar);

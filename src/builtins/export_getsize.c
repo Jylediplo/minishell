@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/22 18:52:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:13:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_evar(t_evar *evar, char *newvalue)
 	evar->newvalue = newvalue;
 	evar->newvalue_toset = NULL;
 	evar->error = NONE;
+	evar->set_next = NULL;
 }
 
 char	*parse_quoted_sequence(t_evar *evar, char quotetype)
@@ -32,7 +33,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype)
 		if (*evar->newvalue == '$')
 			size_dol_substitution(evar, 0);
 		else if (is_whitespace(*evar->newvalue))
-			return (set_err_status(evar, STOP), NULL);
+			return (save_next_evar(evar));
 		else
 			increase_size_evar(evar);
 	}
@@ -81,7 +82,10 @@ void	get_evar_size(t_evar *evar)
 			if (*evar->newvalue == '$')
 				size_dol_substitution(evar, 0);
 			else if (is_whitespace(*evar->newvalue))
+			{
+				save_next_evar(evar);
 				return (set_err_status(evar, STOP));
+			}
 			else
 				increase_size_evar(evar);
 		}
@@ -93,25 +97,23 @@ void	get_evar_size(t_evar *evar)
 	}
 }
 
-char	*parse_evar(char *newvalue)
+char	*parse_evar(t_evar *evar, char *newvalue)
 {
-	t_evar	evar;
-
-	init_evar(&evar, newvalue);
-	get_evar_size(&evar);
-	if (evar.error != NONE && evar.error != STOP)
+	init_evar(evar, newvalue);
+	get_evar_size(evar);
+	if (evar->error != NONE && evar->error != STOP)
 	{
-		evar_error_message(&evar);
+		evar_error_message(evar);
 		return (NULL);
 	}
-	evar.error = NONE;
-	evar.newvalue_copy = ft_strdup(newvalue);
-	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));
-	if (!evar.newvalue_toset)
+	evar->error = NONE;
+	evar->newvalue_copy = ft_strdup(newvalue);
+	evar->newvalue_toset = (char *)malloc(sizeof(char) * (evar->size_evar + 1));
+	if (!evar->newvalue_toset)
 		return (NULL);
-	get_evar(&evar);
-	if (evar.error == MALLOC)
+	get_evar(evar);
+	if (evar->error == MALLOC)
 		ft_putstr_fd("Malloc error, can't display string\n", 2);
-	free(evar.newvalue_copy);
-	return (evar.newvalue_toset);
+	free(evar->newvalue_copy);
+	return (evar->newvalue_toset);
 }

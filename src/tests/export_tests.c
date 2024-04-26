@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 11:24:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 20:03:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:03:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ void	copy_current(void)
 	unlink("docs/.temp.md");
 }
 
-int	test_export(char *(*parser)(char *))
+int	test_export(char *(*parser)(t_evar *evar, char *))
 {
+	t_evar	evar;
 	char	**inputs;
 	char	*to_test;
 	char	*parsed_string;
@@ -122,15 +123,30 @@ int	test_export(char *(*parser)(char *))
 	i = 0;
 	while (inputs[i])
 	{
-		parsed_string = parser(inputs[i++]);
+		parsed_string = parser(&evar, inputs[i++]);
 		if (parsed_string)
 		{
 			write(test_file, parsed_string, ft_strlen(parsed_string));
-			write(test_file, "\n\n", 2);
+			if (evar.set_next)
+				write(test_file, "`\n\n`", 4);
+			else
+				write(test_file, "\n\n", 2);
 			free(parsed_string);
 		}
 		else
 			write(test_file, "`NULL`\n\n", 8);
+		while (evar.set_next)
+		{
+			parsed_string = parse_evar(&evar, evar.set_next);
+			if (parsed_string)
+			{
+				write(test_file, parsed_string, ft_strlen(parsed_string));
+				write(test_file, "\n\n", 2);
+				free(parsed_string);
+			}
+			else
+				write(test_file, "`NULL`\n\n", 8);
+		}
 	}
 	close(test_file);
 	i = 0;

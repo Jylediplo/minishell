@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/25 19:36:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 10:56:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	size_dol_substitution(t_evar *evar, int inside)
 	}
 	else if (*evar->newvalue != '{')
 	{
-		while (allowed_in_substitution(*evar->newvalue))
+		while (valid_identifier_char(*evar->newvalue))
 			increase_expanded_var_size(evar);
 		if (*evar->newvalue == '?')
 			return (trigger_exitsig_size_handler(evar));
@@ -100,7 +100,7 @@ void	expand_dol(t_evar *evar, int inside)
 	}
 	else if (current_char(evar) != '{')
 	{
-		while (allowed_in_substitution(current_char(evar)))
+		while (valid_identifier_char(current_char(evar)))
 			increase_expanded_var_size_and_index(evar);
 		if (current_char(evar) == '?')
 			return (trigger_exitsig_copy_handler(evar));
