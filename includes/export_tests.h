@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 11:57:43 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 13:54:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:55:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 #include <unistd.h>
 
 char	*get_next_line(int fd);
-int		test_export(char *(*parser)(t_evar *evar, char *));
+int		test_export(char *(*parser)(char *));
 
 #endif

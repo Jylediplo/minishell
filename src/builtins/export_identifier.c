@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 12:56:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:46:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ int	get_next_operator(t_evar *evar, char *parsed_command)
 
 void	init_change_evar(t_evar *evar, char *parsed_command)
 {
+	if (!parsed_command)
+		return ;
+	printf("Parsed command: <%s>\n", parsed_command);
 	if (get_next_operator(evar, parsed_command))
 	{
 		evar_error_message(evar);
@@ -72,9 +75,9 @@ void	init_change_evar(t_evar *evar, char *parsed_command)
 		if (evar->change_evar.operator == '+')
 			evar->change_evar.append = 1;
 		if (valid_identifier(parsed_command, evar->change_evar.operator))
-			printf("Name <%s> is valid\n", parsed_command);
+			printf("valid\n");
 		else
-			printf("Name <%s> is invalid\n", parsed_command);
+			printf("invalid\n");
 	}
 	else
 		printf("No operators detected !! This variable will be added to envp, but typing 'env' will not show it. You can access see it with 'echo'.\n");

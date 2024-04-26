@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/26 14:17:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:48:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ int	main(int argc, char **argv, char **envp)
 	export_envar(&shell, "PATHa'    '+=$?");
 	export_envar(&shell, "PATHa+=$? 		PAT?Hb =okay PATHc+=$?uhhh");
 	export_envar(&shell, "PATHa+=$? 		");
+	export_envar(&shell, "ls\" \" -la | \"\" grep");
+	export_envar(&shell, "ls -la");
 	i = 0;
 	while (shell.envp[i])
 		free(shell.envp[i++]);

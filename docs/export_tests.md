@@ -66,6 +66,8 @@
 `${?? okok}"me? nothing, huh... just hanging around!"`
 
 `${?}bonjour atous...`
+
+`export PATH=$? 	PATHTEST+=""helloworld$HOME`
 ## OUTPUT
 `/home/pantoine`
 
@@ -133,7 +135,7 @@
 
 `0me? nothing, huh... just hanging around!`
 
-`0bonjour`
+`0bonjour atous...`
 
-`atous...`
+`export PATH=0 PATHTEST+=helloworld/home/pantoine`
 
