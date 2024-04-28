@@ -66,6 +66,8 @@
 `${?? okok}"me? nothing, huh... just hanging around!"`
 
 `${?}bonjour atous...`
+
+`PATH+=${OK`
 ## OUTPUT
 `/home/pantoine`
 
@@ -136,4 +138,6 @@
 `0bonjour`
 
 `atous...`
+
+`NULL`
 

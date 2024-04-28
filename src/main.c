@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/26 14:17:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 18:54:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	mainloop(t_shell *shell)
 {
 	char	*command;
 
+	(void)shell;
 	while (1)
 	{
 		handle_signals();
@@ -74,7 +75,7 @@ int	mainloop(t_shell *shell)
 			free(command);
 			break ;
 		}
-		handle_minishell_cmd(command, shell->envp);
+		handle_minishell_cmd(command, /*shell->envp*/NULL);
 		free(command);
 	}
 	return (0);
@@ -97,14 +98,14 @@ int	main(int argc, char **argv, char **envp)
 	//create_term(shell.envp);
 	//mainloop(&shell);
 	export_envar(&shell, "\"\"''PATH'  +=    'bon\"${SHLVL}ok?\"jour");
-	export_envar(&shell, "PATHa'    '+");
-	export_envar(&shell, "HOME\"=\"'   yooo''''...${HOME}...$?'${UNL_UCKY}?PANTOINE/${SHLVL}");
-	export_envar(&shell, "PATHa'    '+=$?");
-	export_envar(&shell, "PATHa+=$? 		PAT?Hb =okay PATHc+=$?uhhh");
-	export_envar(&shell, "PATHa+=$? 		");
-	i = 0;
-	while (shell.envp[i])
-		free(shell.envp[i++]);
-	free(shell.envp);
+	//export_envar(&shell, "PATHa'    '+");
+	//export_envar(&shell, "HOME\"=\"'   yooo''''...${HOME}...$?'${UNL_UCKY}?PANTOINE/${SHLVL}");
+	//export_envar(&shell, "PATHa'    '+=$?");
+	//export_envar(&shell, "PATHb+=$? 		PAT?Hb =okay PATHc+=$?uhhh");
+	//export_envar(&shell, "PATHc+=$? 		");
+	export_envar(&shell, "PATHe=\"$'{'}\"");
+	export_envar(&shell, "PATHe+='okok'");
+	print_envp(shell.envp);
+	free_envp(shell.envp);
 	return (0);
 }

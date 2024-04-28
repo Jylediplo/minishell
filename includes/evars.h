@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 14:14:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:01:26 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_evar
 		MALLOC,
 		BAD_SUBSTITUTION,
 		UNCLOSED_QUOTE,
+		UNCLOSED_BRACE,
 		STOP,
 		INVALID_IDENTIFIER,
 	}	error;
@@ -57,7 +58,7 @@ typedef struct  s_shell
 {
     int     argc;
     char    **argv;
-    char    **envp;
+	t_list	*envp;
 }   t_shell;
 # endif
 char	*parse_evar(t_evar *evar, char *newvalue);
@@ -98,7 +99,7 @@ int		is_legal_sigsub_copy(t_evar *evar);
 //export_identifier.c
 int		valid_identifier(char *identifier, char operator);
 int		valid_identifier_char(char c);
-void	init_change_evar(t_evar *evar, char *parsed_command);
+void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
 
 //export_identifier_utils.c
 char	*save_next_evar(t_evar *evar);
@@ -110,4 +111,12 @@ void	set_err_status(t_evar *evar, int status);
 
 //export_main.c
 int		export_envar(t_shell *shell, char *exportcommand);
+
+//modify_envp.c
+void	print_envp(t_list *envp);
+void	free_envp(t_list *envp);
+void	add_to_envp(t_shell *shell, t_evar *evar, char *value);
+
+//modify_envp_utils.c
+char	*strjoin_free(char *s1, const char *s2);
 #endif

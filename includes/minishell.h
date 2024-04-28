@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/20 11:53:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 13:59:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct  s_shell
 {
     int     argc;
     char    **argv;
-    char    **envp;
+    t_list	*envp;
 }   t_shell;
 # endif
 
@@ -48,7 +48,8 @@ void		handle_signals(void);
 void		free_history_data(void *data);
 
 // env variables and export functions
-char    **copy_env(char **envp);
+t_list  *copy_env(char **envp);
+void	free_envp(t_list *envp);
 int    	export_envar(t_shell *shell, char *to_change);
 char	*set_new_evar(t_shell *shell, char *newvalue);
 #endif

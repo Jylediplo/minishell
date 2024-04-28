@@ -6,37 +6,49 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 12:45:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 17:55:20 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
 
-char	**copy_env(char **envp)
+t_list	*copy_env(char **envp)
 {
-	char	**res;
-	char	len;
 	int		i;
+	t_list	*envvar;
+	t_list	*head;
+	char	*value;
 
-	i = 0;
-	len = 0;
+	i = 1;
+	value = ft_strdup(envp[0]);
+	if (!value)
+		exit(EXIT_FAILURE);
+	head = ft_lstnew(value);
+	if (!head)
+	{
+		free(value);
+		exit(EXIT_FAILURE);
+	}
 	while (envp[i])
 	{
-		len++;
+		value = ft_strdup(envp[i]);
+		if (!value)
+		{
+			free_envp(head);
+			exit(EXIT_FAILURE);
+		}
+		envvar = ft_lstnew(value);
+		if (!envvar)
+		{
+			free(value);
+			free_envp(head);
+			exit(EXIT_FAILURE);
+		}
+		ft_lstadd_back(&head, envvar);
 		i++;
 	}
-	res = malloc(sizeof(char *) * (len + 1));
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (envp[i])
-	{
-		res[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	res[i] = NULL;
-	return (res);
+	return (head);
 }
 
 /*
@@ -52,15 +64,13 @@ int	export_envar(t_shell *shell, char *exportcommand)
 	parsed_command = parse_evar(&evar, exportcommand);
 	if (!parsed_command)
 		return (1);
-	init_change_evar(&evar, parsed_command);
-	free(parsed_command);
+	init_change_evar(shell, &evar, parsed_command);
 	while (evar.set_next)
 	{
 		parsed_command = parse_evar(&evar, evar.set_next);
 		if (!parsed_command)
 			return (1);
-		init_change_evar(&evar, parsed_command);
-		free(parsed_command);
+		init_change_evar(shell, &evar, parsed_command);
 	}
 	return (0);
 }

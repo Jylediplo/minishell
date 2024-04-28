@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/24 16:50:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 11:21:44 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	evar_error_message(t_evar *evar)
 		ft_putstr_fd("error: bad substitution\n", 2);
 	else if (evar->error == UNCLOSED_QUOTE)
 		ft_putstr_fd("error: unclosed quote detected\n", 2);
+	else if (evar->error == UNCLOSED_BRACE)
+		ft_putstr_fd("error: unclosed brace detected\n", 2);
 	else if (evar->error == INVALID_IDENTIFIER)
 		ft_putstr_fd("error: not a valid identifier\n", 2);
 }

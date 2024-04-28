@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/26 12:56:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/28 18:06:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,24 @@ int	get_next_operator(t_evar *evar, char *parsed_command)
 	return (0);
 }
 
-void	init_change_evar(t_evar *evar, char *parsed_command)
+void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 {
 	if (get_next_operator(evar, parsed_command))
-	{
 		evar_error_message(evar);
-		return ;
-	}
-	if (evar->change_evar.operator)
+	else if (evar->change_evar.operator)
 	{
 		if (evar->change_evar.operator == '+')
 			evar->change_evar.append = 1;
 		if (valid_identifier(parsed_command, evar->change_evar.operator))
-			printf("Name <%s> is valid\n", parsed_command);
+		{
+			printf("Name <%s> is valid. Added to envp\n", parsed_command);
+			add_to_envp(shell, evar, parsed_command);
+			return ;
+		}
 		else
-			printf("Name <%s> is invalid\n", parsed_command);
+			printf("Name <%s> is invalid. Not added to envp\n", parsed_command);
 	}
 	else
 		printf("No operators detected !! This variable will be added to envp, but typing 'env' will not show it. You can access see it with 'echo'.\n");
+	free(parsed_command);
 }
