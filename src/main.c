@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/28 18:54:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/29 13:47:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
-	int		i;
 
-	i = 0;
 	init_shell(argc, argv, envp, &shell);
 	//create_term(shell.envp);
 	//mainloop(&shell);
@@ -105,6 +103,13 @@ int	main(int argc, char **argv, char **envp)
 	//export_envar(&shell, "PATHc+=$? 		");
 	export_envar(&shell, "PATHe=\"$'{'}\"");
 	export_envar(&shell, "PATHe+='okok'");
+	export_envar(&shell, "PATHe='okok'");
+	export_envar(&shell, "PATHe='okok'");
+	export_envar(&shell, "PATHe='okok'");
+	export_envar(&shell, "PATHb='okok'");
+	export_envar(&shell, "PATHb+='2nd one'${HOME}helloworld\'\'\"|\"");
+	export_envar(&shell, "PATHb='ABORTMISSION'");
+	export_envar(&shell, "PATHe= PATHe+=");
 	print_envp(shell.envp);
 	free_envp(shell.envp);
 	return (0);

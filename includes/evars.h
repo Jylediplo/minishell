@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/28 19:01:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/29 13:24:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,5 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value);
 
 //modify_envp_utils.c
 char	*strjoin_free(char *s1, const char *s2);
+void	modify_envvar(t_list *envp, t_list *newvar);
 #endif
