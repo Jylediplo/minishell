@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/01 17:52:23 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:25:06 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int	main(int argc, char **argv, char **envp)
 	export_envar(&shell, "PATHb='ABORTMISSION'");
 	export_envar(&shell, "PATHe= PATHe+=");
 	export_envar(&shell, "HOME+=$?cmamaison${HOME}\"''\" PATHe+=coucou");
+	efftee_echo(&shell, "bonjour a tous$SHLVL''\"$AHA\"");
+	unset_envvar(&shell, "PATHb HOME ${ABC}");
 	print_envp(shell.envp);
 	free_envp(shell.envp);
 	return (0);

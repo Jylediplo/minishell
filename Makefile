@@ -20,6 +20,7 @@ SRCS 				= main.c \
 					builtins/echo_main.c \
 					builtins/echo_getsize.c \
 					builtins/echo_setnew.c \
+					builtins/unset_main.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
