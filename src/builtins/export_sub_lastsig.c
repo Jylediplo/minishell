@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/25 19:53:42 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/04/30 21:41:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ int	copy_exitsig_value(t_evar *evar)
 	return (1);
 }
 
-void	trigger_exitsig_copy_handler(t_evar *evar)
+void	trigger_exitsig_copy_handler(t_evar *evar, t_list *envp)
 {
 	increase_expanded_var_size_and_index(evar);
-	substitute_var(evar);
+	substitute_var(evar, envp);
 }
 
-void	trigger_exitsig_size_handler(t_evar *evar)
+void	trigger_exitsig_size_handler(t_evar *evar, t_list *envp)
 {
 	increase_expanded_var_size(evar);
-	get_expanded_size(evar);
+	get_expanded_size(evar, envp);
 }

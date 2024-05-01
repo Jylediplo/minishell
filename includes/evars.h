@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/29 13:24:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:36:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,15 @@ typedef struct  s_shell
 	t_list	*envp;
 }   t_shell;
 # endif
-char	*parse_evar(t_evar *evar, char *newvalue);
-void	get_evar(t_evar *evar);
+char	*parse_evar(t_evar *evar, char *newvalue, t_list *envp);
+void	get_evar(t_evar *evar, t_list *envp);
 void	find_next_quotes(t_evar *evar, char *string, int index);
 void	get_next_quotetype(t_evar *evar);
 char	current_char(t_evar *evar);
 void	copy_char(t_evar *evar);
+
+//export_getsize.c
+void	init_evar(t_evar *evar, char *newvalue);
 
 //export_utils.c
 void	increase_expanded_var_size(t_evar *evar);
@@ -74,10 +77,10 @@ void	increase_expanded_var_size_and_index(t_evar *evar);
 void	increase_size_evar(t_evar *evar);
 
 //export_substitutions.c
-void	size_dol_substitution(t_evar *evar, int inside);
-void	get_expanded_size(t_evar *evar);
-void	expand_dol(t_evar *evar, int inside);
-void	substitute_var(t_evar *evar);
+void	size_dol_substitution(t_evar *evar, int inside, t_list *envp);
+void	get_expanded_size(t_evar *evar, t_list *envp);
+void	expand_dol(t_evar *evar, int inside, t_list *envp);
+void	substitute_var(t_evar *evar, t_list *envp);
 
 //export_substitutions_utils.c
 int		is_whitespace(char c);
@@ -87,8 +90,8 @@ int		copy_single_dollar(t_evar *evar, int inside);
 //export_sub_lastsig.c
 int		get_exitsig_size(t_evar *evar);
 int		copy_exitsig_value(t_evar *evar);
-void	trigger_exitsig_copy_handler(t_evar *evar);
-void	trigger_exitsig_size_handler(t_evar *evar);
+void	trigger_exitsig_copy_handler(t_evar *evar, t_list *envp);
+void	trigger_exitsig_size_handler(t_evar *evar, t_list *envp);
 
 //export_sub_lastsig_utils.c
 int		handle_questionmarks_in_braces_size(t_evar *evar);
@@ -116,8 +119,16 @@ int		export_envar(t_shell *shell, char *exportcommand);
 void	print_envp(t_list *envp);
 void	free_envp(t_list *envp);
 void	add_to_envp(t_shell *shell, t_evar *evar, char *value);
+char	*get_envvar_value(t_list **envp, char *envvar);
 
 //modify_envp_utils.c
 char	*strjoin_free(char *s1, const char *s2);
 void	modify_envvar(t_list *envp, t_list *newvar);
+
+//echo_getsize.c
+char	*parse_echo(t_list *envp, char *to_echo);
+
+//echo_setnew.c
+void	get_echo(t_evar *evar, t_list *envp);
+
 #endif

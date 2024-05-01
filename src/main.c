@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/29 13:47:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:52:23 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,18 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(argc, argv, envp, &shell);
 	//create_term(shell.envp);
 	//mainloop(&shell);
-	export_envar(&shell, "\"\"''PATH'  +=    'bon\"${SHLVL}ok?\"jour");
-	//export_envar(&shell, "PATHa'    '+");
-	//export_envar(&shell, "HOME\"=\"'   yooo''''...${HOME}...$?'${UNL_UCKY}?PANTOINE/${SHLVL}");
-	//export_envar(&shell, "PATHa'    '+=$?");
-	//export_envar(&shell, "PATHb+=$? 		PAT?Hb =okay PATHc+=$?uhhh");
-	//export_envar(&shell, "PATHc+=$? 		");
+	export_envar(&shell, "\"\"''PATHa'+=  ''  'bon\"ok?\"jour");
+	export_envar(&shell, "PATHa'    '+");
+	export_envar(&shell, "HOME\"=\"'   yooo''''...${HOME}...$?'${UNL_UCKY}?PANTOINE/${SHLVL}");
+	export_envar(&shell, "PATHa'    '+=$?");
+	export_envar(&shell, "PATHb+=$? 		PAT?Hb =okay PATHc+=$?uhhh");
+	export_envar(&shell, "PATHc+=$? 		");
 	export_envar(&shell, "PATHe=\"$'{'}\"");
 	export_envar(&shell, "PATHe+='okok'");
-	export_envar(&shell, "PATHe='okok'");
-	export_envar(&shell, "PATHe='okok'");
-	export_envar(&shell, "PATHe='okok'");
-	export_envar(&shell, "PATHb='okok'");
-	export_envar(&shell, "PATHb+='2nd one'${HOME}helloworld\'\'\"|\"");
+	export_envar(&shell, "PATHb+='2nd one'${SHLVL}helloworld\'\'\"|\"");
 	export_envar(&shell, "PATHb='ABORTMISSION'");
 	export_envar(&shell, "PATHe= PATHe+=");
+	export_envar(&shell, "HOME+=$?cmamaison${HOME}\"''\" PATHe+=coucou");
 	print_envp(shell.envp);
 	free_envp(shell.envp);
 	return (0);

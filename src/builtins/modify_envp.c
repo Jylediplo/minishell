@@ -6,20 +6,20 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/29 13:43:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:26:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-char	*get_envvar_value(t_list *envp, char *envvar)
+char	*get_envvar_value(t_list **envp, char *envvar)
 {
 	t_list	*iter;
 	size_t	len;
 	char	*envp_value;
 	char	*operator;
 
-	iter = envp;
+	iter = *envp;
 	if (!envvar || !envvar[0])
 		return (NULL);
 	operator = ft_strchr(envvar, '=');
@@ -32,11 +32,28 @@ char	*get_envvar_value(t_list *envp, char *envvar)
 	{
 		envp_value = iter->content;
 		if (!ft_strncmp(envp_value, envvar, len)
-			&& *(envp_value + len) == '=')
+			&& envp_value[len] == '=')
 			return (envp_value + len + 1);
 		iter = iter->next;
 	}
 	return (NULL);
+}
+
+void	remove_plus_in_envvar(t_list *newvar)
+{
+	char	*value;
+	char	*res;
+	char	*plus_operator;
+	int		len;
+
+	value = newvar->content;
+	plus_operator = ft_strchr(value, '+');
+	len = plus_operator - value;
+	res = (char *)malloc(sizeof(char) * (ft_strlen(value)));
+	ft_memcpy(res, value, len);
+	ft_memcpy(res + len, plus_operator + 1, ft_strlen(value) - len);
+	free(newvar->content);
+	newvar->content = res;
 }
 
 void	append_to_envvar(t_list *envp, t_list *newvar)
@@ -63,6 +80,7 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 		}
 		iter = iter->next;
 	}
+	remove_plus_in_envvar(newvar);
 	ft_lstadd_back(&envp, newvar);
 }
 
@@ -78,14 +96,10 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 	}
 	if (!evar->change_evar.append)
 	{
-		printf("Content of the new variable: <%s>\n", (char *)newvar->content);
-		if (!get_envvar_value(shell->envp, (char *)newvar->content))
+		if (!get_envvar_value(&shell->envp, (char *)newvar->content))
 			ft_lstadd_back(&shell->envp, newvar);
 		else
-		{
-			printf("Envvar already in the list -> modify operation\n");
 			modify_envvar(shell->envp, newvar);
-		}
 		return ;
 	}
 	append_to_envvar(shell->envp, newvar);

@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/28 11:42:01 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:36:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	get_expanded_size(t_evar *evar)
+void	get_expanded_size(t_evar *evar, t_list *envp)
 {
 	if (get_exitsig_size(evar))
 		return ;
@@ -24,7 +24,8 @@ void	get_expanded_size(t_evar *evar)
 		evar->newvalue - evar->size_expanded_var,
 		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
+	printf("Need to expand this variable: %s\n", evar->dol_expansion_variable);
+	evar->dol_expansion_value = get_envvar_value(&envp, evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 		evar->size_evar += ft_strlen(evar->dol_expansion_value);
 	if (*evar->newvalue == '}')
@@ -32,7 +33,7 @@ void	get_expanded_size(t_evar *evar)
 	free(evar->dol_expansion_variable);
 }
 
-void	size_dol_substitution(t_evar *evar, int inside)
+void	size_dol_substitution(t_evar *evar, int inside, t_list *envp)
 {
 	evar->size_expanded_var = 0;
 	evar->newvalue++;
@@ -40,7 +41,7 @@ void	size_dol_substitution(t_evar *evar, int inside)
 	{
 		evar->newvalue++;
 		if (*evar->newvalue == '?')
-			return (trigger_exitsig_size_handler(evar));
+			return (trigger_exitsig_size_handler(evar, envp));
 		while (*evar->newvalue != '}' && *evar->newvalue)
 		{
 			if (!valid_identifier_char(*evar->newvalue))
@@ -56,14 +57,14 @@ void	size_dol_substitution(t_evar *evar, int inside)
 		while (valid_identifier_char(*evar->newvalue))
 			increase_expanded_var_size(evar);
 		if (*evar->newvalue == '?')
-			return (trigger_exitsig_size_handler(evar));
+			return (trigger_exitsig_size_handler(evar, envp));
 		if (count_single_dollar(evar, inside))
 			return ;
 	}
-	get_expanded_size(evar);
+	get_expanded_size(evar, envp);
 }
 
-void	substitute_var(t_evar *evar)
+void	substitute_var(t_evar *evar, t_list *envp)
 {
 	if (copy_exitsig_value(evar))
 		return ;
@@ -75,7 +76,7 @@ void	substitute_var(t_evar *evar)
 		evar->newvalue_copy - evar->size_expanded_var + evar->id_copy,
 		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = getenv(evar->dol_expansion_variable);
+	evar->dol_expansion_value = get_envvar_value(&envp, evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 	{
 		ft_memcpy(evar->newvalue_toset + evar->id_toset,
@@ -88,7 +89,7 @@ void	substitute_var(t_evar *evar)
 	free(evar->dol_expansion_variable);
 }
 
-void	expand_dol(t_evar *evar, int inside)
+void	expand_dol(t_evar *evar, int inside, t_list *envp)
 {
 	evar->size_expanded_var = 0;
 	evar->id_copy++;
@@ -96,7 +97,7 @@ void	expand_dol(t_evar *evar, int inside)
 	{
 		evar->id_copy++;
 		if (current_char(evar) == '?')
-			return (trigger_exitsig_copy_handler(evar));
+			return (trigger_exitsig_copy_handler(evar, envp));
 		while (current_char(evar) != '}')
 			increase_expanded_var_size_and_index(evar);
 	}
@@ -105,9 +106,9 @@ void	expand_dol(t_evar *evar, int inside)
 		while (valid_identifier_char(current_char(evar)))
 			increase_expanded_var_size_and_index(evar);
 		if (current_char(evar) == '?')
-			return (trigger_exitsig_copy_handler(evar));
+			return (trigger_exitsig_copy_handler(evar, envp));
 		if (copy_single_dollar(evar, inside))
 			return ;
 	}
-	substitute_var(evar);
+	substitute_var(evar, envp);
 }

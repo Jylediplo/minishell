@@ -17,6 +17,9 @@ SRCS 				= main.c \
 					builtins/handle_errors.c \
 					builtins/modify_envp.c \
 					builtins/modify_envp_utils.c \
+					builtins/echo_main.c \
+					builtins/echo_getsize.c \
+					builtins/echo_setnew.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
