@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/01 13:36:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:53:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	get_expanded_size(t_evar *evar, t_list *envp)
 		evar->newvalue - evar->size_expanded_var,
 		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	printf("Need to expand this variable: %s\n", evar->dol_expansion_variable);
 	evar->dol_expansion_value = get_envvar_value(&envp, evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 		evar->size_evar += ft_strlen(evar->dol_expansion_value);
