@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:04:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/30 21:36:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:52:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	get_evar(t_evar *evar, t_list *envp)
 				copy_char(evar);
 		}
 		if (evar->error == STOP || evar->error == MALLOC)
+		{
+			evar->newvalue_toset[evar->id_toset] = '\0';
 			return ;
+		}
 		find_next_quotes(evar, evar->newvalue_copy, evar->id_copy);
 	}
 	evar->newvalue_toset[evar->id_toset] = '\0';
