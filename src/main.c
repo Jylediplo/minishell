@@ -64,7 +64,8 @@ int	mainloop(int argc, char **argv, char **envp)
 	{
 		handle_signals();
 		command = readline("🐚 Super prompt ➜ ");
-		parse(command, envp);
+		//parse(command, envp);
+		split_word(command);
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);

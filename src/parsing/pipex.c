@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 14:07:04 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/19 18:06:57 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/04/28 15:33:18 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,11 @@ void manage_path(char *argv, char **envp)
     char *path;
     char **local_path;
     char *test;
-    int i;
     char **cmd;
 
     cmd = ft_split(argv, ' ');
     if (!cmd)
         error(NULL, NULL, NULL);
-    i = 0;
     path = find_path(envp);
     if (!path)
         error(NULL, cmd, NULL);

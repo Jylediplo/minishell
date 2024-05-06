@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/19 17:30:40 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/02 14:25:52 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ char *find_path(char **envp);
 int find_str(char *to_find, char *str);
 void error(char *file, char **to_free1, char **to_free2);
 void free_split(char **str);
-
-
+void split_word(char *command);
+char *manage_quotes(char *command);
 #endif

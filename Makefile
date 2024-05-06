@@ -9,7 +9,7 @@ SRCS 				= main.c \
 					get_next_line/get_next_line.c \
 					get_next_line/get_next_line_utils.c \
 					parsing/parsing.c \
-					parsing/pipex.c
+					parsing/parsing1.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
