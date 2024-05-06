@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/02 12:05:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:08:19 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	get_echo_size(t_evar *evar, t_list *envp)
 	{
 		get_next_quotetype(evar);
 		if (evar->quotetype)
-			evar->newvalue = parse_quoted_sequence_echo(evar, evar->quotetype, envp);
+			evar->newvalue = parse_quoted_sequence_echo(evar,
+					evar->quotetype, envp);
 		else if (!evar->quotetype)
 		{
 			if (*evar->newvalue == '$')

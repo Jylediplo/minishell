@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/02 12:53:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:40:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,39 @@ void	get_expanded_size(t_evar *evar, t_list *envp)
 		evar->newvalue - evar->size_expanded_var,
 		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = get_envvar_value(&envp, evar->dol_expansion_variable);
+	evar->dol_expansion_value = get_envvar_value(&envp,
+			evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 		evar->size_evar += ft_strlen(evar->dol_expansion_value);
 	if (*evar->newvalue == '}')
 		evar->newvalue++;
 	free(evar->dol_expansion_variable);
+}
+
+int	brace_size_dol_substitution(t_evar *evar, t_list *envp)
+{
+	evar->newvalue++;
+	if (*evar->newvalue == '?')
+	{
+		trigger_exitsig_size_handler(evar, envp);
+		return (1);
+	}
+	while (*evar->newvalue != '}' && *evar->newvalue)
+	{
+		if (!valid_identifier_char(*evar->newvalue))
+		{
+			set_err_status(evar, BAD_SUBSTITUTION);
+			return (1);
+		}
+		else
+			increase_expanded_var_size(evar);
+	}
+	if (*evar->newvalue != '}')
+	{
+		set_err_status(evar, UNCLOSED_BRACE);
+		return (1);
+	}
+	return (0);
 }
 
 void	size_dol_substitution(t_evar *evar, int inside, t_list *envp)
@@ -38,18 +65,8 @@ void	size_dol_substitution(t_evar *evar, int inside, t_list *envp)
 	evar->newvalue++;
 	if (*evar->newvalue == '{')
 	{
-		evar->newvalue++;
-		if (*evar->newvalue == '?')
-			return (trigger_exitsig_size_handler(evar, envp));
-		while (*evar->newvalue != '}' && *evar->newvalue)
-		{
-			if (!valid_identifier_char(*evar->newvalue))
-				return (set_err_status(evar, BAD_SUBSTITUTION));
-			else
-				increase_expanded_var_size(evar);
-		}
-		if (*evar->newvalue != '}')
-			return (set_err_status(evar, UNCLOSED_BRACE));
+		if (brace_size_dol_substitution(evar, envp))
+			return ;
 	}
 	else if (*evar->newvalue != '{')
 	{
@@ -75,7 +92,8 @@ void	substitute_var(t_evar *evar, t_list *envp)
 		evar->newvalue_copy - evar->size_expanded_var + evar->id_copy,
 		evar->size_expanded_var);
 	evar->dol_expansion_variable[evar->size_expanded_var] = '\0';
-	evar->dol_expansion_value = get_envvar_value(&envp, evar->dol_expansion_variable);
+	evar->dol_expansion_value = get_envvar_value(&envp,
+			evar->dol_expansion_variable);
 	if (evar->dol_expansion_value)
 	{
 		ft_memcpy(evar->newvalue_toset + evar->id_toset,

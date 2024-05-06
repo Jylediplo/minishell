@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/01 17:26:58 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:41:19 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 		if (!ft_strncmp(envp_value, newvar_value, len)
 			&& envp_value[len] == '=')
 		{
+			printf("Append to the following: <%s>\n", envp_value);
 			iter->content = strjoin_free(iter->content,
-				ft_strchr(newvar->content, '=') + 1);
+					ft_strchr(newvar->content, '=') + 1);
 			ft_lstdelone(newvar, free);
 			return ;
 		}
@@ -114,18 +115,5 @@ void	print_envp(t_list *envp)
 	{
 		printf("%s\n", (char *)iter->content);
 		iter = iter->next;
-	}
-}
-
-void	free_envp(t_list *envp)
-{
-	t_list	*temp;
-
-	while (envp)
-	{
-		temp = envp->next;
-		free(envp->content);
-		free(envp);
-		envp = temp;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/28 18:06:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:08:43 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,5 @@ void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 		else
 			printf("Name <%s> is invalid. Not added to envp\n", parsed_command);
 	}
-	else
-		printf("No operators detected !! This variable will be added to envp, but typing 'env' will not show it. You can access see it with 'echo'.\n");
 	free(parsed_command);
 }

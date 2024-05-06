@@ -15,6 +15,7 @@ SRCS 				= main.c \
 					builtins/export_identifier.c \
 					builtins/export_identifier_utils.c \
 					builtins/handle_errors.c \
+					builtins/free_utils_export.c \
 					builtins/modify_envp.c \
 					builtins/modify_envp_utils.c \
 					builtins/echo_main.c \

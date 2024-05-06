@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/01 19:21:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:56:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	remove_envvar(t_list **envp, char *to_remove)
 	t_list	*previous;
 	char	*envp_value;
 	size_t	len;
-	
+
 	iter = *envp;
 	if (!to_remove || !to_remove[0])
 		return ;

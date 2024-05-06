@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/01 16:08:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:19:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,20 @@ t_list	*copy_env(char **envp)
 		exit(EXIT_FAILURE);
 	head = ft_lstnew(value);
 	if (!head)
-	{
-		free(value);
-		exit(EXIT_FAILURE);
-	}
+		free_value_exit(value);
 	while (envp[i])
 	{
-		value = ft_strdup(envp[i]);
+		value = ft_strdup(envp[i++]);
 		if (!value)
-		{
-			free_envp(head);
-			exit(EXIT_FAILURE);
-		}
+			free_envp_exit(head);
 		envvar = ft_lstnew(value);
 		if (!envvar)
-		{
-			free(value);
-			free_envp(head);
-			exit(EXIT_FAILURE);
-		}
+			free_envp_value_exit(head, value);
 		ft_lstadd_back(&head, envvar);
-		i++;
 	}
 	return (head);
 }
 
-/*
-*	Input must be a string starting on the first character of the new variable.
-*	For the new variable to be a valid identifier, it must only contain letters, numbers and underscores.
-*/
 int	export_envar(t_shell *shell, char *exportcommand)
 {
 	char	*parsed_command;
