@@ -1822,3 +1822,209 @@ ok "|" oui
 ok "<" oui
 ok < oui
 "ok" < oui
+ok
+"ok" oui
+export=oui
+"|"
+oui "|" efe
+oui | efe
+"oui ok"
+"oui"
+exit
+"|"
+|
+"ls -la"
+"ls -la" ""
+"ls -la" " "
+"ls -la" > ok
+echo "hi" | cat | cat | cat | cat | cat | cat | cat
+echo - "" "  " hello
+exit
+echo - "" "  " hello
+exit
+"ok"
+echo - "" "  " hello
+echo - "" " | " |  hello
+exit
+$EXP$ORT 
+export "TEST=bonjour"
+export TEST=bonjour
+"pol" ok 
+"pol"     ok 
+exit
+"pol"     ok 
+exit
+"pol"     ok 
+export TEST=bonjour
+exit
+export TEST=bonjour
+export "TEST=bonjour"
+export EXP=exp ORT=ort
+exit
+$ok
+$ok$oui
+exit
+k
+$
+$ok
+$ok oui
+""
+"$ok"
+
+"$ok$oui"
+"$ok'$oui'"
+exit
+"$ok'$oui'"
+'$ok'
+"$ok"
+exit
+ok
+exit
+ok
+exit
+ok
+expo
+export
+exit
+export
+exit
+export
+exportd
+exit
+exportd
+expor
+exit
+expor
+exit
+expor
+export
+exit
+export
+expor
+ok
+expor
+export
+exit
+ok
+expor
+exportt
+expor
+exit
+ok
+expor
+export
+exportt
+exit
+ok
+export
+cd
+cde
+unset path
+unset path |
+unset path "|"
+"export"
+"exp"o"rt"
+"exp"o"rte"
+"exp"o"rt"
+ok
+ls -la | grep "a"
+"e""p""o""r""t"
+"e"""x"p""o""r""t"
+cat 
+\ cat 
+cat 
+
+
+
+cat | cat | ls
+echo ""
+cut -d' ' -f3
+"ls -la"
+echo $USER
+exit
+history
+exit
+exitr
+exit
+"ok$oui"
+"ok$oui"
+export ok
+exportt
+export
+export 
+export    
+export
+expor
+exportt
+export
+export "-n"
+echo 
+echof
+echo -n
+echo -nnnnnnnnnnnnnnnn
+echo -nnnnnnnnnnnnnnnn -n -nnn
+export Path="oui"
+export Path= "oui"
+export Path="oui jjeoifij"
+export Path="oui jjeoifij"
+exit
+ok
+ok$ok
+exit
+ok$ok
+exit
+ok$ok "oui"
+exit
+ok
+exit
+ok
+export oui
+export "oui"
+export "oui" | grep "a"
+export "oui" | grep ""
+exit
+ok
+ok$
+$
+$ ok
+exit
+ok oui""
+ok oui ""
+ok oui""
+ok
+export oui
+export "oui"
+export "oui" "lol"
+export "oui" "lol" 
+export "oui" "lol" | ok
+export "oui" "lol" | "ok"
+exit
+ok
+$ok
+export
+export ok
+export "ok"
+export "ok" "oui" <<
+ok
+export ok
+export ok""
+export ok"" oui
+export ok"" oui |
+export ok"" oui "|"
+export ok"" oui "|" <
+export ok"" oui "|" <<
+export ok"" oui "|" ">>"
+export ok"" oui "|" >>
+export ok"" oui "|" >>>
+ok
+bash
+exito
+exit
+< wc -w Makefile | cat | ls -la > bonjour.txt
+< wc -w $HOME | cat | ls -la > bonjour.txt
+< wc -w $HO ME | cat | ls -la > bonjour.txt
+< wc -w $HO$ME | cat | ls -la > bonjour.txt
+< wc -w ''$HO$ME"blablabla" | cat | ls -la > bonjour.txt
+< wc -w ''$HO$ME"blablabla" | cat | 'ls -la' > bonjour.txt
+< wc -w ''$HO$ME"blablabla" | cat | ls" "-la > bonjour.txt
+< wc -w ''$HO$ME"blablabla" | cat | ''""''ls -''la"" > bonjour.txt
