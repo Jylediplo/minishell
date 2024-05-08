@@ -1,5 +1,25 @@
 #include "../../includes/minishell.h"
 
+typedef struct s_lexer
+{
+	int index;
+	enum
+	{
+		NONE = 258,
+		WORD = 259,
+		PIPE = 260,
+		GREATER = 261,
+        LESSER = 262,
+        BUILTIN = 263,
+        HEREDOC = 264,
+        APPEND = 265,
+        DELIMITER = 266,
+    
+	}	flag;
+	char *content;
+	int dollar;
+} t_lexer;
+
 typedef struct s_quote
 {
     int input_length;
@@ -107,6 +127,7 @@ typedef struct s_words
     int num_words;
     char *command;
     char **wds_delim;
+    t_lexer **lexer;
 } t_words;
 
 void init_words_struct(t_words *words, char *command)
@@ -206,32 +227,12 @@ void split_words(t_words *words)
     }
 }
 
-typedef struct s_lexer
-{
-	int index;
-	enum
-	{
-		NONE = 258,
-		WORD = 259,
-		PIPE = 260,
-		GREATER = 261,
-        LESSER = 262,
-        BUILTIN = 263,
-        HEREDOC = 264,
-        APPEND = 265,
-        DELIMITER = 266,
-    
-	}	flag;
-	char *content;
-	int dollar;
-} t_lexer;
-
 int count_dollars(char *word)
 {
 	int i;
 
     i = 0;
-    while (word[i])
+    while (word && word[i])
     {
         if (word[i] == '$')
             return (1);
@@ -259,6 +260,8 @@ int is_builtin(char *word)
 }
 int is_matching(char *word, char *token, size_t length, int *previous)
 {
+    if (!word)
+        return (0);
     if (!ft_strncmp(word, token, ft_strlen(word))
         && (ft_strlen(word) == length))
     {
@@ -386,11 +389,41 @@ char** split_string(char *str, int *count)
     return (tokens);
 }
 
+void handle_lexer(t_words *words, int h, int *previous_is_builtin)
+{
+    int i;
+
+    i = -1;
+    words->lexer = malloc(sizeof(t_lexer *) * (h + 1));
+    if (!words->lexer)
+    {
+        printf("Error MALLOC !\n");
+        exit(EXIT_FAILURE);
+    }
+    while (++i < h)
+	{
+		words->lexer[i] = malloc(sizeof(t_lexer) * 1);
+        if (!words->lexer[i])
+        {
+            printf("error MALLOC !\n");
+            exit(EXIT_FAILURE);
+        }
+        words->lexer[i]->dollar = 0;
+		if(count_dollars(words->wds_delim[i]))
+			dollars_handler(words->lexer, i, words);
+		else
+           create_lexer(words, previous_is_builtin, words->lexer, i);
+        printf("Content : %s || flag : %d || dollar : %d\n", 
+            words->lexer[i]->content, words->lexer[i]->flag, words->lexer[i]->dollar);
+    }
+    *previous_is_builtin = 0;
+	words->lexer[i] = 0;
+}
+
 void split_word(char *command)
 {
     static int previous_is_builtin;
     t_words words;
-    t_lexer **lexer;
 	int i;
 
 	i = 0;
@@ -402,57 +435,30 @@ void split_word(char *command)
     while (i < words.num_words)
     {
         int token_count = 0;
-        /*tokens = */
         if (!split_string(words.words[i], &token_count))
             printf("error malloc !\n");
-        // for (int j = 0; j < token_count; j++)
-        // {
-        //     printf("words : %s\n", tokens[j]);
-        // }
         i++;
         h += token_count;
     }
-    (void)tokens;
-    printf("num tokens : %d\n", h);
+
     words.wds_delim = malloc(sizeof(char *) * (h + 1));
     i = 0;
+    int j = 0;
+    int k = 0;
     while (i < words.num_words)
     {
         int token_count = 0;
         tokens = split_string(words.words[i], &token_count);
-        for (int j = 0; j < token_count; j++)
+        k = 0;
+        while (k < token_count)
         {
-            words.wds_delim[i + j] = tokens[j];
+            words.wds_delim[j] = tokens[k];
+            j++;
+            k++;
         }
         i++;
     }
-    // printf("everything : %s\n", words.wds_delim[0]);
-    // printf("everything : %s\n", words.wds_delim[1]);
-    i = 0;
-	lexer = malloc(sizeof(t_lexer *) * (h + 1));
-    if (!lexer)
-    {
-        printf("Error MALLOC !\n");
-        exit(EXIT_FAILURE);
-    }
-    while (i < h)
-	{
-		lexer[i] = malloc(sizeof(t_lexer) * 1);
-        if (!lexer[i])
-        {
-            printf("error MALLOC !\n");
-            exit(EXIT_FAILURE);
-        }
-        lexer[i]->dollar = 0;
-		if(count_dollars(words.wds_delim[i]))
-			dollars_handler(lexer, i, &words);
-		else
-           create_lexer(&words, &previous_is_builtin, lexer, i);
-        printf("Content : %s || flag : %d || dollar : %d\n", lexer[i]->content, lexer[i]->flag, lexer[i]->dollar);
-		i++;
-    }
-    previous_is_builtin = 0;
-	lexer[i] = 0;
+    handle_lexer(&words, h, &previous_is_builtin);
 }
 
 //<< stop cat
