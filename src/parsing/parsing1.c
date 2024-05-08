@@ -78,7 +78,6 @@ char *manage_quotes(char *command)
 	return (cmd.output);
 }
 
-
 char *ft_strncpy(char *dst, const char *src,  size_t n)
 {
 	if (n != 0)
@@ -98,80 +97,109 @@ char *ft_strncpy(char *dst, const char *src,  size_t n)
 	}
 	return (dst);
 }
-
-void split_words(char *command, char ***words, int *num_words)
+typedef struct s_words
 {
-    int len = strlen(command);
-    *num_words = 0;
-    int in_quote = 0;
-    int word_start = 0;
+    int len;
+    int in_quote;
+    int word_start;
+    int i;
+    char **words;
+    int num_words;
+    char *command;
+    char **wds_delim;
+} t_words;
+
+void init_words_struct(t_words *words, char *command)
+{
+    words->len = ft_strlen(command);
+    words->in_quote = 0;
+    words->word_start = 0;
+    words->num_words = 0;
+    words->command = command;
+}
+
+void check_words(t_words *words)
+{
     int i;
 
-    // Count the number of words
     i = 0;
-    while (i < len)
+    while (i < words->len)
     {
-        if (command[i] == '"' || command[i] == '\'')
-            in_quote = !in_quote;
-        else if (!in_quote && (command[i] == ' ' || command[i] == '\t'))
+        if (words->command[i] == '"' || words->command[i] == '\'')
+            words->in_quote = !words->in_quote;
+        else if (!words->in_quote && (words->command[i] == ' ' || words->command[i] == '\t'))
         {
-            if (i > word_start)
-                (*num_words)++;
-            word_start = i + 1;
+            if (i > words->word_start)
+                words->num_words++;
+            words->word_start = i + 1;
         }
         i++;
     }
-    if (i > word_start && !in_quote)
-        (*num_words)++;
-
-    // Allocating memory for words array
-    *words = malloc((*num_words) * sizeof(char *));
-    if (*words == NULL) {
+    if (i > words->word_start && !words->in_quote)
+        (words->num_words)++;
+    words->words = malloc((words->num_words) * sizeof(char *));
+    if (words->words == NULL)
+    {
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
+}
 
-    *num_words = 0;
-    in_quote = 0;
-    word_start = 0;
-    i = 0;
-    while (i < len)
+void create_words(t_words *words, int *i)
+{
+    while (*i < words->len)
     {
-        if (command[i] == '"' || command[i] == '\'')
+        if (words->command[*i] == '"' || words->command[*i] == '\'')
+            words->in_quote = !words->in_quote;
+        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t'))
         {
-            in_quote = !in_quote;
-        }
-        else if (!in_quote && (command[i] == ' ' || command[i] == '\t'))
-        {
-            if (i > word_start)
+            if (*i > words->word_start)
             {
-                (*words)[*num_words] = (char *)malloc((i - word_start + 1) * sizeof(char));
-                if ((*words)[*num_words] == NULL)
+                (words->words)[words->num_words] = malloc((*i - words->word_start + 1) * sizeof(char));
+                if ((words->words)[words->num_words] == NULL)
                 {
                     printf("Memory allocation failed\n");
                     exit(EXIT_FAILURE);
                 }
-                ft_strncpy((*words)[*num_words], command + word_start, i - word_start);
-                (*words)[*num_words][i - word_start] = '\0';
-                (*num_words)++;
+                ft_strncpy((words->words)[words->num_words],
+                    words->command + words->word_start, *i - words->word_start);
+                (words->words)[words->num_words][*i - words->word_start] = '\0';
+                (words->num_words)++;
             }
-            word_start = i + 1;
+            words->word_start = *i + 1;
         }
-        i++;
+        (*i)++;
     }
-    if (i > word_start && !in_quote)
+}
+void reset_values(t_words *words)
+{
+    words->num_words = 0;
+    words->in_quote = 0;
+    words->word_start = 0;
+}
+
+void split_words(t_words *words)
+{
+    int i;
+
+    i = 0;
+    check_words(words);
+    reset_values(words);
+    create_words(words, &i);
+    if (i > words->word_start && !words->in_quote)
     {
-        (*words)[*num_words] = malloc((i - word_start + 1) * sizeof(char));
-        if ((*words)[*num_words] == NULL)
+        (words->words)[words->num_words] = malloc((i - words->word_start + 1) * sizeof(char));
+        if ((words->words)[words->num_words] == NULL)
         {
             printf("Memory allocation failed\n");
             exit(EXIT_FAILURE);
         }
-        ft_strncpy((*words)[*num_words], command + word_start, i - word_start);
-        (*words)[*num_words][i - word_start] = '\0';
-        (*num_words)++;
+        ft_strncpy((words->words)[words->num_words],
+            words->command + words->word_start, i - words->word_start);
+        (words->words)[words->num_words][i - words->word_start] = '\0';
+        (words->num_words)++;
     }
-    if (in_quote)
+    if (words->in_quote)
     {
         printf("Error: Unclosed quote\n");
         exit(EXIT_FAILURE);
@@ -181,7 +209,6 @@ void split_words(char *command, char ***words, int *num_words)
 typedef struct s_lexer
 {
 	int index;
-	//check for builtins
 	enum
 	{
 		NONE = 258,
@@ -191,12 +218,12 @@ typedef struct s_lexer
         LESSER = 262,
         BUILTIN = 263,
         HEREDOC = 264,
-        APPEND = 265
+        APPEND = 265,
+        DELIMITER = 266,
     
 	}	flag;
 	char *content;
 	int dollar;
-
 } t_lexer;
 
 int count_dollars(char *word)
@@ -221,86 +248,211 @@ int is_builtin(char *word)
 
     while (i < 7)
     {
-        if (!ft_strncmp(word, builtins[i], ft_strlen(word)) && (ft_strlen(word) == ft_strlen(builtins[i])))
+        if (!ft_strncmp(word, builtins[i], ft_strlen(word))
+            && (ft_strlen(word) == ft_strlen(builtins[i])))
+        {
             return (1);
+        }
         i++;
     }
     return (0);
 }
-
-void split_word(char *command)
+int is_matching(char *word, char *token, size_t length, int *previous)
 {
-	//dollars detection
-	//if single quotes -> 
-    char **words;
-    static int previous_is_builtin;
-    int num_words;
-	t_lexer **lexer;
-	int i;
-	i = 0;
-    split_words(command, &words, &num_words);
-    //printf("Number of words: %d\n", num_words);
-	lexer = malloc(sizeof(t_lexer *) * (num_words + 1));
-    while (i < num_words)
-	{
-		lexer[i] = malloc(sizeof(t_lexer) * 1);
-        lexer[i]->dollar = 0;
-		if(count_dollars(words[i]))
-		{
-			lexer[i]->dollar = 1;
-            lexer[i]->flag = WORD;
-            lexer[i]->content = words[i];
-		}
-		else
-		{
-            if (!previous_is_builtin)
-			    lexer[i]->content = manage_quotes(words[i]);
+    if (!ft_strncmp(word, token, ft_strlen(word))
+        && (ft_strlen(word) == length))
+    {
+        *previous = 0;
+        return (1);
+    }
+    return (0);
+}
+void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int i)
+{
+     if (!(*previous_is_builtin))
+			    lexer[i]->content = manage_quotes(words->wds_delim[i]);
             else
-                lexer[i]->content = words[i];
-			if (!ft_strncmp(words[i], "|", ft_strlen(words[i])) && (ft_strlen(words[i]) == 1))
-			{
+                lexer[i]->content = words->wds_delim[i];
+			if (is_matching(words->wds_delim[i], "|", 1, previous_is_builtin))
 				lexer[i]->flag = PIPE;
-                previous_is_builtin = 0;
-			}
-			else if (!ft_strncmp(words[i], ">", ft_strlen(words[i])) && (ft_strlen(words[i]) == 1))
-			{
+			else if (is_matching(words->wds_delim[i], ">", 1, previous_is_builtin))
 				lexer[i]->flag = GREATER;
-                previous_is_builtin = 0;
-			}
-            else if (!ft_strncmp(words[i], "<", ft_strlen(words[i])) && (ft_strlen(words[i]) == 1))
-			{
+            else if (is_matching(words->wds_delim[i], "<", 1, previous_is_builtin))
 				lexer[i]->flag = LESSER;
-                previous_is_builtin = 0;
-			}
-            else if (!ft_strncmp(words[i], "<<", ft_strlen(words[i])) && (ft_strlen(words[i]) == 2))
-			{
+            else if (is_matching(words->wds_delim[i], "<<", 2, previous_is_builtin))
 				lexer[i]->flag = HEREDOC;
-                previous_is_builtin = 0;
-			}
-            else if (!ft_strncmp(words[i], ">>", ft_strlen(words[i])) && (ft_strlen(words[i]) == 2))
-			{
+            else if (is_matching(words->wds_delim[i], ">>", 2, previous_is_builtin))
 				lexer[i]->flag = APPEND;
-                previous_is_builtin = 0;
-			}
 			else
             {
 				lexer[i]->flag = WORD;
                 if (is_builtin(lexer[i]->content))
                 {
                     lexer[i]->flag = BUILTIN;
-                    previous_is_builtin = 1;
-
+                    *previous_is_builtin = 1;
                 }
             }
-			//manage_quotes(words[i]);
-		}
-        printf("Content : %s || flag : %d || dollar : %d\n", lexer[i]->content, lexer[i]->flag, lexer[i]->dollar);
+}
+void dollars_handler(t_lexer **lexer, int i, t_words *words)
+{
+    lexer[i]->dollar = 1;
+    lexer[i]->flag = WORD;
+    lexer[i]->content = words->wds_delim[i];
+}
 
-        //free(words[i]); // Free memory allocated for each _t
+char** split_string(char *str, int *count)
+{
+    int max_tokens = ft_strlen(str) + 1;
+    char **tokens = malloc(max_tokens * sizeof(char *));
+    if (!tokens)
+    {
+        printf("Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char *delimiters = "<|>";
+    char *start = str;
+    char *end = str;
+    int index = 0;
+    if ((str[0] == '\'' && str[ft_strlen(str) - 1] == '\'') || 
+        ((str[0] == '"') && str[ft_strlen(str) - 1] == '"'))
+    {
+        tokens[0] = malloc(sizeof(char) * ft_strlen(str));
+        tokens[0] = str;
+        *count = 1;
+        return (tokens);
+    }
+    while (*end != '\0')
+    {
+        if (ft_strchr(delimiters, *end) != NULL)
+        {
+            if (start != end)
+            {
+                int length = end - start;
+                tokens[index] = malloc((length + 1) * sizeof(char));
+                ft_strncpy(tokens[index], start, length);
+                tokens[index][length] = '\0';
+                index++;
+                if (index >= max_tokens)
+                {
+                    printf("Too many tokens, increase max_tokens\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            if ((*end == '<' || *end == '>') && (*(end + 1) == *end))
+            {
+                char double_delimiter[3];
+                double_delimiter[0] = *end;
+                double_delimiter[1] = *end;
+                double_delimiter[2] = '\0';
+                tokens[index] = malloc(3 * sizeof(char));
+                ft_strncpy(tokens[index], double_delimiter, 3);
+                index++;
+                if (index >= max_tokens)
+                {
+                    printf("Too many tokens, increase max_tokens\n");
+                    exit(EXIT_FAILURE);
+                }
+                start = end + 2;
+                end++;
+            }
+            else
+            {
+                char delimiter[2];
+                delimiter[0] = *end;
+                delimiter[1] = '\0';
+                tokens[index] = (char *)malloc(2 * sizeof(char));
+                strncpy(tokens[index], delimiter, 2);
+                index++;
+                if (index >= max_tokens)
+                {
+                    printf("Too many tokens, increase max_tokens\n");
+                    exit(EXIT_FAILURE);
+                }
+                start = end + 1;
+            }
+        }
+        end++;
+    }
+    if (start != end)
+    {
+        int length = end - start;
+        tokens[index] = malloc((length + 1) * sizeof(char));
+        ft_strncpy(tokens[index], start, length);
+        tokens[index][length] = '\0';
+        index++;
+    }
+    *count = index;
+    return (tokens);
+}
+
+void split_word(char *command)
+{
+    static int previous_is_builtin;
+    t_words words;
+    t_lexer **lexer;
+	int i;
+
+	i = 0;
+    init_words_struct(&words, command);
+    split_words(&words);
+    char **tokens;
+    int h;
+    h = 0;
+    while (i < words.num_words)
+    {
+        int token_count = 0;
+        /*tokens = */
+        if (!split_string(words.words[i], &token_count))
+            printf("error malloc !\n");
+        // for (int j = 0; j < token_count; j++)
+        // {
+        //     printf("words : %s\n", tokens[j]);
+        // }
+        i++;
+        h += token_count;
+    }
+    (void)tokens;
+    printf("num tokens : %d\n", h);
+    words.wds_delim = malloc(sizeof(char *) * (h + 1));
+    i = 0;
+    while (i < words.num_words)
+    {
+        int token_count = 0;
+        tokens = split_string(words.words[i], &token_count);
+        for (int j = 0; j < token_count; j++)
+        {
+            words.wds_delim[i + j] = tokens[j];
+        }
+        i++;
+    }
+    // printf("everything : %s\n", words.wds_delim[0]);
+    // printf("everything : %s\n", words.wds_delim[1]);
+    i = 0;
+	lexer = malloc(sizeof(t_lexer *) * (h + 1));
+    if (!lexer)
+    {
+        printf("Error MALLOC !\n");
+        exit(EXIT_FAILURE);
+    }
+    while (i < h)
+	{
+		lexer[i] = malloc(sizeof(t_lexer) * 1);
+        if (!lexer[i])
+        {
+            printf("error MALLOC !\n");
+            exit(EXIT_FAILURE);
+        }
+        lexer[i]->dollar = 0;
+		if(count_dollars(words.wds_delim[i]))
+			dollars_handler(lexer, i, &words);
+		else
+           create_lexer(&words, &previous_is_builtin, lexer, i);
+        printf("Content : %s || flag : %d || dollar : %d\n", lexer[i]->content, lexer[i]->flag, lexer[i]->dollar);
 		i++;
     }
+    previous_is_builtin = 0;
 	lexer[i] = 0;
-   // free(words); // Free memory allocated for words array
 }
 
 //<< stop cat
