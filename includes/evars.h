@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/06 19:41:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:46:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	malloc_error_dol(t_evar *evar);
 void	set_err_status(t_evar *evar, int status);
 
 //free_utils_export.c
+void	free_list(t_list *lst);
 void	free_envp(t_list *envp);
 void	free_envp_exit(t_list *head);
 void	free_envp_value_exit(t_list *head, char *value);

@@ -22,6 +22,9 @@ SRCS 				= main.c \
 					builtins/echo_getsize.c \
 					builtins/echo_setnew.c \
 					builtins/unset_main.c \
+					execute/execute_main_size.c \
+					execute/execute_flags.c \
+					execute/execute_errors.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -68,5 +71,9 @@ re: fclean all
 testexport:
 	HEADERS="$(HEADERS) export_tests.h"
 	@make SRCS="$(filter-out main.c, $(SRCS) tests/export_tests.c tests/get_next_line/get_next_line.c tests/get_next_line/get_next_line_utils.c tests/export_main_test.c)"
+
+testexecute:
+	HEADERS="$(HEADERS) execute.h"
+	@make SRCS="$(filter-out main.c, $(SRCS) tests/execute_tests.c)"
 
 .PHONY: all clean fclean re libft testexport

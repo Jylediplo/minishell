@@ -6,12 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/06 18:57:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:46:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../includes/evars.h"
+#include "../includes/execute.h"
 
 int	g_current_sig = 0;
 

@@ -1,15 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_main.c                                     :+:      :+:    :+:   */
+/*   execute_errors.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/07 00:10:57 by pantoine         ###   ########.fr       */
+/*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/07 18:11:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 
-int	create_cmdlist(t_lexer *)
+void	malloc_exec_err(void)
+{
+	ft_putstr_fd("petitcoq: malloc error\n", 2)	;
+}
+
+void	unexpected_token_exec_err(char *error_token)
+{
+	ft_putstr_fd("petitcoq: syntax error near unexpected token `", 2);
+	ft_putstr_fd(error_token, 2);
+	ft_putstr_fd("'\n", 2);
+}
