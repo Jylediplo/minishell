@@ -6,13 +6,15 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 12:00:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:26:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
+# define HDNAME ".hdtmp"
+# include "minishell.h"
 # ifndef LEXER
 #  define LEXER
 typedef struct s_lexer
@@ -53,25 +55,24 @@ typedef struct s_cmd
 	 * {"tr", "a-z", "A-Z"}, out = bonjour.txt; dup2(bonjour2.txt, bonjour.txt), in = HEREDOC
 	 */
 	char	**command;
+	t_list	*cmd_args;
 	int		size_cmd;
-	char	*in;
-	char	*out;
+	int		in;
+	int		out;
 	int		index;
 }	t_cmd;
 
-# include "minishell.h"
-
 //execute_main_size.c
 int	get_cmdlist_size(char *input);
-int	get_size_command(t_lexer **lexer, int *lexer_pos, t_list **cmds);
+int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
 //execute_flags.c
 int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
-int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_list *cmds);
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list *cmds);
+int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
 //execute_heredocs.c
-int	create_heredoc(char *delimiter, int *current_temp);
+int	create_heredoc(char *delimiter, int *current_temp, t_cmd *cmd);
 int	delete_heredocs(int nb_heredocs);
 
 //execute_errors.c

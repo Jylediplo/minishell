@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 12:17:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/09 20:22:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	delete_heredocs(int nb_heredocs)
 		nb_heredocs_str = ft_itoa(index);
 		if (!nb_heredocs_str)
 			return (1);
-		to_unlink = ft_strjoin(".hdtmp", nb_heredocs_str);
+		to_unlink = ft_strjoin(HDNAME, nb_heredocs_str);
 		if (!to_unlink)
 		{
 			free(nb_heredocs_str);
@@ -47,12 +47,12 @@ char	*name_tempfile(int current_temp)
 	current_temp_str = ft_itoa(current_temp);
 	if (!current_temp_str)
 		return (NULL);
-	name = ft_strjoin(".hdtmp", current_temp_str);
+	name = ft_strjoin(HDNAME, current_temp_str);
 	free(current_temp_str);
 	return (name);
 }
 
-int	create_heredoc(char *delimiter, int *current_temp)
+int	create_heredoc(char *delimiter, int *current_temp, t_cmd *cmd)
 {
 	int		tmp;
 	char	*line;
@@ -65,11 +65,12 @@ int	create_heredoc(char *delimiter, int *current_temp)
 	free(tmp_filename);
 	if (tmp == -1)
 		return (2);
+	cmd->in = tmp;
 	*current_temp += 1;
 	while (1)
 	{
 		write(1, "> ", 2);
-		line = get_next_line(0);
+		line = get_next_line(STDIN_FILENO);
 		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
 			&& line[ft_strlen(delimiter)] == '\n')
 		{
@@ -79,6 +80,6 @@ int	create_heredoc(char *delimiter, int *current_temp)
 		write(tmp, line, ft_strlen(line));
 		free(line);
 	}
-	close(tmp);
+	//printf("value: %s\n", (char* )cmd->cmd_args->content);
 	return (0);
 }
