@@ -1,8 +1,8 @@
 #include "../../includes/minishell.h"
 
-typedef struct s_lexer
+typedef	struct s_lexer
 {
-	int index;
+	int	index;
 	enum
 	{
 		NONE = 258,
@@ -30,18 +30,18 @@ typedef struct s_quote
     char *output;
 } t_quote;
 
-void init_cmd(t_quote *cmd, char *command)
+void	init_cmd(t_quote *cmd, char *command)
 {
     cmd->input_length = (int)ft_strlen(command);
-    cmd->i = 0;
-    cmd->quote_open = 0;
-    cmd->output_index = 0;
-    cmd->output = malloc(sizeof(char) * (cmd->input_length + 1));
-    if (!cmd->output)
-    {
-        printf("Memory allocation failed.\n");
-        exit(1);
-    }
+	cmd->i = 0;
+	cmd->quote_open = 0;
+	cmd->output_index = 0;
+	cmd->output = malloc(sizeof(char) * (cmd->input_length + 1));
+	if (!cmd->output)
+	{
+		printf("Memory allocation failed.\n");
+		exit(1);
+	}
 }
 void current_is_quote(t_quote *cmd, char *command)
 {
@@ -98,24 +98,20 @@ char *manage_quotes(char *command)
 	return (cmd.output);
 }
 
-char *ft_strncpy(char *dst, const char *src,  size_t n)
+char *ft_strncpy(char *dst, const char *src, size_t n)
 {
-	if (n != 0)
+    size_t i;
+
+    i = 0;
+    while (i < n)
     {
-		char *d = dst;
-		const char *s = src;
-		do
-        {
-			if ((*d++ = *s++) == 0)
-            {
-				/* NUL pad the remaining n-1 bytes */
-				while (--n != 0)
-					*d++ = 0;
-				break;
-			}
-		} while (--n != 0);
-	}
-	return (dst);
+        if (i < ft_strlen(src))
+            dst[i] = src[i];
+        else
+            dst[i] = '\0';
+        i++;
+    }
+    return (dst);
 }
 typedef struct s_words
 {
@@ -321,8 +317,30 @@ void init_struct_del(t_delim *delim, char *str)
     delim->start = str;
     delim->end = str;
     delim->index = 0;
+    delim->tokens = malloc((ft_strlen(str) + 1) * sizeof(char *));
+    if (!delim->tokens)
+    {
+        printf("Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
 
 }
+
+void handle_db_del_next(t_delim *delim, char *delimiter)
+{
+    delimiter[0] = *delim->end;
+    delimiter[1] = '\0';
+    delim->tokens[delim->index] = malloc(2 * sizeof(char));
+    if (!delim->tokens[delim->index])
+    {
+        printf("Memory allocation failed \n");
+        exit(EXIT_FAILURE);
+    }
+    strncpy(delim->tokens[delim->index], delimiter, 2);
+    delim->index++;
+    delim->start = delim->end + 1;
+}
+
 void handle_db_del(t_delim *delim)
 {
     char delimiter[2];
@@ -334,20 +352,18 @@ void handle_db_del(t_delim *delim)
                 double_delimiter[1] = *delim->end;
                 double_delimiter[2] = '\0';
                 delim->tokens[delim->index] = malloc(3 * sizeof(char));
+                if (!delim->tokens[delim->index])
+                {
+                    printf("Memory allocation error \n");
+                    exit(EXIT_FAILURE);
+                }
                 ft_strncpy(delim->tokens[delim->index], double_delimiter, 3);
                 delim->index++;    
                 delim->start = delim->end + 2;
                 delim->end++;
             }
             else
-            {
-                delimiter[0] = *delim->end;
-                delimiter[1] = '\0';
-                delim->tokens[delim->index] = (char *)malloc(2 * sizeof(char));
-                strncpy(delim->tokens[delim->index], delimiter, 2);
-                delim->index++;
-                delim->start = delim->end + 1;
-            }
+                handle_db_del_next(delim, delimiter);
 }
 
 void handle_start_del(t_delim *delim)
@@ -388,17 +404,40 @@ void handle_end_del(t_delim *delim)
     }
 }
 
+void handle_quotes_del(int count1, int *match, char *str)
+{
+    int j;
+    int k;
+
+    j = count1 - 1;
+    k = count1;
+            while (j >= 0)
+            {
+                if (str[j] == '"')
+                {
+                    *match += 1;
+                    break;
+                }
+                j--;
+            }
+            while (k <= (int)ft_strlen(str))
+            {
+                if (str[k] == '"')
+                {
+                    *match += 1;
+                    break;
+                }
+                k++;
+            }
+        (void)match;
+}
+
 char** split_string(char *str, int *count)
 {
      int count1 = 0;
     int match = 0;
     t_delim delim;
-    delim.tokens = malloc((ft_strlen(str) + 1) * sizeof(char *));
-    if (!delim.tokens)
-    {
-        printf("Memory allocation error\n");
-        exit(EXIT_FAILURE);
-    }
+   
     init_struct_del(&delim, str);
     while (*delim.end != '\0')
     {   
@@ -406,26 +445,9 @@ char** split_string(char *str, int *count)
         match = 0;
          if (ft_strchr(delim.del, *delim.end) != NULL)
          {
-            for (int j = count1 -1; j >= 0; j--)
-            {
-                printf("jjj : %c\n", str[j]);
-                if (str[j] == '"')
-                {
-                    match++;
-                    break;
-                }
-            }
-            for (int k = count1; k <= (int)ft_strlen(str); k++)
-            {
-                if (str[k] == '"')
-                {
-                    match++;
-                    break;
-                }
-            }
+           handle_quotes_del(count1, &match, str);
             if (match != 2)
             {
-                printf("match : %d\n", match);
                 handle_start_del(&delim);
                 handle_db_del(&delim);
             }
@@ -461,8 +483,6 @@ void handle_lexer(t_words *words, int *previous_is_builtin)
 			dollars_handler(words->lexer, i, words);
 		else
            create_lexer(words, previous_is_builtin, words->lexer, i);
-        printf("Content : %s & flag : %d || dollar : %d\n", 
-            words->lexer[i]->content, words->lexer[i]->flag, words->lexer[i]->dollar);
     }
     *previous_is_builtin = 0;
 	words->lexer[i] = 0;
@@ -528,6 +548,13 @@ void split_word(char *command)
     manage_delim(&words);
     fill_with_delim(&words);
     handle_lexer(&words, &previous_is_builtin);
+
+    while (i < words.count_del)
+    {
+        printf("Content : %s & flag : %d || dollar : %d\n", 
+        words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
+        i++;
+    }
 }
 
 //<< stop cat

@@ -3790,3 +3790,84 @@ d
 |"kded>"
 |"kded>">
 exit
+ok | oui
+exit
+ok } < fiel
+ok }fefe> < fiel
+<s"s<s"s>>
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+exit
+ok
+<
+<>>
+<>>"<"
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+<|"|"|
+exit
+ok
+<|"|"|
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+<|"|"|
+<|"|"|
+<>>
+<s"s<s"s>>
+exit
+<s"s<s"s>>
+<|"|"|
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+"ls -la"
+"ls -la" | ||
+"ls -la" |grep ok
+"ls -la" |grepok
+"ls -la" |grep "ok"
+"ls -la" |grep ""
+exit
+ok
+"ls -la" |grep ""
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+exit
+ok
+exit
+ok
+adkeod
+akef
+afkaekf
+aekfoae
+fkeakf
+fefaoe
+la
+ls
+exit
+ok
+"ok"<">"
+exit
+"ok"<">"
+|"|"
+"O"|
+"O"|l
+"O"|"l"
+"ls -la" | grep
+"ls -la" | "oui"
+"ls -la"|"oui"
+"ls -la"|
+exit
+ok|"l"
+"|"|"|"
+"|"||
+||"|"
+exit
+"ok"|h
+"ok"| "oK"
+"ok"|"oK"
+ok|"oK"
+exit
+ok|"oK"
+"|"|"|"
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat << ST3 > fuck.txt
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat <<"ST3" > fuck.txt
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat<<"ST3" > fuck.txt
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | "cat"<<"ST3" > fuck.txt
+exit
+ok
+exit
