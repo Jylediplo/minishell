@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/08 21:13:49 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/09 12:00:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ int	get_size_command(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_list *cmds);
 int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list *cmds);
+
+//execute_heredocs.c
+int	create_heredoc(char *delimiter, int *current_temp);
+int	delete_heredocs(int nb_heredocs);
 
 //execute_errors.c
 void	malloc_exec_err(void);

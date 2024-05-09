@@ -24,7 +24,10 @@ SRCS 				= main.c \
 					builtins/unset_main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
+					execute/execute_heredocs.c \
 					execute/execute_errors.c \
+					gnl/get_next_line.c \
+					gnl/get_next_line_utils.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -73,7 +76,7 @@ testexport:
 	@make SRCS="$(filter-out main.c, $(SRCS) tests/export_tests.c tests/get_next_line/get_next_line.c tests/get_next_line/get_next_line_utils.c tests/export_main_test.c)"
 
 testexecute:
-	HEADERS="$(HEADERS) execute.h"
+	HEADERS="$(HEADERS) execute.h get_next_line.h"
 	@make SRCS="$(filter-out main.c, $(SRCS) tests/execute_tests.c)"
 
 .PHONY: all clean fclean re libft testexport

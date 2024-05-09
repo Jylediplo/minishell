@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/08 21:38:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/09 12:18:26 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int	get_size_command(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 				|| lexer[*lexer_pos]->flag == LESSER)
 		{
 			if (!is_legal_token(lexer, lexer_pos, *cmds))
-				return (1);
+				return (-1);
 		}
 		else if (lexer[*lexer_pos]->flag == HEREDOC)
 		{
 			if (!is_legal_heredoc(lexer, lexer_pos, *cmds))
-				return (1);
+				return (-1);
 		}
 		if (!lexer[*lexer_pos])
 			return (size_cmd);
@@ -89,16 +89,14 @@ void free_lexer(t_lexer **lexer)
 	free(lexer);
 }
 
-t_lexer	**init_lex(char *input)
+t_lexer	**init_lex(char **contents)
 {
 	t_lexer **lexer;
-	char	**contents;
 	int		i;
 	int		len;
 
 	i = 0;
 	len = 0;
-	contents = ft_split(input, ' ');
 	while (contents[i++])
 		len++;
 	i = 0;
@@ -147,9 +145,20 @@ t_list	*init_cmdlist_size(void)
 	return (head);
 }
 
+void	free_split(char **tofree)
+{
+	int	i;
+
+	i = 0;
+	while (tofree[i])
+		free(tofree[i++]);
+	free(tofree);
+}
+
 int	get_cmdlist_size(char *input)
 {
 	int		i;
+	char	**contents;
 	t_lexer **lexer;
 	t_list	*head;
 
@@ -157,7 +166,8 @@ int	get_cmdlist_size(char *input)
 	head = init_cmdlist_size();
 	if (!head)
 		return (1);
-	lexer = init_lex(input);
+	contents = ft_split(input, ' ');
+	lexer = init_lex(contents);
 	while (lexer[i])
 	{
 		if (filter_type_input(lexer, &i, &head) == 1)
@@ -168,5 +178,6 @@ int	get_cmdlist_size(char *input)
 	}
 	free_lexer(lexer);
 	free_envp(head);
+	free_split(contents);
 	return (0);
 }
