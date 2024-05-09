@@ -127,6 +127,7 @@ typedef struct s_words
     int num_words;
     char *command;
     char **wds_delim;
+    int count_del;
     t_lexer **lexer;
 } t_words;
 
@@ -136,6 +137,7 @@ void init_words_struct(t_words *words, char *command)
     words->in_quote = 0;
     words->word_start = 0;
     words->num_words = 0;
+    words->count_del = 0;
     words->command = command;
 }
 
@@ -303,104 +305,150 @@ void dollars_handler(t_lexer **lexer, int i, t_words *words)
     lexer[i]->content = words->wds_delim[i];
 }
 
+typedef struct s_delim
+{
+    char **tokens;
+    char *del;
+    char *start;
+    char *end;
+    int index;
+
+} t_delim;
+
+void init_struct_del(t_delim *delim, char *str)
+{
+    delim->del = "<|>";
+    delim->start = str;
+    delim->end = str;
+    delim->index = 0;
+
+}
+void handle_db_del(t_delim *delim)
+{
+    char delimiter[2];
+    char double_delimiter[3];
+
+     if ((*delim->end == '<' || *delim->end == '>') && (*(delim->end + 1) == *delim->end))
+            {
+                double_delimiter[0] = *delim->end;
+                double_delimiter[1] = *delim->end;
+                double_delimiter[2] = '\0';
+                delim->tokens[delim->index] = malloc(3 * sizeof(char));
+                ft_strncpy(delim->tokens[delim->index], double_delimiter, 3);
+                delim->index++;    
+                delim->start = delim->end + 2;
+                delim->end++;
+            }
+            else
+            {
+                delimiter[0] = *delim->end;
+                delimiter[1] = '\0';
+                delim->tokens[delim->index] = (char *)malloc(2 * sizeof(char));
+                strncpy(delim->tokens[delim->index], delimiter, 2);
+                delim->index++;
+                delim->start = delim->end + 1;
+            }
+}
+
+void handle_start_del(t_delim *delim)
+{
+    int length;
+
+    if (delim->start != delim->end)
+    {
+        length = delim->end - delim->start;
+        delim->tokens[delim->index] = malloc((length + 1) * sizeof(char));
+        if (!delim->tokens[delim->index])
+        {
+            printf("error malloc !\n");
+            exit(EXIT_FAILURE);
+        }
+        ft_strncpy(delim->tokens[delim->index], delim->start, length);
+        delim->tokens[delim->index][length] = '\0';
+        delim->index++;
+    }
+}
+
+void handle_end_del(t_delim *delim)
+{
+    int length;
+
+    if (delim->start != delim->end)
+    {
+        length = delim->end - delim->start;
+        delim->tokens[delim->index] = malloc((length + 1) * sizeof(char));
+        if (!delim->tokens[delim->index])
+        {
+            printf("error malloc !\n");
+            exit(EXIT_FAILURE);
+        }
+        ft_strncpy(delim->tokens[delim->index], delim->start, length);
+        delim->tokens[delim->index][length] = '\0';
+        delim->index++;
+    }
+}
+
 char** split_string(char *str, int *count)
 {
-    int max_tokens = ft_strlen(str) + 1;
-    char **tokens = malloc(max_tokens * sizeof(char *));
-    if (!tokens)
+     int count1 = 0;
+    int match = 0;
+    t_delim delim;
+    delim.tokens = malloc((ft_strlen(str) + 1) * sizeof(char *));
+    if (!delim.tokens)
     {
         printf("Memory allocation error\n");
         exit(EXIT_FAILURE);
     }
-
-    char *delimiters = "<|>";
-    char *start = str;
-    char *end = str;
-    int index = 0;
-    if ((str[0] == '\'' && str[ft_strlen(str) - 1] == '\'') || 
-        ((str[0] == '"') && str[ft_strlen(str) - 1] == '"'))
-    {
-        tokens[0] = malloc(sizeof(char) * ft_strlen(str));
-        tokens[0] = str;
-        *count = 1;
-        return (tokens);
-    }
-    while (*end != '\0')
-    {
-        if (ft_strchr(delimiters, *end) != NULL)
-        {
-            if (start != end)
+    init_struct_del(&delim, str);
+    while (*delim.end != '\0')
+    {   
+        count1++;
+        match = 0;
+         if (ft_strchr(delim.del, *delim.end) != NULL)
+         {
+            for (int j = count1 -1; j >= 0; j--)
             {
-                int length = end - start;
-                tokens[index] = malloc((length + 1) * sizeof(char));
-                ft_strncpy(tokens[index], start, length);
-                tokens[index][length] = '\0';
-                index++;
-                if (index >= max_tokens)
+                printf("jjj : %c\n", str[j]);
+                if (str[j] == '"')
                 {
-                    printf("Too many tokens, increase max_tokens\n");
-                    exit(EXIT_FAILURE);
+                    match++;
+                    break;
                 }
             }
-            if ((*end == '<' || *end == '>') && (*(end + 1) == *end))
+            for (int k = count1; k <= (int)ft_strlen(str); k++)
             {
-                char double_delimiter[3];
-                double_delimiter[0] = *end;
-                double_delimiter[1] = *end;
-                double_delimiter[2] = '\0';
-                tokens[index] = malloc(3 * sizeof(char));
-                ft_strncpy(tokens[index], double_delimiter, 3);
-                index++;
-                if (index >= max_tokens)
+                if (str[k] == '"')
                 {
-                    printf("Too many tokens, increase max_tokens\n");
-                    exit(EXIT_FAILURE);
+                    match++;
+                    break;
                 }
-                start = end + 2;
-                end++;
             }
-            else
+            if (match != 2)
             {
-                char delimiter[2];
-                delimiter[0] = *end;
-                delimiter[1] = '\0';
-                tokens[index] = (char *)malloc(2 * sizeof(char));
-                strncpy(tokens[index], delimiter, 2);
-                index++;
-                if (index >= max_tokens)
-                {
-                    printf("Too many tokens, increase max_tokens\n");
-                    exit(EXIT_FAILURE);
-                }
-                start = end + 1;
+                printf("match : %d\n", match);
+                handle_start_del(&delim);
+                handle_db_del(&delim);
             }
         }
-        end++;
+        delim.end++;
     }
-    if (start != end)
-    {
-        int length = end - start;
-        tokens[index] = malloc((length + 1) * sizeof(char));
-        ft_strncpy(tokens[index], start, length);
-        tokens[index][length] = '\0';
-        index++;
-    }
-    *count = index;
-    return (tokens);
+    handle_end_del(&delim);
+    *count = delim.index;
+    return (delim.tokens);
 }
 
-void handle_lexer(t_words *words, int h, int *previous_is_builtin)
+void handle_lexer(t_words *words, int *previous_is_builtin)
 {
     int i;
 
     i = -1;
-    words->lexer = malloc(sizeof(t_lexer *) * (h + 1));
+    words->lexer = malloc(sizeof(t_lexer *) * (words->count_del + 1));
     if (!words->lexer)
     {
         printf("Error MALLOC !\n");
         exit(EXIT_FAILURE);
     }
-    while (++i < h)
+    while (++i < words->count_del)
 	{
 		words->lexer[i] = malloc(sizeof(t_lexer) * 1);
         if (!words->lexer[i])
@@ -413,52 +461,73 @@ void handle_lexer(t_words *words, int h, int *previous_is_builtin)
 			dollars_handler(words->lexer, i, words);
 		else
            create_lexer(words, previous_is_builtin, words->lexer, i);
-        printf("Content : %s || flag : %d || dollar : %d\n", 
+        printf("Content : %s & flag : %d || dollar : %d\n", 
             words->lexer[i]->content, words->lexer[i]->flag, words->lexer[i]->dollar);
     }
     *previous_is_builtin = 0;
 	words->lexer[i] = 0;
 }
 
-void split_word(char *command)
+void manage_delim(t_words *words)
 {
-    static int previous_is_builtin;
-    t_words words;
-	int i;
+    int i;
+    int token_count;
 
-	i = 0;
-    init_words_struct(&words, command);
-    split_words(&words);
-    char **tokens;
-    int h;
-    h = 0;
-    while (i < words.num_words)
+    i = 0;
+    while (i < words->num_words)
     {
-        int token_count = 0;
-        if (!split_string(words.words[i], &token_count))
+        token_count = 0;
+        if (!split_string(words->words[i], &token_count))
             printf("error malloc !\n");
         i++;
-        h += token_count;
+        words->count_del += token_count;
     }
-
-    words.wds_delim = malloc(sizeof(char *) * (h + 1));
-    i = 0;
-    int j = 0;
-    int k = 0;
-    while (i < words.num_words)
+    words->wds_delim = malloc(sizeof(char *) * (words->count_del + 1));
+    if (!words->wds_delim)
     {
-        int token_count = 0;
-        tokens = split_string(words.words[i], &token_count);
+        printf("error malloc !\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void fill_with_delim(t_words *words)
+{
+    char **tokens;
+    int i;
+    int j;
+    int k;
+    int token_count;
+
+    i = 0;
+    j = 0;
+    while (i < words->num_words)
+    {
+        token_count = 0;
+        tokens = split_string(words->words[i], &token_count);
         k = 0;
         while (k < token_count)
         {
-            words.wds_delim[j] = tokens[k];
+            words->wds_delim[j] = tokens[k];
             j++;
             k++;
         }
         i++;
     }
-    handle_lexer(&words, h, &previous_is_builtin);
+}
+
+void split_word(char *command)
+{
+    static int previous_is_builtin;
+    t_words words;
+   
+	int i;
+
+	i = 0;
+    init_words_struct(&words, command);
+    split_words(&words);
+    manage_delim(&words);
+    fill_with_delim(&words);
+    handle_lexer(&words, &previous_is_builtin);
 }
 
 //<< stop cat
