@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/08 00:54:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/08 21:38:51 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,44 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	get_size_command(t_lexer **lexer, int *lexer_pos)
+int	get_size_command(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 {
 	int		size_cmd;
 
 	size_cmd = 0;
-	while (lexer[*lexer_pos] && (lexer[*lexer_pos]->flag == WORD
-			|| lexer[*lexer_pos]->flag == BUILTIN))
+	printf("starting a new command sequence at: %s\n", lexer[*lexer_pos]->content);
+	while (lexer[*lexer_pos] && lexer[*lexer_pos]->flag != PIPE)
 	{
-		size_cmd++;
-		(*lexer_pos)++;
+		printf("Now treating: %s\n", lexer[*lexer_pos]->content);
+		if (lexer[*lexer_pos]->flag == WORD
+				|| lexer[*lexer_pos]->flag == BUILTIN)
+		{
+			size_cmd++;
+			(*lexer_pos)++;
+		}
+		else if (lexer[*lexer_pos]->flag == APPEND
+				|| lexer[*lexer_pos]->flag == GREATER
+				|| lexer[*lexer_pos]->flag == LESSER)
+		{
+			if (!is_legal_token(lexer, lexer_pos, *cmds))
+				return (1);
+		}
+		else if (lexer[*lexer_pos]->flag == HEREDOC)
+		{
+			if (!is_legal_heredoc(lexer, lexer_pos, *cmds))
+				return (1);
+		}
+		if (!lexer[*lexer_pos])
+			return (size_cmd);
+		if (lexer[*lexer_pos]->flag == PIPE)
+			break ;
 	}
+	printf("Command sequence over at: %s\n", lexer[*lexer_pos]->content);
 	return (size_cmd);
 }
 
 int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 {
-	void	*size_ptr;
-	int		size;
-
-	size = 0;
-	size_ptr = NULL;
 	if (lexer[*lexer_pos]->flag == WORD
 		|| lexer[*lexer_pos]->flag == PIPE)
 	{
@@ -43,7 +60,7 @@ int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 	}
 	else if (lexer[*lexer_pos]->flag == HEREDOC)
 	{
-		if (!is_legal_heredoc(lexer, lexer_pos, cmds))
+		if (!is_legal_heredoc(lexer, lexer_pos, *cmds))
 			return (1);
 	}
 	else if (lexer[*lexer_pos]->flag == APPEND
@@ -86,7 +103,6 @@ t_lexer	**init_lex(char *input)
 		len++;
 	i = 0;
 	lexer = malloc(sizeof(t_lexer *) * len + 1);
-	printf("Command: ");
 	while (contents[i])
 	{
 		lexer[i] = malloc(sizeof(t_lexer));
@@ -144,8 +160,11 @@ int	get_cmdlist_size(char *input)
 	lexer = init_lex(input);
 	while (lexer[i])
 	{
-		if (filter_type_input(lexer, &i, &head))
+		if (filter_type_input(lexer, &i, &head) == 1)
+		{
+			g_current_sig = 258;
 			break ;
+		}
 	}
 	free_lexer(lexer);
 	free_envp(head);

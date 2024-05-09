@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/08 00:53:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/08 21:13:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ typedef struct s_cmd
 
 //execute_main_size.c
 int	get_cmdlist_size(char *input);
-int	get_size_command(t_lexer **lexer, int *lexer_pos);
+int	get_size_command(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 
 //execute_flags.c
 int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_list *cmds);
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list **cmds);
+int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list *cmds);
 
 //execute_errors.c
 void	malloc_exec_err(void);

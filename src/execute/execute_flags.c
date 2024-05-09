@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/08 01:09:42 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/08 21:35:20 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 	if (!cmd)
 	{
 		malloc_exec_err();
-		return (1);
+		return (2);
 	}
-	cmd->size_cmd = get_size_command(lexer, lexer_pos);
+	cmd->size_cmd = get_size_command(lexer, lexer_pos, cmds);
 	printf("New command with size: <%d>\n", cmd->size_cmd);
 	cmd->index = index++;
 	cmd->in = "0";
@@ -59,7 +59,7 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_list *cmds)
 
 	current_cmd = ft_lstlast(cmds);
 	content_current_cmd = current_cmd->content;
-	printf("Index of command with redirection: %d\n", content_current_cmd->index);
+	(void)content_current_cmd;
 	*lexer_pos += 1;
 	if (lexer[*lexer_pos] && (lexer[*lexer_pos]->flag == WORD
 		|| lexer[*lexer_pos]->flag == BUILTIN))
@@ -69,12 +69,10 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_list *cmds)
 		return (1);
 	}
 	unexpected_token_exec_err(lexer[*lexer_pos]->content);
-	*lexer_pos += 1;
-	lexer[*lexer_pos - 1]->content = NULL;
 	return (0);
 }
 
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list **cmds)
+int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list *cmds)
 {
 	(void)cmds;
 	*lexer_pos += 1;
@@ -85,7 +83,6 @@ int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 		return (1);
 	}
 	unexpected_token_exec_err(lexer[*lexer_pos]->content);
-	lexer[*lexer_pos - 1]->content = NULL;
 	*lexer_pos += 1;
 	return (0);
 }
