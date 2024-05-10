@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 20:43:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:00:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	delete_heredocs(int nb_heredocs)
 	return (0);
 }
 
-char	*name_tempfile()
+char	*name_tempfile(t_cmd *cmd)
 {
 	char	*name;
 	char	random[11];
@@ -56,6 +56,7 @@ char	*name_tempfile()
 	if (count == -1)
 		return (NULL);
 	name = ft_strjoin(HDNAME, random);
+	cmd->tempfile_name = name;
 	return (name);
 }
 
@@ -65,11 +66,10 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 	char	*line;
 	char	*tmp_filename;
 
-	tmp_filename = name_tempfile();
+	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
 		return (1);
 	tmp = open(tmp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	cmd->tempfile_name = tmp_filename;
 	if (tmp == -1)
 		return (2);
 	cmd->in = tmp;

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 20:45:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 23:03:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 
 int	add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content)
 {
-	t_list *new_arg;
+	t_list	*new_arg;
 
-	new_arg = ft_lstnew(newarg_content);	
+	new_arg = ft_lstnew(newarg_content);
 	if (!new_arg)
 	{
-		printf("fucking shit fucking bugged malloc trash PC just buy more ram bro LOOOOL1111\n");
+		malloc_exec_err();
 		return (1);
 	}
 	ft_lstadd_back(&cmd->cmd_args, new_arg);
@@ -34,11 +34,11 @@ int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	while (lexer[*lexer_pos] && lexer[*lexer_pos]->flag != PIPE)
 	{
 		if (lexer[*lexer_pos]->flag == WORD
-				|| lexer[*lexer_pos]->flag == BUILTIN)
+			|| lexer[*lexer_pos]->flag == BUILTIN)
 			add_arg_to_cmd(lexer_pos, cmd, lexer[*lexer_pos]->content);
 		else if (lexer[*lexer_pos]->flag == APPEND
-				|| lexer[*lexer_pos]->flag == GREATER
-				|| lexer[*lexer_pos]->flag == LESSER)
+			|| lexer[*lexer_pos]->flag == GREATER
+			|| lexer[*lexer_pos]->flag == LESSER)
 		{
 			if (!is_legal_token(lexer, lexer_pos, cmd))
 				return (-1);
@@ -56,6 +56,24 @@ int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	return (0);
 }
 
+int	flag_add_to_node(t_lexer **lexer, int *lexer_pos)
+{
+	if (lexer[*lexer_pos]->flag == WORD
+		|| lexer[*lexer_pos]->flag == PIPE
+		|| lexer[*lexer_pos]->flag == BUILTIN)
+		return (1);
+	return (0);
+}
+
+int	flag_redirect_stream(t_lexer **lexer, int *lexer_pos)
+{
+	if (lexer[*lexer_pos]->flag == APPEND
+		|| lexer[*lexer_pos]->flag == GREATER
+		|| lexer[*lexer_pos]->flag == LESSER)
+		return (1);
+	return (0);
+}
+
 int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 {
 	t_cmd	*cmd;
@@ -63,9 +81,7 @@ int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 
 	current_cmd = ft_lstlast(*cmds);
 	cmd = current_cmd->content;
-	if (lexer[*lexer_pos]->flag == WORD
-		|| lexer[*lexer_pos]->flag == PIPE
-		|| lexer[*lexer_pos]->flag == BUILTIN)
+	if (flag_add_to_node(lexer, lexer_pos))
 	{
 		if (add_size_arg_node(lexer, lexer_pos, cmds))
 			return (1);
@@ -75,9 +91,7 @@ int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 		if (!is_legal_heredoc(lexer, lexer_pos, cmd))
 			return (1);
 	}
-	else if (lexer[*lexer_pos]->flag == APPEND
-			|| lexer[*lexer_pos]->flag == GREATER
-			|| lexer[*lexer_pos]->flag == LESSER)
+	else if (flag_redirect_stream(lexer, lexer_pos))
 	{
 		if (!is_legal_token(lexer, lexer_pos, cmd))
 			return (1);
@@ -87,19 +101,9 @@ int	filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 	return (0);
 }
 
-void free_lexer(t_lexer **lexer)
-{
-	int	i;
-
-	i = 0;
-	while (lexer[i])
-		free(lexer[i++]);
-	free(lexer);
-}
-
 t_lexer	**init_lex(t_list *envp, char **contents)
 {
-	t_lexer **lexer;
+	t_lexer	**lexer;
 	char	*temp;
 	int		i;
 	int		len;
@@ -122,13 +126,17 @@ t_lexer	**init_lex(t_list *envp, char **contents)
 		printf("%s ", lexer[i]->content);
 		if (!ft_strncmp(contents[i], "|", 1) && ft_strlen(contents[i]) == 1)
 			lexer[i]->flag = PIPE;
-		else if (!ft_strncmp(contents[i], "<", 1) && ft_strlen(contents[i]) == 1)
+		else if (!ft_strncmp(contents[i], "<", 1)
+			&& ft_strlen(contents[i]) == 1)
 			lexer[i]->flag = LESSER;
-		else if (!ft_strncmp(contents[i], ">", 1) && ft_strlen(contents[i]) == 1)
+		else if (!ft_strncmp(contents[i], ">", 1)
+			&& ft_strlen(contents[i]) == 1)
 			lexer[i]->flag = GREATER;
-		else if (!ft_strncmp(contents[i], ">>", 2) && ft_strlen(contents[i]) == 2)
+		else if (!ft_strncmp(contents[i], ">>", 2)
+			&& ft_strlen(contents[i]) == 2)
 			lexer[i]->flag = APPEND;
-		else if (!ft_strncmp(contents[i], "<<", 2) && ft_strlen(contents[i])== 2)
+		else if (!ft_strncmp(contents[i], "<<", 2)
+			&& ft_strlen(contents[i]) == 2)
 			lexer[i]->flag = HEREDOC;
 		else
 			lexer[i]->flag = WORD;
@@ -144,7 +152,7 @@ t_list	*init_cmdlist_size(void)
 	t_list	*head;
 	char	*begin;
 	t_cmd	*first_cmd;
-	
+
 	first_cmd = malloc(sizeof(t_cmd));
 	if (!first_cmd)
 		return (NULL);
@@ -161,42 +169,6 @@ t_list	*init_cmdlist_size(void)
 		return (NULL);
 	}
 	return (head);
-}
-
-void	free_cmdlist(t_list *cmds)
-{
-	t_list	*iter;
-	t_list	*temp;
-	t_list	*temp2;
-	t_list	*args;
-	t_cmd	*cmd;
-
-	iter = cmds;
-	cmd = iter->content;
-	args = cmd->cmd_args;
-	free(args->content); //BEGIN
-	while (iter)
-	{
-		temp = iter->next;
-		cmd = iter->content;
-		args = cmd->cmd_args;
-		while (args)
-		{
-			temp2 = args->next;
-			free(args);
-			args = temp2;
-		}
-		if (cmd->in > 0)
-			close(cmd->in);
-		if (cmd->out > 1)
-			close(cmd->out);
-		if (cmd->tempfile_name)
-			unlink(cmd->tempfile_name);
-		free(cmd->tempfile_name);
-		free(cmd);
-		free(iter);
-		iter = temp;
-	}
 }
 
 void	free_split(char **tofree)
@@ -233,7 +205,7 @@ int	get_cmdlist(char *input, t_list *envp)
 {
 	int		i;
 	char	**contents;
-	t_lexer **lexer;
+	t_lexer	**lexer;
 	t_list	*head;
 
 	i = 0;
@@ -250,9 +222,9 @@ int	get_cmdlist(char *input, t_list *envp)
 			break ;
 		}
 	}
-	free_lexer(lexer);
 	print_commands(head);
+	free_lexer(lexer);
 	free_cmdlist(head);
-	free_split(contents);
+	free(contents);
 	return (0);
 }

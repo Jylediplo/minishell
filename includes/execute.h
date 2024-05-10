@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 20:36:25 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 23:22:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,28 @@ int	get_cmdlist(char *input, t_list *envp);
 int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
 //execute_flags.c
-int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
-int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int		set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos);
+int		add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 
 //execute_heredocs.c
-int	create_heredoc(char *delimiter, t_cmd *cmd);
-int	delete_heredocs(int nb_heredocs);
+int		delete_heredocs(int nb_heredocs);
+char	*name_tempfile(t_cmd *cmd);
+int		create_heredoc(char *delimiter, t_cmd *cmd);
 
 //execute_errors.c
 void	malloc_exec_err(void);
 void	unexpected_token_exec_err(char *error_token);
+
+//execute_free_utils.c
+void	close_fds_remove_tmps(t_cmd *cmd);
+void	free_single_cmd(t_list *args);
+void	free_cmdlist(t_list *cmds);
+void	free_lexer(t_lexer **lexer);
+
+//execute_set_redirections.c
+int		redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int		is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int		is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+
 #endif
