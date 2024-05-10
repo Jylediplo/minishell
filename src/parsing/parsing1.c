@@ -127,7 +127,7 @@ void check_words(t_words *words)
     {
         if (words->command[i] == '"' || words->command[i] == '\'')
             words->in_quote = !words->in_quote;
-        else if (!words->in_quote && (words->command[i] == ' ' || words->command[i] == '\t'))
+        else if (!words->in_quote && (words->command[i] == ' ' || words->command[i] == '\t' || words->command[i] == '>'))
         {
             if (i > words->word_start)
                 words->num_words++;
@@ -151,8 +151,14 @@ void create_words(t_words *words, int *i)
     {
         if (words->command[*i] == '"' || words->command[*i] == '\'')
             words->in_quote = !words->in_quote;
-        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t'))
+        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t' || words->command[*i] == '>'))
         {
+            if (words->command[*i] == '>')
+            {
+                printf("ne maepppel noic\n");
+                
+                break;
+            }
             if (*i > words->word_start)
             {
                 (words->words)[words->num_words] = malloc((*i - words->word_start + 1) * sizeof(char));
