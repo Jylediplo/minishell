@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 19:26:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 20:36:25 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef struct s_lexer
     }    flag;
     char	*content;
     int		dollar;
-
 } t_lexer;
 # endif
 typedef struct s_cmd
@@ -55,15 +54,15 @@ typedef struct s_cmd
 	 * {"tr", "a-z", "A-Z"}, out = bonjour.txt; dup2(bonjour2.txt, bonjour.txt), in = HEREDOC
 	 */
 	char	**command;
+	char	*tempfile_name;
 	t_list	*cmd_args;
 	int		size_cmd;
 	int		in;
 	int		out;
-	int		index;
 }	t_cmd;
 
 //execute_main_size.c
-int	get_cmdlist_size(char *input);
+int	get_cmdlist(char *input, t_list *envp);
 int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
 //execute_flags.c
@@ -72,7 +71,7 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
 //execute_heredocs.c
-int	create_heredoc(char *delimiter, int *current_temp, t_cmd *cmd);
+int	create_heredoc(char *delimiter, t_cmd *cmd);
 int	delete_heredocs(int nb_heredocs);
 
 //execute_errors.c

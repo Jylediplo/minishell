@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/08 00:00:18 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:25:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 
 	init_shell(argc, argv, envp, &shell);
-	get_cmdlist_size(argv[1]);
+	get_cmdlist(argv[1], shell.envp);
 	//print_envp(shell.envp);
 	free_envp(shell.envp);
 	return (0);

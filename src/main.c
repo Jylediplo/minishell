@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/07 15:46:58 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 19:23:23 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,12 @@ int	main(int argc, char **argv, char **envp)
 	export_envar(&shell, "   PATHe= PATHe+=");
 	export_envar(&shell, "HOME+=$?cmamaison${HOME}\"''\" PATHe+=coucou");
 	efftee_echo(&shell, "''bonjour a tous$SHLVL''\"$AHA\"");
+	efftee_echo(&shell, "''bonjour");
 	efftee_echo(&shell, "\"     \"-n '   'bonjour a tous$SHLVL''\"$AHA\"");
 	export_envar(&shell, "TEST=-n");
 	export_envar(&shell, "TEST+=");
 	export_envar(&shell, "TEST-=-n");
-	efftee_echo(&shell, "''$TEST''bonjour  a tous, NO NEWLINE$SHLVL''\"$AHA\"");
+	efftee_echo(&shell, "''$TEST bonjour  a tous, NO NEWLINE$SHLVL''\"$AHA\"");
 	//efftee_echo(&shell, """''$TEST''bonjour       a tous, NO NEWLINE$SHLVL''\"$AHA\"");
 	unset_envvar(&shell, "PATHe HOME ${ABC} ahahahahah");
 	efftee_echo(&shell, "--nnnnn - bonjour a tous$SHLVL''\"$AHA         uhh\"");

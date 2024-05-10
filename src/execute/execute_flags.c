@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 20:13:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 20:48:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@
 
 int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 {
-	static int	index = 0;
-	t_cmd		*cmd;
-	t_list		*newcmd_size;
+	t_cmd	*cmd;
+	t_list	*newcmd_size;
 	
 	newcmd_size = NULL;
 	if (lexer[*lexer_pos]->flag == PIPE)
@@ -39,15 +38,21 @@ int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 	}
 	cmd->in = STDIN_FILENO;
 	cmd->out = STDOUT_FILENO;
+	cmd->tempfile_name = NULL;
 	cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
-	*lexer_pos += 1;
-	cmd->size_cmd = get_size_command(lexer, lexer_pos, cmd);
-	if (cmd->size_cmd == -1)
+	if (!cmd->cmd_args)
 	{
 		free(cmd);
 		return (1);
 	}
-	cmd->index = index++;
+	*lexer_pos += 1;
+	cmd->size_cmd = get_size_command(lexer, lexer_pos, cmd);
+	if (cmd->size_cmd == -1)
+	{
+		free(cmd->cmd_args);
+		free(cmd);
+		return (1);
+	}
 	printf("Input/output for this command: %d/%d\n", cmd->in, cmd->out);
 	newcmd_size = ft_lstnew(cmd);
 	if (!newcmd_size)
@@ -93,6 +98,11 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 		*lexer_pos += 1;
 		return (1);
 	}
+	if (!lexer[*lexer_pos])
+	{
+		unexpected_token_exec_err("newline");
+		return (0);
+	}
 	unexpected_token_exec_err(lexer[*lexer_pos]->content);
 	return (0);
 }
@@ -107,7 +117,7 @@ int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	if (lexer[*lexer_pos] && (lexer[*lexer_pos]->flag == WORD
 			|| lexer[*lexer_pos]->flag == BUILTIN))
 	{
-		heredoc_status = create_heredoc(lexer[*lexer_pos]->content, &current_temp, cmd);
+		heredoc_status = create_heredoc(lexer[*lexer_pos]->content, cmd);
 		if (heredoc_status == 1)
 		{
 			malloc_exec_err();

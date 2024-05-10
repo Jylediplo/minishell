@@ -6,13 +6,14 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 20:22:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 20:43:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/get_next_line.h"
 #include "../../includes/minishell.h"
+#include <limits.h>
 
 int	delete_heredocs(int nb_heredocs)
 {
@@ -39,34 +40,39 @@ int	delete_heredocs(int nb_heredocs)
 	return (0);
 }
 
-char	*name_tempfile(int current_temp)
+char	*name_tempfile()
 {
-	char		*name;
-	char		*current_temp_str;
+	char	*name;
+	char	random[11];
+	int		random_fd;
+	ssize_t	count;
 
-	current_temp_str = ft_itoa(current_temp);
-	if (!current_temp_str)
+	random_fd = open("/dev/urandom", O_RDONLY);
+	if (random_fd == -1)
 		return (NULL);
-	name = ft_strjoin(HDNAME, current_temp_str);
-	free(current_temp_str);
+	count = read(random_fd, random, 11);
+	random[10] = '\0';
+	close(random_fd);
+	if (count == -1)
+		return (NULL);
+	name = ft_strjoin(HDNAME, random);
 	return (name);
 }
 
-int	create_heredoc(char *delimiter, int *current_temp, t_cmd *cmd)
+int	create_heredoc(char *delimiter, t_cmd *cmd)
 {
 	int		tmp;
 	char	*line;
 	char	*tmp_filename;
 
-	tmp_filename = name_tempfile(*current_temp);
+	tmp_filename = name_tempfile();
 	if (!tmp_filename)
 		return (1);
 	tmp = open(tmp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	free(tmp_filename);
+	cmd->tempfile_name = tmp_filename;
 	if (tmp == -1)
 		return (2);
 	cmd->in = tmp;
-	*current_temp += 1;
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -80,6 +86,5 @@ int	create_heredoc(char *delimiter, int *current_temp, t_cmd *cmd)
 		write(tmp, line, ft_strlen(line));
 		free(line);
 	}
-	//printf("value: %s\n", (char* )cmd->cmd_args->content);
 	return (0);
 }
