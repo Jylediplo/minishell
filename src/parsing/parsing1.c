@@ -1,25 +1,5 @@
 #include "../../includes/minishell.h"
 
-typedef	struct s_lexer
-{
-	int	index;
-	enum
-	{
-		NONE = 258,
-		WORD = 259,
-		PIPE = 260,
-		GREATER = 261,
-        LESSER = 262,
-        BUILTIN = 263,
-        HEREDOC = 264,
-        APPEND = 265,
-        DELIMITER = 266,
-    
-	}	flag;
-	char *content;
-	int dollar;
-} t_lexer;
-
 typedef struct s_quote
 {
     int input_length;
@@ -124,6 +104,7 @@ typedef struct s_words
     char *command;
     char **wds_delim;
     int count_del;
+    char **tokens;
     t_lexer **lexer;
 } t_words;
 
@@ -298,7 +279,7 @@ void dollars_handler(t_lexer **lexer, int i, t_words *words)
 {
     lexer[i]->dollar = 1;
     lexer[i]->flag = WORD;
-    lexer[i]->content = words->wds_delim[i];
+    lexer[i]->content = ft_strdup(words->wds_delim[i]);
 }
 
 typedef struct s_delim
@@ -434,7 +415,7 @@ void handle_quotes_del(int count1, int *match, char *str)
 
 char** split_string(char *str, int *count)
 {
-     int count1 = 0;
+    int count1 = 0;
     int match = 0;
     t_delim delim;
    
@@ -487,18 +468,37 @@ void handle_lexer(t_words *words, int *previous_is_builtin)
     *previous_is_builtin = 0;
 	words->lexer[i] = 0;
 }
+void free_tokens(char ***tokens, int token_count)
+{
+    int i;
+
+    i = 0;
+    while (i < token_count)
+        free(tokens[i++]);
+}
 
 void manage_delim(t_words *words)
 {
     int i;
     int token_count;
+    char **tokens;
 
     i = 0;
     while (i < words->num_words)
     {
         token_count = 0;
-        if (!split_string(words->words[i], &token_count))
+        tokens = split_string(words->words[i], &token_count);
+        if (!tokens)
+        {
             printf("error malloc !\n");
+            exit(EXIT_FAILURE);
+        }
+        //free_tokens(&tokens, token_count);
+        for(int j = 0; j < token_count; j++)
+        {
+            free(tokens[j]);
+        }
+        free(tokens);
         i++;
         words->count_del += token_count;
     }
@@ -508,15 +508,16 @@ void manage_delim(t_words *words)
         printf("error malloc !\n");
         exit(EXIT_FAILURE);
     }
+    words->wds_delim[words->count_del] = 0;
 }
 
 void fill_with_delim(t_words *words)
 {
-    char **tokens;
     int i;
     int j;
     int k;
     int token_count;
+    char **tokens;
 
     i = 0;
     j = 0;
@@ -527,34 +528,64 @@ void fill_with_delim(t_words *words)
         k = 0;
         while (k < token_count)
         {
-            words->wds_delim[j] = tokens[k];
+            words->wds_delim[j] = ft_strdup(tokens[k]);
+            free(tokens[k]);
             j++;
             k++;
         }
+        free(tokens);
         i++;
     }
 }
 
-void split_word(char *command)
+void free_struct(t_words *words)
 {
-    static int previous_is_builtin;
-    t_words words;
-   
-	int i;
+    int i;
 
-	i = 0;
-    init_words_struct(&words, command);
-    split_words(&words);
-    manage_delim(&words);
-    fill_with_delim(&words);
-    handle_lexer(&words, &previous_is_builtin);
-
-    while (i < words.count_del)
+    i = 0;
+    while (i < words->num_words)
+        free(words->words[i++]);
+    free(words->words);
+    i = 0;
+    while (words->wds_delim[i])
+        free(words->wds_delim[i++]);
+    free(words->wds_delim);
+    i = 0;
+    while (words->lexer[i])    
     {
-        printf("Content : %s & flag : %d || dollar : %d\n", 
-        words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
+        free(words->lexer[i]->content);
+        free(words->lexer[i]);
         i++;
     }
+
+}
+
+t_lexer **split_word(char *command)
+{
+    //static int previous_is_builtin;
+    t_words words;
+   
+	// int i;
+	// i = 0;
+
+    init_words_struct(&words, command);
+    split_words(&words);
+    for(int i = 0; i < words.num_words; i++)
+    {
+        printf("words : %s\n", words.words[i]);
+    }
+    // manage_delim(&words);
+    // fill_with_delim(&words);
+    // handle_lexer(&words, &previous_is_builtin);
+    // while (i < words.count_del)
+    // {
+    //     printf("Content : %s & flag : %d || dollar : %d\n", 
+    //     words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
+    //     i++;
+    // }
+    //free_struct(&words);
+    //free(words.lexer);
+    return (words.lexer);
 }
 
 //<< stop cat

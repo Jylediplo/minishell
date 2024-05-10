@@ -3871,3 +3871,353 @@ wc << ST1 -w | grep > test.txt 2 << ST2 -X | "cat"<<"ST3" > fuck.txt
 exit
 ok
 exit
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat<<"ST3" > fuck.txt
+"|"\
+"|"|
+"|"|"|"
+exit
+<>>>>>
+>>>><<<<<
+>>>><<<<<<
+exit
+ok<<"FOKEOFK"
+"ok"<<"FOKEOFK"
+ok<"l"
+exit
+"ok"<"fd"
+stop cat
+stop<cat
+"l"<ok
+"ok"<"ok"
+exit
+ok
+exit
+ok
+ok<
+""ok
+exit
+ok
+exit
+exit
+exit
+exit
+exit
+ok
+""
+ok
+ok
+ok
+ok
+:
+""
+ok
+
+
+
+
+
+
+
+
+ok
+exit
+
+
+
+ok
+exit
+ok
+
+
+
+
+
+
+
+
+
+
+exit
+fe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+exit
+ls $L bonjour.txt
+exit
+ok
+Ok ||
+exit
+ok
+exit
+ok
+Ok ||
+exit
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat<<"ST3" > fuck.txt
+exir
+exit
+exitr
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+ok | grep 
+exit
+exit
+exit
+ok | ""
+
+ok | "ouu">>feif< || "ldoe"$"lol"
+make
+exit
+ok
+ok | "ouu">>feif< || "ldoe"$"lol"
+exi
+exit
+ok | "ouu">>feif< || "ldoe"$"lol"
+exit
+exit
+ok | "ouu">>feif< || "ldoe"$"lol"
+
+
+
+
+""
+exit
+exit
+ok
+l
+exit
+ok
+exot
+exit
+ok
+
+
+
+
+
+
+
+
+exit
+ok
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+ok
+oui
+non
+exit
+ok
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+ok
+xit
+exit
+exit
+exit
+ok
+ok | "ouu">>feif< || "ldoe"$"lol"
+exit
+ok
+exit
+exit
+exit
+exit
+exit
+exit
+eit
+exit
+exit
+exit
+ij ifje exit
+exit
+f<k
+exit
+okfseof 
+exit
+fjsfjsei fsefosef |ifjoisef >kfjjf <ofefie fijeifjeojfefefeokfoekfokeofkeokfkeokfokeofkoekfokeokfoekfokeokfoekfokeokfeofekfose
+fefiej<ofkoef |fkoefe >eofkekfe
+exit
+exit
+exit
+exit
+exit
+exit
+ok
+exit
+dd<d
+exit
+fefiej<ofkoef |fkoefe >eofkekfe
+exit
+fjsfjsei fsefosef |ifjoisef >kfjjf <ofefie fijeifjeojfefefeokfoekfokeofkeokfkeokfokeofkoekfokeokfoekfokeokfoekfokeokfeofekfose
+exit
+ok | "ouu">>feif< || "ldoe"$"lol"
+ok | "ouu">>feif< || "ldoe"$"lol"
+exit
+ok | "ouu">>feif< || "ldoe"$"lol"
+exit
+ok | "ouu">>feif< || "ldoe""lol"
+exit
+ok | "ouu">>feif< || "ldoe""lo$l"
+exit
+ok
+ok | "ouu">>feif< || "ldoe""lo$l"
+exit
+ok
+exit
+ok | "ouu">>feif< || "ldoe""lo$l"
+exit
+ok
+ok | "ouu">>feif< || "ldoe""lo$l"
+ok | "ouu">>feif< || "ldoe""lo$l"
+wc << ST1 -w | grep > test.txt 2 << ST2 -X | cat<<"ST3" > fuck.txt
+
+
+
+
+
+
+
+
+exit
+fokeskfse>ifjie
+echo <>>
+echo <>>
+exit
+"$"
+"$">
+"$"><
+echo <>>
+exit
+<>
+>>
+<<
+<>
+<>>
+echo <
+exit
+echo
+echo d
+exit
+kfoeokf foek
+fep
+ofe <>>>>
+ls <>
+echo <>
+exit
+echos <
+exporty d
+export d
+export d
+echo  d
+exit
+echo c
+export P=>
+export "$OK>"
+export $OK>
+export $OK > ok
+export LOL=>
+export LOL=><
+export LOL=>""<
+"ok"<"oui"
+export LOL=>""<
+>""<
+echo "">
+echo "" >
+echo > "" oui
+echo >> oui
+"echo">"oui"
+echo ok $T bonjour.txt
+export T=$Tlomdr
+export T=$Tlomdr OK=test
+export T=$Tlomdr OK=test > test.txt
+>""<
+>"f"<
+>""<
+>''<
+>''
+export PATHe+=LOL>>bonjour.txt
+exit
+
+skkes""
+skkes"<"
+skkes"<"fefe
+export PATHe+=LOL>>bonjour.txt
+export PATHe+=LOL">">bonjour.txt
+export PATHe+=LOL">">bonjour.txt
+exit
+okfeofs<
+"ok"<"ok"
+ok<ok
+>>>>
+<>"<"
+<>"<">
+exit
+ok
+ok>>
+ok">"
+ok">"<
+ok">"<>
+ok">"<>"ok"
+exit
+ok>>
+ok>>""
+exit
+dede"d">
+exit
+ok
+oui
+exit
+exit
+"ls -la"
+ls -la
+ls -la<<
+ls -la <<
+ls -la << oui >ok
+ls -la << oui > ok
+"ls" "la"
+ls -la
+,.
+<>
+exi
+exit

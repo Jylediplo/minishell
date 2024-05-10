@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/02 14:25:52 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/10 19:36:32 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@
 extern int	g_current_sig;
 void		handle_signals(void);
 
-//parsing
-void    parse(char *command, char **envp);
 
 // history
 typedef struct s_data_h
@@ -75,8 +73,26 @@ char	*helper(int fd, char *buffer, int bytes_read);
 size_t	index_for_n(char *buffer);
 
 
+//parsing
+typedef	struct s_lexer
+{
+	enum
+	{
+		NONE = 258,
+		WORD = 259,
+		PIPE = 260,
+		GREATER = 261,
+        LESSER = 262,
+        BUILTIN = 263,
+        HEREDOC = 264,
+        APPEND = 265,
+        DELIMITER = 266,
+    
+	}	flag;
+	char *content;
+	int dollar;
+} t_lexer;
 
-//pipex de zeub (c est mon ancien vraiment pas ouf)
 
 void manage_path(char *cmd, char **envp);
 char  *correct_path(char *argv, char **local_path);
@@ -84,6 +100,6 @@ char *find_path(char **envp);
 int find_str(char *to_find, char *str);
 void error(char *file, char **to_free1, char **to_free2);
 void free_split(char **str);
-void split_word(char *command);
+t_lexer **split_word(char *command);
 char *manage_quotes(char *command);
 #endif

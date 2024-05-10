@@ -59,13 +59,18 @@ int	mainloop(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	history.list = NULL;
+	t_lexer **lexer;
 	restore_history(&history);
 	while (1)
 	{
 		handle_signals();
 		command = readline("🐚 Super prompt ➜ ");
-		//parse(command, envp);
-		split_word(command);
+		lexer = split_word(command);
+		if (!lexer)
+		{
+			//printf("empty command continue !\n");
+			continue;
+		}
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);
