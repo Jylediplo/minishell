@@ -151,14 +151,8 @@ void create_words(t_words *words, int *i)
     {
         if (words->command[*i] == '"' || words->command[*i] == '\'')
             words->in_quote = !words->in_quote;
-        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t' || words->command[*i] == '>'))
+        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t'))
         {
-            if (words->command[*i] == '>')
-            {
-                printf("ne maepppel noic\n");
-                
-                break;
-            }
             if (*i > words->word_start)
             {
                 (words->words)[words->num_words] = malloc((*i - words->word_start + 1) * sizeof(char));
@@ -566,6 +560,75 @@ void free_struct(t_words *words)
 
 }
 
+
+void parseString(char *input)
+{
+    int in_quotes = 0; 
+
+    while (*input != '\0') {
+        if (*input == '"') {
+            in_quotes = !in_quotes;
+        } else if (*input == '>' && !in_quotes) {
+            *input = '\0'; 
+            printf("[%s] ", input - 1);
+            *input = '>'; // Restore '>'
+        }
+        input++;
+    }
+
+    // Print the last token after the loop
+    printf("[%s]\n", input - 1);
+}
+
+char delim(char *delimiter, char letter)
+{
+    int i;
+
+    i = 0;
+    while (delimiter[i])
+    {
+        if (delimiter[i] == letter)
+            return (letter);
+        i++;
+    }
+    return (0);
+}
+
+void delimiter(char *word)
+{
+    int db_quote_open;
+    int s_quote_open;
+    int i;
+
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+    char *delimiter = "><|";
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+            {
+                printf("%c%c detected index : %d!\n", delim(delimiter, word[i]), delim(delimiter, word[i]), i);
+                i++;
+            }
+            else
+            {
+                printf("%c detected index : %d!\n", delim(delimiter, word[i]), i);
+            }
+        }
+        i++;
+    }
+}
+
 t_lexer **split_word(char *command)
 {
     //static int previous_is_builtin;
@@ -578,8 +641,10 @@ t_lexer **split_word(char *command)
     split_words(&words);
     for(int i = 0; i < words.num_words; i++)
     {
-        printf("words : %s\n", words.words[i]);
+        delimiter(words.words[i]);
+        //printf("words : %s\n", words.words[i]);
     }
+
     // manage_delim(&words);
     // fill_with_delim(&words);
     // handle_lexer(&words, &previous_is_builtin);
