@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 23:22:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/11 21:04:46 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,27 @@ typedef struct s_cmd
 }	t_cmd;
 
 //execute_main_size.c
-int	get_cmdlist(char *input, t_list *envp);
-int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
+int		filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds);
+t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin);
+t_list	*init_cmdlist_size(void);
+int		get_cmdlist(char *input, t_list *envp);
 
 //execute_flags.c
+int		get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int		set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos);
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 
 //execute_heredocs.c
-int		delete_heredocs(int nb_heredocs);
 char	*name_tempfile(t_cmd *cmd);
+int		open_temp(char *filename);
 int		create_heredoc(char *delimiter, t_cmd *cmd);
 
 //execute_errors.c
-void	malloc_exec_err(void);
+int		newcmd_malloc_err(t_cmd *cmd);
 void	unexpected_token_exec_err(char *error_token);
+void	perror_context(char *failed_command, char *context);
 
 //execute_free_utils.c
 void	close_fds_remove_tmps(t_cmd *cmd);
@@ -90,4 +95,7 @@ int		redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int		is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int		is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 
+//execute_utils.c
+int		flag_redirect_stream(t_lexer **lexer, int *lexer_pos);
+int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 #endif

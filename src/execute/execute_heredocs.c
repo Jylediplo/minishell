@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 22:00:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/11 19:20:06 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,6 @@
 #include "../../includes/get_next_line.h"
 #include "../../includes/minishell.h"
 #include <limits.h>
-
-int	delete_heredocs(int nb_heredocs)
-{
-	char	*to_unlink;
-	char	*nb_heredocs_str;
-	int		index;
-
-	index = 0;
-	while (index <= nb_heredocs)
-	{
-		nb_heredocs_str = ft_itoa(index);
-		if (!nb_heredocs_str)
-			return (1);
-		to_unlink = ft_strjoin(HDNAME, nb_heredocs_str);
-		if (!to_unlink)
-		{
-			free(nb_heredocs_str);
-			continue ;
-		}
-		unlink(to_unlink);
-		free(nb_heredocs_str);
-		free(to_unlink);
-	}
-	return (0);
-}
 
 char	*name_tempfile(t_cmd *cmd)
 {
@@ -49,30 +24,51 @@ char	*name_tempfile(t_cmd *cmd)
 
 	random_fd = open("/dev/urandom", O_RDONLY);
 	if (random_fd == -1)
+	{
+		perror_context("open", "/dev/urandom");
 		return (NULL);
+	}
 	count = read(random_fd, random, 11);
-	random[10] = '\0';
 	close(random_fd);
 	if (count == -1)
+	{
+		perror_context("read", "/dev/urandom");
 		return (NULL);
+	}
+	random[10] = '\0';
 	name = ft_strjoin(HDNAME, random);
 	cmd->tempfile_name = name;
+	if (!name)
+		perror_context("malloc", NULL);
 	return (name);
+}
+
+int	open_temp(char *filename)
+{
+	int	fd;
+
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror_context("open", filename);
+		free(filename);
+	}
+	return (fd);
 }
 
 int	create_heredoc(char *delimiter, t_cmd *cmd)
 {
-	int		tmp;
+	int		tmp_fd;
 	char	*line;
 	char	*tmp_filename;
 
 	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
 		return (1);
-	tmp = open(tmp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (tmp == -1)
-		return (2);
-	cmd->in = tmp;
+	tmp_fd = open_temp(tmp_filename);
+	if (tmp_fd == -1)
+		return (1);
+	cmd->in = tmp_fd;
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -83,7 +79,7 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 			free(line);
 			break ;
 		}
-		write(tmp, line, ft_strlen(line));
+		write(tmp_fd, line, ft_strlen(line));
 		free(line);
 	}
 	return (0);

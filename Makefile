@@ -28,6 +28,7 @@ SRCS 				= main.c \
 					execute/execute_errors.c \
 					execute/execute_free_utils.c \
 					execute/execute_set_redirections.c \
+					execute/execute_utils.c \
 					gnl/get_next_line.c \
 					gnl/get_next_line_utils.c \
 

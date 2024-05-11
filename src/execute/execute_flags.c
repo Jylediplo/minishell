@@ -6,13 +6,41 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 23:19:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/11 20:59:35 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
+
+int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
+{
+	while (lexer[*lexer_pos] && lexer[*lexer_pos]->flag != PIPE)
+	{
+		if (lexer[*lexer_pos]->flag == WORD
+			|| lexer[*lexer_pos]->flag == BUILTIN)
+		{
+			if (add_arg_to_cmd(lexer_pos, cmd, lexer[*lexer_pos]->content))
+				return (-1);
+		}
+		else if (flag_redirect_stream(lexer, lexer_pos))
+		{
+			if (!is_legal_token(lexer, lexer_pos, cmd))
+				return (-1);
+		}
+		else if (lexer[*lexer_pos]->flag == HEREDOC)
+		{
+			if (!is_legal_heredoc(lexer, lexer_pos, cmd))
+				return (-1);
+		}
+		if (!lexer[*lexer_pos])
+			return (0);
+		if (lexer[*lexer_pos]->flag == PIPE)
+			break ;
+	}
+	return (0);
+}
 
 int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 {
@@ -22,6 +50,7 @@ int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
 	if (!cmd->cmd_args)
 	{
+		perror_context("malloc", NULL);
 		free(cmd);
 		return (1);
 	}
@@ -35,7 +64,7 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
-		malloc_exec_err();
+		perror_context("malloc", NULL);
 		return (NULL);
 	}
 	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd))
@@ -44,7 +73,12 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos)
 	cmd->size_cmd = get_size_command(lexer, lexer_pos, cmd);
 	if (cmd->size_cmd == -1)
 	{
-		free(cmd->cmd_args);
+		if (cmd->tempfile_name)
+		{
+			unlink(cmd->tempfile_name);
+			free(cmd->tempfile_name);
+		}
+		free_single_cmd(cmd->cmd_args);
 		free(cmd);
 		return (NULL);
 	}
@@ -67,13 +101,11 @@ int	add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds)
 		}
 	}
 	cmd = init_cmdargs(lexer, lexer_pos);
+	if (!cmd)
+		return (1);
 	newcmd_size = ft_lstnew(cmd);
 	if (!newcmd_size)
-	{
-		free(cmd);
-		malloc_exec_err();
-		return (1);
-	}
+		return (newcmd_malloc_err(cmd));
 	ft_lstadd_back(cmds, newcmd_size);
 	return (0);
 }
