@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 20:50:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/11 22:57:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	unexpected_token_exec_err(char *error_token)
 	ft_putstr_fd("petitcoq: syntax error near unexpected token `", 2);
 	ft_putstr_fd(error_token, 2);
 	ft_putstr_fd("'\n", 2);
+	g_current_sig = 2;
 }
 
 void	perror_context(char *failed_command, char *context)
@@ -45,4 +46,5 @@ void	perror_context(char *failed_command, char *context)
 		ft_putstr_fd(context, 2);
 	}
 	ft_putstr_fd("\n", 2);
+	g_current_sig = errno;
 }
