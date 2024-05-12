@@ -560,26 +560,6 @@ void free_struct(t_words *words)
 
 }
 
-
-void parseString(char *input)
-{
-    int in_quotes = 0; 
-
-    while (*input != '\0') {
-        if (*input == '"') {
-            in_quotes = !in_quotes;
-        } else if (*input == '>' && !in_quotes) {
-            *input = '\0'; 
-            printf("[%s] ", input - 1);
-            *input = '>'; // Restore '>'
-        }
-        input++;
-    }
-
-    // Print the last token after the loop
-    printf("[%s]\n", input - 1);
-}
-
 char delim(char *delimiter, char letter)
 {
     int i;
@@ -629,6 +609,105 @@ void delimiter(char *word)
     }
 }
 
+int count_delim(char *word)
+{
+    int db_quote_open;
+    int s_quote_open;
+    int i;
+	int count;
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+	count = 0;
+    char *delimiter = "><|";
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+            {
+                printf("%c%c detected index : %d!\n", delim(delimiter, word[i]), delim(delimiter, word[i]), i);
+				count++;
+                i++;
+            }
+            else
+            {
+                printf("%c detected index : %d!\n", delim(delimiter, word[i]), i);
+				count++;
+            }
+        }
+        i++;
+    }
+	return (count);
+}
+
+typedef struct s_delims
+{
+	int index;
+	char *delim;
+} t_delims;
+
+t_delims **create_tab_delim(char *word, int nb_delim)
+{
+	int db_quote_open;
+    int s_quote_open;
+    int i;
+
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+    char *delimiter = "><|";
+	t_delims **delims;
+	int cursor_tab = 0;
+	delims = malloc(sizeof(t_delims *) * (nb_delim + 1));
+	delims[nb_delim] = 0;
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+            {
+				delims[cursor_tab] = malloc(sizeof(t_delims) * 1);
+				delims[cursor_tab]->delim = malloc(sizeof(char) * (3));
+				delims[cursor_tab]->delim[0] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[1] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[2] = '\0';
+				delims[cursor_tab]->index = i;
+				cursor_tab++;
+               // printf("%c%c detected index : %d!\n", delim(delimiter, word[i]), delim(delimiter, word[i]), i);
+                i++;
+            }
+            else
+            {
+                //printf("%c detected index : %d!\n", delim(delimiter, word[i]), i);
+				delims[cursor_tab] = malloc(sizeof(t_delims) * 1);
+				delims[cursor_tab]->delim = malloc(sizeof(char) * (2));
+				delims[cursor_tab]->delim[0] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[1] = '\0';
+				delims[cursor_tab]->index = i;
+				cursor_tab++;
+            }
+        }
+        i++;
+    }
+	return (delims);
+}
+
 t_lexer **split_word(char *command)
 {
     //static int previous_is_builtin;
@@ -641,8 +720,14 @@ t_lexer **split_word(char *command)
     split_words(&words);
     for(int i = 0; i < words.num_words; i++)
     {
-        delimiter(words.words[i]);
-        //printf("words : %s\n", words.words[i]);
+		t_delims **test;
+		int nb_delim = count_delim(words.words[i]);
+		printf("nb delim : %d\n", nb_delim);
+		test = create_tab_delim(words.words[i], nb_delim);
+		for(int k =0; k < nb_delim; k++)
+		{
+			printf("delim : %s and i : %d\n", test[k]->delim, test[k]->index);
+		}
     }
 
     // manage_delim(&words);

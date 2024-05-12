@@ -2,106 +2,99 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Helper function to check if a character is a delimiter
-int is_delimiter(char ch, const char *delimiters) {
+int delim(char *delimiters, char ch) {
     while (*delimiters) {
-        if (ch == *delimiters)
+        if (*delimiters == ch) {
             return 1;
+        }
         delimiters++;
     }
     return 0;
 }
 
-// Function to parse the input word into an array of strings
-char **parse_words(char *word, const char *delimiters, int *num_tokens) {
+char **split_string(char *word) {
     int db_quote_open = 0;
     int s_quote_open = 0;
-    int word_count = 0;
     int i = 0;
+    char *delimiter = "><|";
 
-    // Allocate an initial array of string pointers
-    char **tokens = (char **)malloc(sizeof(char *) * 10); // Start with a small size, can expand if needed
-    if (!tokens) {
+    // Determine the maximum number of substrings
+    int max_substrings = 1;
+    while (word[i]) {
+        if (delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open)) {
+            max_substrings++;
+        }
+        if (word[i] == '"' || word[i] == '\'') {
+            if (word[i] == '\'') {
+                s_quote_open = !s_quote_open;
+            } else {
+                db_quote_open = !db_quote_open;
+            }
+        }
+        i++;
+    }
+
+    // Allocate memory for the container
+    char **container = malloc(max_substrings * sizeof(char *));
+    if (container == NULL) {
         fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
 
-    char *current_token = NULL;
-    while (word[i]) {
-        // Check for single or double quotes to toggle quote state
+    int substring_index = 0;
+    int start_index = 0;
+
+    // Iterate through the input string
+    for (i = 0; word[i]; i++) {
+        if (delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open)) {
+            // Found a delimiter, create a substring
+            int length = i - start_index;
+            container[substring_index] = malloc((length + 1) * sizeof(char));
+            if (container[substring_index] == NULL) {
+                fprintf(stderr, "Memory allocation failed\n");
+                exit(EXIT_FAILURE);
+            }
+            strncpy(container[substring_index], word + start_index, length);
+            container[substring_index][length] = '\0';
+            substring_index++;
+            start_index = i + 1;
+        }
         if (word[i] == '"' || word[i] == '\'') {
-            if (word[i] == '\'')
+            if (word[i] == '\'') {
                 s_quote_open = !s_quote_open;
-            else
-                db_quote_open = !db_quote_open;
-        }
-
-        // Check if we encounter a delimiter outside of quotes
-        if (is_delimiter(word[i], delimiters) && !s_quote_open && !db_quote_open) {
-            // Terminate the current token and add it to the tokens array
-            if (current_token) {
-                current_token[word + i - current_token] = '\0'; // Null-terminate the token
-                tokens[word_count++] = current_token;
-                current_token = NULL;
-            }
-
-            // Handle consecutive identical delimiters like "><"
-            if (word[i + 1] == word[i] && word[i] != '|') {
-                // Allocate memory for the consecutive delimiter
-                current_token = (char *)malloc(3); // Assuming we need two characters + null terminator
-                if (!current_token) {
-                    fprintf(stderr, "Memory allocation failed\n");
-                    exit(EXIT_FAILURE);
-                }
-                sprintf(current_token, "%c%c", word[i], word[i]); // Store the consecutive delimiter
-                tokens[word_count++] = current_token;
-                i++; // Skip the next character since it's part of the delimiter
             } else {
-                // Allocate memory for the single delimiter
-                current_token = (char *)malloc(2); // Assuming we need one character + null terminator
-                if (!current_token) {
-                    fprintf(stderr, "Memory allocation failed\n");
-                    exit(EXIT_FAILURE);
-                }
-                sprintf(current_token, "%c", word[i]); // Store the single delimiter
-                tokens[word_count++] = current_token;
-            }
-        } else {
-            // If not a delimiter, append character to the current token
-            if (!current_token) {
-                // Start a new token
-                current_token = word + i;
+                db_quote_open = !db_quote_open;
             }
         }
-
-        i++;
     }
 
-    // If there's a remaining token after the loop ends, add it to the tokens array
-    if (current_token) {
-        tokens[word_count++] = current_token;
+    // Copy the last substring
+    int length = i - start_index;
+    container[substring_index] = malloc((length + 1) * sizeof(char));
+    if (container[substring_index] == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
     }
+    strncpy(container[substring_index], word + start_index, length);
+    container[substring_index][length] = '\0';
 
-    // Set the number of tokens
-    *num_tokens = word_count;
+    // Add NULL terminator to indicate end of the container
+    container[max_substrings - 1] = NULL;
 
-    return tokens;
+    return container;
 }
 
 int main() {
-    char *input_word = "Hello>world|'with|quotes'";
-    const char *delimiters = "><|";
-    int num_tokens;
+    char *input = "test>ok";
+    char **result = split_string(input);
 
-    char **tokens = parse_words(input_word, delimiters, &num_tokens);
-
-    printf("Parsed Tokens:\n");
-    for (int i = 0; i < num_tokens; i++) {
-        printf("%s\n", tokens[i]);
-        free(tokens[i]); // Free each token after printing
+    int i = 0;
+    while (result[i] != NULL) {
+        printf("container[%d] = %s\n", i, result[i]);
+        free(result[i]); // Free memory allocated for each substring
+        i++;
     }
-
-    free(tokens); // Free the tokens array
+    free(result); // Free memory allocated for the container
 
     return 0;
 }

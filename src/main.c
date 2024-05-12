@@ -66,11 +66,7 @@ int	mainloop(int argc, char **argv, char **envp)
 		handle_signals();
 		command = readline("🐚 Super prompt ➜ ");
 		lexer = split_word(command);
-		if (!lexer)
-		{
-			//printf("empty command continue !\n");
-			continue;
-		}
+		(void)lexer;
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);
