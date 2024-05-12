@@ -30,8 +30,11 @@ SRCS 				= main.c \
 					execute/execute_set_redirections.c \
 					execute/execute_utils.c \
 					execute/execute_transform_cmdlist.c \
-					gnl/get_next_line.c \
-					gnl/get_next_line_utils.c \
+					history/manage_history.c \
+					history/manage_list.c \
+					get_next_line/get_next_line.c \
+					get_next_line/get_next_line_utils.c \
+					parsing/parsing.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -56,7 +59,7 @@ $(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/$(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
-$(NAME): $(OBJ_D) $(OBJS) Makefile $(INCLUDEDIR)/$(HEADERS) libft/libft.a
+$(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE) $(LIBTERMCAP)
 
 libft:	
