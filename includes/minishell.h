@@ -78,7 +78,7 @@ typedef	struct s_lexer
 {
 	enum
 	{
-		NONE = 258,
+		UNKNOWN = 258,
 		WORD = 259,
 		PIPE = 260,
 		GREATER = 261,
@@ -100,6 +100,6 @@ char *find_path(char **envp);
 int find_str(char *to_find, char *str);
 void error(char *file, char **to_free1, char **to_free2);
 void free_split(char **str);
-t_lexer **split_word(char *command);
+void	split_word(char *command);
 char *manage_quotes(char *command);
 #endif
