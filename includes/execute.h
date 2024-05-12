@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 15:05:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:49:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,6 @@ typedef struct s_lexer
 # endif
 typedef struct s_cmd
 {
-	/*
-	 * tr a-z A-Z >> bonjour.txt >> bonjour2.txt << STOP
-	 *
-	 * "tr" WORD
-	 * "a-z" WORD
-	 * "A-Z" WORD 
-	 * ">>" APPEND
-	 * "bonjour.txt" WORD -> dup2(bonjour.txt, 1);
-	 * ">>" APPEND
-	 * "bonjour2.txt" WORD -> dup2(bonjour2.txt, bonjour.txt);
-	 * "<<" HEREDOC
-	 * "STOP" WORD
-	 *
-	 * {"tr", "a-z", "A-Z"}, out = bonjour.txt; dup2(bonjour2.txt, bonjour.txt), in = HEREDOC
-	 */
 	char	**command;
 	char	*tempfile_name;
 	t_list	*cmd_args;
