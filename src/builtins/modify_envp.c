@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/06 19:41:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 19:48:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ char	*get_envvar_value(t_list **envp, char *envvar)
 		envp_value = iter->content;
 		if (!ft_strncmp(envp_value, envvar, len)
 			&& envp_value[len] == '=')
+		{
 			return (envp_value + len + 1);
+		}
 		iter = iter->next;
 	}
 	return (NULL);

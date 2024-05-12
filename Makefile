@@ -22,6 +22,7 @@ SRCS 				= main.c \
 					builtins/echo_getsize.c \
 					builtins/echo_setnew.c \
 					builtins/unset_main.c \
+					builtins/env_main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
 					execute/execute_heredocs.c \

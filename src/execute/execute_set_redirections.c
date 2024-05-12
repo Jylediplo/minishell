@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 20:47:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 19:51:19 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	if (lexer[*lexer_pos - 1]->flag == LESSER)
 		cmd->in = open(lexer[*lexer_pos]->content, O_RDONLY);
 	else if (lexer[*lexer_pos - 1]->flag == GREATER)
-		cmd->out = open(lexer[*lexer_pos]->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 644);
+	{
+		if (cmd->in != -1)
+			cmd->out = open(lexer[*lexer_pos]->content,
+					O_WRONLY | O_CREAT | O_TRUNC, 644);
+	}
 	else if (lexer[*lexer_pos - 1]->flag == APPEND)
 		cmd->out = open(lexer[*lexer_pos]->content,
 				O_WRONLY | O_CREAT | O_APPEND, 644);

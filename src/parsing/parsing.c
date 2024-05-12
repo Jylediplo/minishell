@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/12 18:11:10 by pantoine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+#include "../../includes/execute.h"
 
 typedef struct s_quote
 {
@@ -237,6 +250,7 @@ int is_builtin(char *word)
     }
     return (0);
 }
+
 int is_matching(char *word, char *token, size_t length, int *previous)
 {
     if (!word)
@@ -249,6 +263,7 @@ int is_matching(char *word, char *token, size_t length, int *previous)
     }
     return (0);
 }
+
 void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int i)
 {
      if (!(*previous_is_builtin))
@@ -560,7 +575,7 @@ void free_struct(t_words *words)
 
 }
 
-t_lexer **split_word(char *command)
+void	split_word(char *command, t_list *envp)
 {
     static int previous_is_builtin;
     t_words words;
@@ -579,9 +594,10 @@ t_lexer **split_word(char *command)
         words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
         i++;
     }
-    free_struct(&words);
-    free(words.lexer);
-    return (words.lexer);
+	get_cmdlist(words.lexer, envp);
+    //free_struct(&words);
+    //free(words.lexer);
+    //return (words.lexer);
 }
 
 //<< stop cat

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 17:40:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 18:09:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ typedef struct s_cmd
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
 int		filter_type_input(t_lexer **lexer, int *lexer_pos, t_list **cmds);
+t_lexer	**init_lex(t_list *envp, t_lexer **lexer);
 t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin);
 t_list	*init_cmdlist_size(void);
-int		get_cmdlist(char *input, t_list *envp);
+int		get_cmdlist(t_lexer **lexer, t_list *envp);
 
 //execute_flags.c
 int		get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);

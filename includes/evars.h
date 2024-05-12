@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 17:36:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 19:03:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,4 +145,7 @@ int	efftee_echo(t_shell *shell, char *to_echo);
 //unset_main.c
 void	remove_envvar(t_list **envp, char *to_remove);
 int		unset_envvar(t_shell *shell, char *unsetcommand);
+
+//env_main.c
+int		show_me_the_way(t_list *envp);
 #endif
