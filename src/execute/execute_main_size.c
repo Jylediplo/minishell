@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 21:01:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:55:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ t_list	*init_cmdlist_size(void)
 		perror_context("malloc", NULL);
 		return (NULL);
 	}
-	first_cmd->size_cmd = 0;
 	first_cmd->in = STDIN_FILENO;
 	first_cmd->out = STDOUT_FILENO;
 	first_cmd->tempfile_name = NULL;
+	first_cmd->command = NULL;
 	begin = ft_strdup("BEGIN");
 	if (!begin)
 	{
@@ -151,33 +151,27 @@ t_list	*init_cmdlist_size(void)
 	return (create_begin_cmd(first_cmd, begin));
 }
 
-void	free_split(char **tofree)
-{
-	int	i;
-
-	i = 0;
-	while (tofree[i])
-		free(tofree[i++]);
-	free(tofree);
-}
-
 void	print_commands(t_list *cmds)
 {
 	t_list	*iter;
-	t_list	*args;
+	char	**args;
 	t_cmd	*cmd;
+	int		i;
 
+	i = 0;
 	iter = cmds;
 	while (iter)
 	{
 		cmd = iter->content;
-		args = cmd->cmd_args;
-		while (args)
+		args = cmd->command;
+		while (args[i])
 		{
-			printf("ARG: %s\n", (char *)args->content);
-			args = args->next;
+			printf("CMD[%d]: %s\n", i, args[i]);
+			i++;
 		}
+		printf("Input/output for this command: %d/%d\n", cmd->in, cmd->out);
 		iter = iter->next;
+		i = 0;
 	}
 }
 
@@ -197,13 +191,12 @@ int	get_cmdlist(char *input, t_list *envp)
 	while (lexer[i])
 	{
 		if (filter_type_input(lexer, &i, &head) == 1)
-		{
-			g_current_sig = 258;
 			break ;
-		}
 	}
-	print_commands(head);
+	if (!copy_all_cmds(head->next))
+		print_commands(head->next);
 	free_lexer(lexer);
+	free_command_arrays(head);
 	free_cmdlist(head);
 	free(contents);
 	return (0);

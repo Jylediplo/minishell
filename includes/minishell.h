@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 18:56:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 01:01:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 // libft
 # include "../libft/libft.h"
 //errors
-# include <errno.h>
 # ifndef T_SHELL
 #  define T_SHELL
 typedef struct  s_shell

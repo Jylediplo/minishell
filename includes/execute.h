@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 21:04:46 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:05:51 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_cmd
 	char	**command;
 	char	*tempfile_name;
 	t_list	*cmd_args;
-	int		size_cmd;
 	int		in;
 	int		out;
 }	t_cmd;
@@ -75,8 +74,9 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos);
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos, t_list **cmds);
 
 //execute_heredocs.c
+void	sanitise_tempfile_name(t_cmd *cmd);
 char	*name_tempfile(t_cmd *cmd);
-int		open_temp(char *filename);
+int		open_temp(char *filename, t_cmd *cmd);
 int		create_heredoc(char *delimiter, t_cmd *cmd);
 
 //execute_errors.c
@@ -87,6 +87,7 @@ void	perror_context(char *failed_command, char *context);
 //execute_free_utils.c
 void	close_fds_remove_tmps(t_cmd *cmd);
 void	free_single_cmd(t_list *args);
+void	free_command_arrays(t_list *head);
 void	free_cmdlist(t_list *cmds);
 void	free_lexer(t_lexer **lexer);
 
@@ -98,4 +99,8 @@ int		is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 //execute_utils.c
 int		flag_redirect_stream(t_lexer **lexer, int *lexer_pos);
 int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
+
+//execute_transform_cmdlist.c
+char	**init_cmd_array(t_cmd *cmd);
+int		copy_all_cmds(t_list *head);
 #endif

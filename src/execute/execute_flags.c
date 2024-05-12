@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 20:59:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:29:42 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	cmd->in = STDIN_FILENO;
 	cmd->out = STDOUT_FILENO;
 	cmd->tempfile_name = NULL;
+	cmd->command = NULL;
 	cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
 	if (!cmd->cmd_args)
 	{
@@ -70,8 +71,7 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos)
 	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd))
 		return (NULL);
 	*lexer_pos += 1;
-	cmd->size_cmd = get_size_command(lexer, lexer_pos, cmd);
-	if (cmd->size_cmd == -1)
+	if (get_size_command(lexer, lexer_pos, cmd) == -1)
 	{
 		if (cmd->tempfile_name)
 		{

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/11 19:20:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:03:44 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,21 @@
 #include "../../includes/get_next_line.h"
 #include "../../includes/minishell.h"
 #include <limits.h>
+
+void	sanitise_tempfile_name(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (!cmd->tempfile_name)
+		return ;
+	while (cmd->tempfile_name[i])
+	{
+		if (cmd->tempfile_name[i] == '/')
+			cmd->tempfile_name[i] = '_';
+		i++;
+	}
+}
 
 char	*name_tempfile(t_cmd *cmd)
 {
@@ -40,10 +55,11 @@ char	*name_tempfile(t_cmd *cmd)
 	cmd->tempfile_name = name;
 	if (!name)
 		perror_context("malloc", NULL);
+	sanitise_tempfile_name(cmd);
 	return (name);
 }
 
-int	open_temp(char *filename)
+int	open_temp(char *filename, t_cmd *cmd)
 {
 	int	fd;
 
@@ -52,6 +68,7 @@ int	open_temp(char *filename)
 	{
 		perror_context("open", filename);
 		free(filename);
+		cmd->tempfile_name = NULL;
 	}
 	return (fd);
 }
@@ -65,7 +82,7 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
 		return (1);
-	tmp_fd = open_temp(tmp_filename);
+	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
 	cmd->in = tmp_fd;
