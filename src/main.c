@@ -14,29 +14,6 @@
 
 int	g_current_sig = 0;
 
-void	create_term(char **envp)
-{
-	char	*termtype;
-	char	term_buff[2048];
-	int		status;
-	char	*clear;
-
-	(void)envp;
-	termtype = getenv("TERM");
-	if (!termtype)
-		printf("terminal type not found\n");
-	status = tgetent(term_buff, termtype);
-	if (!status)
-		printf("Terminal type not defined\n");
-	else if (status < 0)
-		printf("Could not access termcap database\n");
-	else
-		printf("Getent value: %s\n", term_buff);
-	clear = tgetstr("cl", NULL);
-	if (clear != NULL)
-		tputs(clear, 1, putchar);
-}
-
 void	handle_minishell_cmd(char *command, char **envp)
 {
 	pid_t	id;
@@ -91,12 +68,8 @@ int	mainloop(int argc, char **argv, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//char	*path;
-
-	//path = ttyname(0);
 	(void)argv;
 	(void)argc;
-	//create_term(envp);
 	mainloop(argc, argv, envp);
 	return (0);
 }

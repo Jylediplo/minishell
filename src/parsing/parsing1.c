@@ -708,34 +708,84 @@ t_delims **create_tab_delim(char *word, int nb_delim)
 	return (delims);
 }
 
-void count_with_delim(t_delims **delim, int nb_delim)
+int count_with_delim(t_delims **delims, int nb_delim, char *word)
 {
 	int i;
 	int count = 0;
 	i = 0;
-	while (delim[i])
+    char *delimiter = "<>|";
+	while (delims[i])
 	{
-		if (i == 0)
-		{
-			if (delim[i]->index > 0)
-				count += 2;
-			if (delim[i]->index == 0)
-				count += 1;
-		}
-		else if (i == (nb_delim - 1))
-		{
-
-		}
-		else
-		{
-			if (delim[i]->index == delim[i - 1]->index)
-			{
-				
-			}
-		}
+		if (i == 0 && i == nb_delim - 1)
+        {
+            count++;
+            if (word[delims[i]->index - 1] != '\0')
+                count++;
+            if (word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0' && word[delims[i]->index + ft_strlen(delims[i]->delim)] != delim(delimiter, word[delims[i]->index + 1]))
+                count++;
+        }
+        else if (i == 0)
+        {
+            count++;
+            if (word[delims[i]->index - 1] != '\0')
+                count++;
+        }
+        else if (i == nb_delim - 1)
+        {
+            count++;
+            if ((word[delims[i]->index - 1] != '\0') && (word[delims[i]->index - 1] != delim(delimiter, word[delims[i]->index - 1])))
+                count++;
+            if (word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0' && word[delims[i]->index + ft_strlen(delims[i]->delim)] != delim(delimiter, word[delims[i]->index + 1]))
+                count++;
+        }
+        else
+        {
+            count++;
+             if (word[delims[i]->index - 1] != '\0' && word[delims[i]->index - 1] != delim(delimiter, word[delims[i]->index -1]))
+                count++;
+        }
 		i++;
 	}
-	printf("count words : %d\n", count);
+	return (count);
+}
+
+void create_words_tab(t_delims **delims, int nb_delim, char *word, int nb_words)
+{
+    char **sentence;
+    int i;
+    sentence = malloc(sizeof(char *) * (nb_words + 1));
+    sentence[nb_words] = NULL;
+    i = 0;
+    int j = 0;
+    int count = 0;
+    while (delims[i])
+    {
+        sentence[count] = ft_substr(word, j, (delims[i]->index - j));
+        if (!*sentence[count])
+        {
+            printf("nothing\n");
+            sentence[count] = ft_strdup(delims[i]->delim);
+        }
+        else
+        {
+            count++;
+            sentence[count] = ft_strdup(delims[i]->delim);
+        }
+        j = delims[i]->index + ft_strlen(delims[i]->delim);
+        if (i == nb_delim - 1 && word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0')
+        {
+            sentence[count] = ft_strdup(delims[i]->delim);
+            count++;
+            sentence[count] = ft_substr(word, delims[i]->index + ft_strlen(delims[i]->delim), (ft_strlen(word) - delims[i]->index));
+        }
+        count++;
+        i++;
+    }
+    int k = 0;
+    while (sentence[k])
+    {
+        printf("mot : %s\n", sentence[k++]);
+    }
 }
 
 t_lexer **split_word(char *command)
@@ -754,7 +804,9 @@ t_lexer **split_word(char *command)
 		int nb_delim = count_delim(words.words[i]);
 		printf("nb delim : %d\n", nb_delim);
 		delim = create_tab_delim(words.words[i], nb_delim);
-		count_with_delim(delim, nb_delim);
+		int nb_words = count_with_delim(delim, nb_delim, words.words[i]);
+        printf("nb word : %d\n", nb_words);
+        create_words_tab(delim, nb_delim, words.words[i], nb_words);
     }
 
     // manage_delim(&words);
