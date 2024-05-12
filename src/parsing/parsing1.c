@@ -708,6 +708,36 @@ t_delims **create_tab_delim(char *word, int nb_delim)
 	return (delims);
 }
 
+void count_with_delim(t_delims **delim, int nb_delim)
+{
+	int i;
+	int count = 0;
+	i = 0;
+	while (delim[i])
+	{
+		if (i == 0)
+		{
+			if (delim[i]->index > 0)
+				count += 2;
+			if (delim[i]->index == 0)
+				count += 1;
+		}
+		else if (i == (nb_delim - 1))
+		{
+
+		}
+		else
+		{
+			if (delim[i]->index == delim[i - 1]->index)
+			{
+				
+			}
+		}
+		i++;
+	}
+	printf("count words : %d\n", count);
+}
+
 t_lexer **split_word(char *command)
 {
     //static int previous_is_builtin;
@@ -720,14 +750,11 @@ t_lexer **split_word(char *command)
     split_words(&words);
     for(int i = 0; i < words.num_words; i++)
     {
-		t_delims **test;
+		t_delims **delim;
 		int nb_delim = count_delim(words.words[i]);
 		printf("nb delim : %d\n", nb_delim);
-		test = create_tab_delim(words.words[i], nb_delim);
-		for(int k =0; k < nb_delim; k++)
-		{
-			printf("delim : %s and i : %d\n", test[k]->delim, test[k]->index);
-		}
+		delim = create_tab_delim(words.words[i], nb_delim);
+		count_with_delim(delim, nb_delim);
     }
 
     // manage_delim(&words);
