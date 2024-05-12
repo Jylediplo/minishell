@@ -3,139 +3,133 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 19:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/09 12:10:25 by pantoine         ###   ########.fr       */
+/*   Created: 2024/04/09 16:57:21 by lefabreg          #+#    #+#             */
+/*   Updated: 2024/04/10 13:44:09 by lefabreg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/get_next_line.h"
+#include "../../includes/minishell.h"
 
-char	*mres(t_list_gnl **head, int fd, ssize_t fp)
+char	*manage_line_with_n_for_buffer(char *buffer, size_t index)
 {
-	size_t		i;
-	size_t		j;
-	t_list_gnl	*temp;
-
-	temp = *head;
-	j = 0;
-	while (temp)
-	{
-		i = 0;
-		while ((temp->content)[i] && fd == temp->fd)
-		{
-			if ((temp->content)[i++] == '\n')
-				return ((char *)malloc(sizeof(char) * (j + 2)));
-			j++;
-		}
-		if (!(temp->content[i]) && fp == 0 && !(temp->next))
-			return ((char *)malloc(sizeof(char) * j + 1));
-		temp = temp->next;
-	}
-	return (NULL);
-}
-
-char	*cleanstring(t_list_gnl **head, char *res, ssize_t j, ssize_t i)
-{
-	ssize_t	sz;
+	size_t	i;
+	char	*line;
 	char	*temp;
 
-	sz = 0;
-	if (((*head)->content)[i])
+	line = malloc(sizeof(char) * index + 1);
+	if (!line)
+		return (NULL);
+	i = -1;
+	while (++i < index)
+		line[i] = buffer[i];
+	line[i] = '\0';
+	temp = ft_substr(buffer, index, BUFFER_SIZE);
+	if (!temp)
+		return (NULL);
+	i = -1;
+	while (temp[++i])
+		buffer[i] = temp[i];
+	while (buffer[i])
+		buffer[i++] = '\0';
+	return (free(temp), line);
+}
+
+char	*manage_line_with_n_for_line(char *buffer, size_t index)
+{
+	size_t	i;
+	char	*line;
+	char	*temp;
+	char	*test;
+
+	if (!index)
+		return (NULL);
+	line = malloc(sizeof(char) * index + 1);
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (i < index)
 	{
-		while (((*head)->content)[sz + i])
-			sz++;
-		temp = malloc(sizeof(char) * (sz + 1));
-		if (!temp)
-			return (NULL);
-		sz = -1;
-		while (++sz, (*head)->content[sz + i])
-			temp[sz] = (*head)->content[sz + i];
-		temp[sz] = '\0';
-		free((*head)->content);
-		(*head)->content = temp;
+		line[i] = buffer[i];
+		i++;
+	}
+	line[i] = '\0';
+	test = buffer;
+	temp = ft_substr(buffer, index, BUFFER_SIZE);
+	free(test);
+	if (!temp)
+		return (NULL);
+	return (free(temp), line);
+}
+
+char	*read_line(int fd, char *buffer, char *previous_line, int *bytes_read)
+{
+	char	*line;
+	char	*temp;
+	size_t	i;
+
+	i = 0;
+	if (previous_line)
+	{
+		temp = ft_strdup(previous_line);
+		free(previous_line);
 	}
 	else
-		*head = lstclear(head, *head, 0);
-	res[j + 1] = '\0';
-	return (res);
-}
-
-void	move_tofront(t_list_gnl **head, int fd)
-{
-	t_list_gnl	*current;
-	t_list_gnl	*previous;
-
-	current = *head;
-	previous = NULL;
-	if ((*head)->next == NULL)
-		return ;
-	while (current && current->fd != fd)
-	{
-		previous = current;
-		current = current->next;
-	}
-	if (!current)
-		return ;
-	previous->next = current->next;
-	current->next = *head;
-	*head = current;
-}
-
-char	*return_line(t_list_gnl	**head, int fd, ssize_t fp)
-{
-	char		*res;
-	ssize_t		i;
-	ssize_t		j;
-
-	j = 0;
-	res = mres(head, fd, fp);
-	if (!res)
+		temp = ft_strdup(buffer);
+	while (buffer[i])
+		buffer[i++] = '\0';
+	*bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (*bytes_read == 0 && temp)
+		return (line = ft_strjoin(temp, buffer), *bytes_read = 0, free(temp),
+			line);
+	if (*bytes_read <= 0)
+		return (*bytes_read = 0, free(temp), NULL);
+	line = ft_strjoin(temp, buffer);
+	if (!line || !temp)
 		return (NULL);
-	while (*head)
+	return (free(temp), line);
+}
+
+char	*helper(int fd, char *buffer, int bytes_read)
+{
+	char	*line;
+	char	*temp;
+
+	line = NULL;
+	while (!index_for_n(line) && bytes_read > 0)
 	{
-		i = 0;
-		if ((*head)->content[i] && fd != (*head)->fd)
-			move_tofront(head, fd);
-		while (((*head)->content)[i] && fd == (*head)->fd)
-		{
-			res[j] = ((*head)->content)[i++];
-			if (res[j] == '\n' || (fp == 0 && !((*head)->content[i])
-					&& !(fd_in_list(*head, fd))))
-				return (cleanstring(head, res, j, i));
-			j++;
-		}
-		*head = lstclear(head, *head, 0);
+		line = read_line(fd, buffer, line, &bytes_read);
+		if (!line)
+			return (NULL);
 	}
-	return (NULL);
+	if (bytes_read == 0)
+		return (line);
+	line = manage_line_with_n_for_line(line, index_for_n(line));
+	temp = manage_line_with_n_for_buffer(buffer, index_for_n(buffer));
+	if (!temp)
+		return (NULL);
+	free(temp);
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	void				*buff;
-	char				*res;
-	ssize_t				fp;
-	static t_list_gnl	*mem = NULL;
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*line;
+	int			bytes_read;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
+	bytes_read = 1;
+	line = NULL;
+	if (!buffer[0])
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read <= 0 || fd < 0)
 		return (NULL);
-	buff = malloc(BUFFER_SIZE);
-	if (!buff)
+	if (index_for_n(buffer))
+		line = manage_line_with_n_for_buffer(buffer, index_for_n(buffer));
+	else
+		line = helper(fd, buffer, bytes_read);
+	if (!line)
 		return (NULL);
-	fp = read(fd, buff, BUFFER_SIZE);
-	if (fp == -1 || (fp == 0 && mem == NULL))
-	{
-		free(buff);
-		return (NULL);
-	}
-	else if (fp != 0)
-		read_buff(buff, &mem, fd, &fp);
-	free(buff);
-	if (!mem)
-		return (NULL);
-	res = return_line(&mem, fd, fp);
-	if (!res)
-		lstclear(&mem, NULL, 1);
-	return (res);
+	return (line);
 }
