@@ -32,8 +32,8 @@ SRCS 				= main.c \
 					execute/execute_transform_cmdlist.c \
 					history/manage_history.c \
 					history/manage_list.c \
-					get_next_line/get_next_line.c \
-					get_next_line/get_next_line_utils.c \
+					gnl/get_next_line.c \
+					gnl/get_next_line_utils.c \
 					parsing/parsing.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
@@ -46,7 +46,6 @@ READLINEDIR 		= $(shell brew --prefix readline)
 endif
 INCLUDEDIR 			= includes
 CFLAGS				+= -I$(READLINEDIR)/include
-LIBTERMCAP			= -ltermcap
 LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
 LIBFT				= -lft -L./libft
 
@@ -60,7 +59,7 @@ $(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/$(HEADERS)
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
 $(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
-	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE) $(LIBTERMCAP)
+	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE)
 
 libft:	
 	@make --no-print-directory -C libft

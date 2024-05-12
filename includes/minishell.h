@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 19:36:32 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/12 17:42:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 // basic i/o
 # include <unistd.h>
 # include <fcntl.h>
-# include <termcap.h>
-# include <termios.h>
 # include <sys/wait.h>
 // libft
 # include "../libft/libft.h"

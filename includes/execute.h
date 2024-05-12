@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 16:49:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:40:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,6 @@
 
 # define HDNAME ".hdtmp"
 # include "minishell.h"
-# ifndef LEXER
-#  define LEXER
-typedef struct s_lexer
-{
-    int index;
-    enum
-    {
-        UNKNOWN = 258,
-        WORD = 259,
-        PIPE = 260,
-        GREATER = 261,
-        LESSER = 262,
-        BUILTIN = 263,
-        HEREDOC = 264,
-        APPEND = 265,
-		DELIMITER = 266,
-    }    flag;
-    char	*content;
-    int		dollar;
-} t_lexer;
-# endif
 typedef struct s_cmd
 {
 	char	**command;
