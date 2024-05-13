@@ -5446,3 +5446,34 @@ $ok
 "${   "
 okkkk
 exit
+export "oui"
+"${}"
+"${}" "oui"
+cd "oui"
+exit
+ok
+export
+export ok
+export ok |
+export<OK
+exit
+export "oui"
+cd "oui" "../"
+$ok "oui"
+exit
+okfe $
+$
+exit
+ok
+$ok "oui"
+fef $ok "oui"
+$ok "oui" "non" | "ok"
+export PATH'+'="		"look
+$TEST PATH'+'="		"look
+$TEST ""please
+TEST ""please
+cd '.'./'.'./
+cd $T./
+$T $T./
+$T ''./
+exit

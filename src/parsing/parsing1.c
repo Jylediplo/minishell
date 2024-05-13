@@ -303,11 +303,14 @@ void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int
                 }
             }
 }
-void dollars_handler(t_lexer **lexer, int i, t_words *words)
+void dollars_handler(t_lexer **lexer, int i, t_words *words, int *previous)
 {
     lexer[i]->dollar = 1;
     lexer[i]->flag = WORD;
     lexer[i]->content = ft_strdup(words->wds_delim[i]);
+    if (i == 0)
+        *previous = 1;
+
 }
 
 typedef struct s_delim
@@ -397,7 +400,7 @@ void handle_lexer(t_words *words, int *previous_is_builtin)
         }
         words->lexer[i]->dollar = 0;
 		if(count_dollars(words->wds_delim[i]))
-			dollars_handler(words->lexer, i, words);
+			dollars_handler(words->lexer, i, words, previous_is_builtin);
 		else
            create_lexer(words, previous_is_builtin, words->lexer, i);
     }
