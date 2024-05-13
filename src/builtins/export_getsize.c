@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 18:05:42 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:10:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char	*parse_evar(t_evar *evar, char *newvalue, t_list *envp)
 		return (NULL);
 	get_evar(evar, envp);
 	if (evar->error == MALLOC)
-		ft_putstr_fd("Malloc error, can't display string\n", 2);
+		ft_putstr_fd("petitcoq: malloc error\n", 2);
 	free(evar->newvalue_copy);
 	return (evar->newvalue_toset);
 }

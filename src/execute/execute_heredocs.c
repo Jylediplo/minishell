@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 15:03:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:28:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	open_temp(char *filename, t_cmd *cmd)
 {
 	int	fd;
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = -1;//open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror_context("open", filename);
@@ -85,7 +85,7 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
-	cmd->in = tmp_fd;
+	cmd->in = tmp_filename;
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -99,5 +99,6 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 		write(tmp_fd, line, ft_strlen(line));
 		free(line);
 	}
+	close(tmp_fd);
 	return (0);
 }

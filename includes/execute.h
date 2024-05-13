@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 22:41:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:08:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ typedef struct s_cmd
 	char	**command;
 	char	*tempfile_name;
 	t_list	*cmd_args;
-	int		in;
-	int		out;
+	char	*in;
+	char	*out;
 }	t_cmd;
 
 //execute_main_size.c

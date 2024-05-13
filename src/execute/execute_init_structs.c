@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 20:52:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:25:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ t_list	*init_cmdlist_size(void)
 		perror_context("malloc", NULL);
 		return (NULL);
 	}
-	first_cmd->in = STDIN_FILENO;
-	first_cmd->out = STDOUT_FILENO;
+	first_cmd->in = NULL;
+	first_cmd->out = NULL;
 	first_cmd->tempfile_name = NULL;
 	first_cmd->command = NULL;
 	begin = ft_strdup("BEGIN");

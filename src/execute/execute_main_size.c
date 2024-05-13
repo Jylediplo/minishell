@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 22:50:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:11:18 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	print_commands(t_list *cmds)
 			printf("CMD[%d]: %s\n", i, args[i]);
 			i++;
 		}
-		printf("Input/output for this command: %d/%d\n", cmd->in, cmd->out);
+		printf("Input/output for this command: %s/%s\n", cmd->in, cmd->out);
 		iter = iter->next;
 		i = 0;
 	}

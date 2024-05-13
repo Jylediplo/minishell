@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:52:53 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 14:46:46 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:23:35 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 
 void	close_fds_remove_tmps(t_cmd *cmd)
 {
-	if (cmd->in > 0)
-		close(cmd->in);
-	if (cmd->out > 1)
-		close(cmd->out);
 	if (cmd->tempfile_name)
 		unlink(cmd->tempfile_name);
 	free(cmd->tempfile_name);
