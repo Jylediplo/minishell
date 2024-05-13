@@ -730,7 +730,7 @@ void free_lexer(t_words *words)
     free(words->lexer);
 }
 
-void split_word(char *command)
+void split_word(char *command, t_shell *shell)
 {
     static int previous_is_builtin;
     t_words words;
