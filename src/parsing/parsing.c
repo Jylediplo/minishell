@@ -761,7 +761,7 @@ void split_word(char *command, t_shell *shell)
     }
     free_words(&words);
     get_cmdlist(words.lexer, shell);
-    free_lexer1(&words);
+    //free_lexer1(&words);
     //free_struct(&words);
     //free(words.lexer);
 }
