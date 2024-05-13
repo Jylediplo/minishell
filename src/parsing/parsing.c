@@ -285,7 +285,8 @@ int is_matching(char *word, char *token, size_t length, int *previous)
     if (!ft_strncmp(word, token, ft_strlen(word))
         && (ft_strlen(word) == length))
     {
-        *previous = 0;
+        if (!ft_strncmp(word, "|", ft_strlen(word)))
+            *previous = 0;
         return (1);
     }
     return (0);
