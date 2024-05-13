@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_main.c                                         :+:      :+:    :+:   */
+/*   pwd_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/02 16:50:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 22:02:33 by pantoine         ###   ########.fr       */
+/*   Created: 2024/05/13 20:55:25 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/13 22:51:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../includes/minishell.h"
 #include "../../includes/evars.h"
+#include "../../includes/execute.h"
 
-int	show_me_the_way(t_list *envp)
+void	get_pwd(void)
 {
-	t_list	*iter;
+	char	path[4096];
 
-	iter = envp;
-	while (iter)
-	{
-		printf("%s\n", (char *)iter->content);
-		iter = iter->next;
-	}
-	return (1);
+	if (!getcwd(path, 4096))
+		perror_context("getcwd", NULL);
+	else
+		printf("%s\n", path);
 }

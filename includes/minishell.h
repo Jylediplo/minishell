@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 20:35:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:52:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char *find_path(char **envp);
 int find_str(char *to_find, char *str);
 void error(char *file, char **to_free1, char **to_free2);
 void free_split(char **str);
-void	split_word(char *command, t_list *envp);
+void	split_word(char *command, t_shell *shell);
 int is_builtin(char *word);
 char *manage_quotes(char *command);
 #endif

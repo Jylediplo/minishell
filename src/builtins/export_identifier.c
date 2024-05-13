@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/06 19:08:43 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 20:52:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,23 @@ int	valid_identifier_char(char c)
 
 int	valid_identifier(char *identifier, char operator)
 {
-	if ((*identifier >= '0' && *identifier <= '9')
-		|| *identifier == operator)
+	int	i;
+
+	i = 0;
+	if ((identifier[i] >= '0' && identifier[i] <= '9')
+		|| identifier[i] == operator)
 		return (0);
-	while (*identifier && *identifier != operator)
+	while (identifier[i])
 	{
-		if (!valid_identifier_char(*identifier++))
+		if (identifier[i] == operator)
+			break ;
+		if (!valid_identifier_char(identifier[i++]))
+			return (0);
+	}
+	if (identifier[i] == operator && operator == '+')
+	{
+		i++;
+		if (identifier[i] != '=')
 			return (0);
 	}
 	return (1);
@@ -70,12 +81,14 @@ void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 			evar->change_evar.append = 1;
 		if (valid_identifier(parsed_command, evar->change_evar.operator))
 		{
-			printf("Name <%s> is valid. Added to envp\n", parsed_command);
 			add_to_envp(shell, evar, parsed_command);
 			return ;
 		}
 		else
-			printf("Name <%s> is invalid. Not added to envp\n", parsed_command);
+		{
+			set_err_status(evar, INVALID_IDENTIFIER);
+			evar_error_message(evar);
+		}
 	}
 	free(parsed_command);
 }

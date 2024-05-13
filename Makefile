@@ -23,6 +23,10 @@ SRCS 				= main.c \
 					builtins/echo_setnew.c \
 					builtins/unset_main.c \
 					builtins/env_main.c \
+					builtins/cd_main.c \
+					builtins/cd_utils.c \
+					builtins/pwd_main.c \
+					builtins/exit_main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
 					execute/execute_heredocs.c \
@@ -31,6 +35,7 @@ SRCS 				= main.c \
 					execute/execute_set_redirections.c \
 					execute/execute_utils.c \
 					execute/execute_transform_cmdlist.c \
+					execute/execute_init_structs.c \
 					history/manage_history.c \
 					history/manage_list.c \
 					gnl/get_next_line.c \

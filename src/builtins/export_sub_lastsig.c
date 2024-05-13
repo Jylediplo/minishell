@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 19:48:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:07:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	copy_exitsig_value(t_evar *evar)
 
 	if (evar->size_expanded_var != 1)
 		return (0);
-	if(evar->newvalue_copy[evar->id_copy - evar->size_expanded_var] != '?')	
-		return (0);	
+	if (evar->newvalue_copy[evar->id_copy - evar->size_expanded_var] != '?')
+		return (0);
 	if (!handle_questionmarks_in_braces_copy(evar))
 		return (1);
 	if (current_char(evar) == '}')

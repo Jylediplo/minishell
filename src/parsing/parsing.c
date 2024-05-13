@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 18:11:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 22:38:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -575,7 +575,7 @@ void free_struct(t_words *words)
 
 }
 
-void	split_word(char *command, t_list *envp)
+void	split_word(char *command, t_shell *shell)
 {
     static int previous_is_builtin;
     t_words words;
@@ -594,7 +594,7 @@ void	split_word(char *command, t_list *envp)
         words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
         i++;
     }
-	get_cmdlist(words.lexer, envp);
+	get_cmdlist(words.lexer, shell);
     //free_struct(&words);
     //free(words.lexer);
     //return (words.lexer);

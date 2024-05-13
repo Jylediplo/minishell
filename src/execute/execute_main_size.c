@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 20:57:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 22:50:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,81 +66,6 @@ void	free_current_lexer(t_lexer **lexer, int i)
 	free(lexer);
 }
 
-t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
-{
-	char	*temp;
-	int		i;
-
-	i = 0;
-	while (lexer[i])
-	{
-		if (lexer[i]->dollar)
-		{
-			temp = parse_echo(envp, lexer[i]->content);
-			if (!temp)
-			{
-				free_current_lexer(lexer, i);
-				return (NULL);
-			}
-			if (is_builtin(temp))
-				lexer[i]->flag = BUILTIN;
-			free(lexer[i]->content);
-			lexer[i]->content = temp;
-		}
-		i++;
-	}
-	return (lexer);
-}
-
-t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
-{
-	t_list	*head;
-
-	if (!begin_cmd->cmd_args)
-	{
-		perror_context("malloc", NULL);
-		free(begin);
-		free(begin_cmd);
-		return (NULL);
-	}
-	head = ft_lstnew(begin_cmd);
-	if (!head)
-	{
-		perror_context("malloc", NULL);
-		free(begin);
-		free(begin_cmd->cmd_args);
-		free(begin_cmd);
-		return (NULL);
-	}
-	return (head);
-}
-
-t_list	*init_cmdlist_size(void)
-{
-	char	*begin;
-	t_cmd	*first_cmd;
-
-	first_cmd = malloc(sizeof(t_cmd));
-	if (!first_cmd)
-	{
-		perror_context("malloc", NULL);
-		return (NULL);
-	}
-	first_cmd->in = STDIN_FILENO;
-	first_cmd->out = STDOUT_FILENO;
-	first_cmd->tempfile_name = NULL;
-	first_cmd->command = NULL;
-	begin = ft_strdup("BEGIN");
-	if (!begin)
-	{
-		perror_context("malloc", NULL);
-		free(first_cmd);
-		return (NULL);
-	}
-	first_cmd->cmd_args = ft_lstnew(begin);
-	return (create_begin_cmd(first_cmd, begin));
-}
-
 void	print_commands(t_list *cmds)
 {
 	t_list	*iter;
@@ -165,16 +90,18 @@ void	print_commands(t_list *cmds)
 	}
 }
 
-int	get_cmdlist(t_lexer **lexer, t_list *envp)
+int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 {
 	int		i;
+	int		exit_status;
 	t_list	*head;
 
 	i = 0;
+	exit_status = 0;
 	head = init_cmdlist_size();
 	if (!head)
 		return (1);
-	lexer = init_lex(envp, lexer);
+	lexer = init_lex(shell->envp, lexer);
 	if (!lexer)
 	{
 		free_cmdlist(head);

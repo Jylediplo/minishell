@@ -1,0 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_main.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/13 16:51:50 by pantoine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+#include "../../includes/execute.h"
+#include "../../includes/evars.h"
+
+int	count_args_cd(t_cmd *cmd)
+{
+	int		len;
+
+	len = 0;
+	while (cmd->command[len])
+		len++;
+	if (len > 2)
+		return (cd_error_message("too many arguments"));
+	return (len);
+}
+
+int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
+{
+	char	*home;
+
+	if (len == -1)
+		return (1);
+	else if (len == 1)
+	{
+		home = get_envvar_value(envp, "HOME");
+		if (!home)
+			return (cd_error_message("HOME not set"));
+		if (chdir(get_envvar_value(envp, "HOME")) == -1)
+		{
+			perror_context("cd", NULL);
+			return (1);
+		}
+	}
+	else if (chdir(cmd->command[1]) == -1)
+	{
+		perror_context("cd", cmd->command[1]);
+		return (1);
+	}
+	return (0);
+}
+
+int	change_directory(t_cmd *cmd, t_shell *shell)
+{
+	char	old[4096];
+	int		len;
+
+	if (!getcwd(old, 4096))
+	{
+		perror_context("getcwd", NULL);
+		return (1);
+	}
+	len = count_args_cd(cmd);
+	if (get_chdir_status(len, cmd, &shell->envp))
+		return (1);
+	change_oldpwd(shell, old);
+	change_pwd(shell);
+	show_me_the_way(shell->envp);
+	return (0);
+}
