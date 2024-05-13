@@ -725,7 +725,7 @@ void create_wds_lexer(t_words *words)
     }
 }
 
-void free_lexer(t_words *words)
+void free_lexer1(t_words *words)
 {
     int i;
 
@@ -761,7 +761,7 @@ void split_word(char *command, t_shell *shell)
     }
     free_words(&words);
     get_cmdlist(words.lexer, shell);
-    free_lexer(&words);
+    free_lexer1(&words);
     //free_struct(&words);
     //free(words.lexer);
 }
