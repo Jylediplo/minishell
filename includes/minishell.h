@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 15:52:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 00:02:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef	struct s_lexer
 	}	flag;
 	char *content;
 	int dollar;
+	int	index;
 } t_lexer;
 
 

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 22:38:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 00:03:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,29 +292,29 @@ int is_matching(char *word, char *token, size_t length, int *previous)
 }
 void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int i)
 {
-     if (!(*previous_is_builtin))
-			    lexer[i]->content = manage_quotes(words->wds_delim[i]);
-            else
-                lexer[i]->content = words->wds_delim[i];
-			if (is_matching(words->wds_delim[i], "|", 1, previous_is_builtin))
-				lexer[i]->flag = PIPE;
-			else if (is_matching(words->wds_delim[i], ">", 1, previous_is_builtin))
-				lexer[i]->flag = GREATER;
-            else if (is_matching(words->wds_delim[i], "<", 1, previous_is_builtin))
-				lexer[i]->flag = LESSER;
-            else if (is_matching(words->wds_delim[i], "<<", 2, previous_is_builtin))
-				lexer[i]->flag = HEREDOC;
-            else if (is_matching(words->wds_delim[i], ">>", 2, previous_is_builtin))
-				lexer[i]->flag = APPEND;
-			else
-            {
-				lexer[i]->flag = WORD;
-                if (is_builtin(lexer[i]->content))
-                {
-                    lexer[i]->flag = BUILTIN;
-                    *previous_is_builtin = 1;
-                }
-            }
+	if (!(*previous_is_builtin))
+		lexer[i]->content = manage_quotes(words->wds_delim[i]);
+	else
+		lexer[i]->content = ft_strdup(words->wds_delim[i]);
+	if (is_matching(words->wds_delim[i], "|", 1, previous_is_builtin))
+		lexer[i]->flag = PIPE;
+	else if (is_matching(words->wds_delim[i], ">", 1, previous_is_builtin))
+		lexer[i]->flag = GREATER;
+	else if (is_matching(words->wds_delim[i], "<", 1, previous_is_builtin))
+		lexer[i]->flag = LESSER;
+	else if (is_matching(words->wds_delim[i], "<<", 2, previous_is_builtin))
+		lexer[i]->flag = HEREDOC;
+	else if (is_matching(words->wds_delim[i], ">>", 2, previous_is_builtin))
+		lexer[i]->flag = APPEND;
+	else
+	{
+		lexer[i]->flag = WORD;
+		if (is_builtin(lexer[i]->content))
+		{
+			lexer[i]->flag = BUILTIN;
+			*previous_is_builtin = 1;
+		}
+	}
 }
 void dollars_handler(t_lexer **lexer, int i, t_words *words, int *previous)
 {
@@ -323,7 +323,6 @@ void dollars_handler(t_lexer **lexer, int i, t_words *words, int *previous)
     lexer[i]->content = ft_strdup(words->wds_delim[i]);
     if (i == 0)
         *previous = 1;
-
 }
 
 typedef struct s_delim
@@ -447,15 +446,11 @@ int count_delim(char *word)
 
             if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
             {
-                printf("%c%c detected index : %d!\n", delim(delimiter, word[i]), delim(delimiter, word[i]), i);
 				count++;
                 i++;
             }
             else
-            {
-                printf("%c detected index : %d!\n", delim(delimiter, word[i]), i);
 				count++;
-            }
         }
         i++;
     }
@@ -611,7 +606,6 @@ char **create_words_tab(t_delims **delims, int nb_delim, char *word, int nb_word
         count++;
         i++;
     }
-    printf("count : %d && nb_words : %d\n", count, nb_words);
     return (sentence);
 }
 
@@ -752,13 +746,6 @@ void split_word(char *command, t_shell *shell)
     create_wds_lexer(&words);
     handle_lexer(&words, &previous_is_builtin);
     free_wds_delim(&words, words.count_del);
-    int j = 0;
-    while (j < words.count_del)
-    {
-        printf("Content : %s & flag : %d || dollar : %d\n", 
-        words.lexer[j]->content, words.lexer[j]->flag, words.lexer[j]->dollar);
-        j++;
-    }
     free_words(&words);
     get_cmdlist(words.lexer, shell);
     //free_lexer1(&words);
