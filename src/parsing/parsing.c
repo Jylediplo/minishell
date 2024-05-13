@@ -13,6 +13,16 @@
 #include "../../includes/minishell.h"
 #include "../../includes/execute.h"
 
+typedef struct s_quote
+{
+    int input_length;
+    int output_index;
+    int quote_open;
+    int i;
+    char current_quote;
+    char *output;
+} t_quote;
+
 void	init_cmd(t_quote *cmd, char *command)
 {
     cmd->input_length = (int)ft_strlen(command);
