@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/10 19:36:32 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/13 23:01:03 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,6 @@ char *find_path(char **envp);
 int find_str(char *to_find, char *str);
 void error(char *file, char **to_free1, char **to_free2);
 void free_split(char **str);
-t_lexer **split_word(char *command);
+void split_word(char *command);
 char *manage_quotes(char *command);
 #endif

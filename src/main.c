@@ -36,14 +36,12 @@ int	mainloop(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	history.list = NULL;
-	t_lexer **lexer;
 	restore_history(&history);
 	while (1)
 	{
 		handle_signals();
 		command = readline("🐚 Super prompt ➜ ");
-		lexer = split_word(command);
-		(void)lexer;
+		split_word(command);
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);
