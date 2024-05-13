@@ -13,16 +13,6 @@
 #include "../../includes/minishell.h"
 #include "../../includes/execute.h"
 
-typedef struct s_quote
-{
-    int input_length;
-    int output_index;
-    int quote_open;
-    int i;
-    char current_quote;
-    char *output;
-} t_quote;
-
 void	init_cmd(t_quote *cmd, char *command)
 {
     cmd->input_length = (int)ft_strlen(command);
@@ -85,7 +75,7 @@ char *manage_quotes(char *command)
     {
         free(cmd.output);
         printf("Error: Quote not properly closed.\n");
-        return NULL;
+        return (NULL);
     }
     cmd.output[cmd.output_index] = '\0';
 	return (cmd.output);
@@ -109,7 +99,9 @@ char *ft_strncpy(char *dst, const char *src, size_t n)
 typedef struct s_words
 {
     int len;
-    int in_quote;
+    int in_s_q;
+    int in_db_q;
+    int in_dollar;
     int word_start;
     int i;
     char **words;
@@ -124,7 +116,9 @@ typedef struct s_words
 void init_words_struct(t_words *words, char *command)
 {
     words->len = ft_strlen(command);
-    words->in_quote = 0;
+    words->in_s_q = 0;
+    words->in_dollar = 0;
+    words->in_db_q = 0;
     words->word_start = 0;
     words->num_words = 0;
     words->count_del = 0;
@@ -138,9 +132,20 @@ void check_words(t_words *words)
     i = 0;
     while (i < words->len)
     {
+         
+            if (words->command[i] == '$' && words->command[i + 1] == '{' && (!words->in_s_q && !words->in_db_q))
+                words->in_dollar = 1;
+            if (words->command[i] == '}' && words->in_dollar)
+                words->in_dollar = 0;
         if (words->command[i] == '"' || words->command[i] == '\'')
-            words->in_quote = !words->in_quote;
-        else if (!words->in_quote && (words->command[i] == ' ' || words->command[i] == '\t'))
+        {
+            if (words->command[i] == '"' && (!words->in_s_q))
+                words->in_db_q = !words->in_db_q;
+            else if (words->command[i] == '\'' && (!words->in_db_q))
+                words->in_s_q = !words->in_s_q;
+        }
+        else if ((!words->in_s_q && !words->in_db_q && !words->in_dollar) &&
+            (words->command[i] == ' ' || words->command[i] == '\t'))
         {
             if (i > words->word_start)
                 words->num_words++;
@@ -148,7 +153,7 @@ void check_words(t_words *words)
         }
         i++;
     }
-    if (i > words->word_start && !words->in_quote)
+    if (i > words->word_start && (!words->in_s_q && !words->in_db_q))
         (words->num_words)++;
     words->words = malloc((words->num_words) * sizeof(char *));
     if (words->words == NULL)
@@ -156,15 +161,26 @@ void check_words(t_words *words)
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
+
 }
 
 void create_words(t_words *words, int *i)
 {
     while (*i < words->len)
     {
+        
+            if (words->command[*i] == '$' && words->command[*i + 1] == '{' && (!words->in_s_q && !words->in_db_q))
+                words->in_dollar = 1;
+            if (words->command[*i] == '}' && words->in_dollar)
+                words->in_dollar = 0;
         if (words->command[*i] == '"' || words->command[*i] == '\'')
-            words->in_quote = !words->in_quote;
-        else if (!words->in_quote && (words->command[*i] == ' ' || words->command[*i] == '\t'))
+        {
+             if (words->command[*i] == '"' && (!words->in_s_q))
+                words->in_db_q = !words->in_db_q;
+            else if (words->command[*i] == '\'' && (!words->in_db_q))
+                words->in_s_q = !words->in_s_q;
+        }
+        else if ((!words->in_s_q && !words->in_db_q && !words->in_dollar) && (words->command[*i] == ' ' || words->command[*i] == '\t'))
         {
             if (*i > words->word_start)
             {
@@ -181,13 +197,15 @@ void create_words(t_words *words, int *i)
             }
             words->word_start = *i + 1;
         }
+        
         (*i)++;
     }
 }
 void reset_values(t_words *words)
 {
     words->num_words = 0;
-    words->in_quote = 0;
+    words->in_s_q = 0;
+    words->in_db_q = 0;
     words->word_start = 0;
 }
 
@@ -199,7 +217,7 @@ void split_words(t_words *words)
     check_words(words);
     reset_values(words);
     create_words(words, &i);
-    if (i > words->word_start && !words->in_quote)
+    if (i > words->word_start && (!words->in_s_q && !words->in_db_q))
     {
         (words->words)[words->num_words] = malloc((i - words->word_start + 1) * sizeof(char));
         if ((words->words)[words->num_words] == NULL)
@@ -212,9 +230,9 @@ void split_words(t_words *words)
         (words->words)[words->num_words][i - words->word_start] = '\0';
         (words->num_words)++;
     }
-    if (words->in_quote)
+    if (words->in_dollar)
     {
-        printf("Error: Unclosed quote\n");
+        printf("Error: BAD substitution\n");
         exit(EXIT_FAILURE);
     }
 }
@@ -250,7 +268,6 @@ int is_builtin(char *word)
     }
     return (0);
 }
-
 int is_matching(char *word, char *token, size_t length, int *previous)
 {
     if (!word)
@@ -263,7 +280,6 @@ int is_matching(char *word, char *token, size_t length, int *previous)
     }
     return (0);
 }
-
 void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int i)
 {
      if (!(*previous_is_builtin))
@@ -290,11 +306,14 @@ void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int
                 }
             }
 }
-void dollars_handler(t_lexer **lexer, int i, t_words *words)
+void dollars_handler(t_lexer **lexer, int i, t_words *words, int *previous)
 {
     lexer[i]->dollar = 1;
     lexer[i]->flag = WORD;
     lexer[i]->content = ft_strdup(words->wds_delim[i]);
+    if (i == 0)
+        *previous = 1;
+
 }
 
 typedef struct s_delim
@@ -322,139 +341,6 @@ void init_struct_del(t_delim *delim, char *str)
 
 }
 
-void handle_db_del_next(t_delim *delim, char *delimiter)
-{
-    delimiter[0] = *delim->end;
-    delimiter[1] = '\0';
-    delim->tokens[delim->index] = malloc(2 * sizeof(char));
-    if (!delim->tokens[delim->index])
-    {
-        printf("Memory allocation failed \n");
-        exit(EXIT_FAILURE);
-    }
-    strncpy(delim->tokens[delim->index], delimiter, 2);
-    delim->index++;
-    delim->start = delim->end + 1;
-}
-
-void handle_db_del(t_delim *delim)
-{
-    char delimiter[2];
-    char double_delimiter[3];
-
-     if ((*delim->end == '<' || *delim->end == '>') && (*(delim->end + 1) == *delim->end))
-            {
-                double_delimiter[0] = *delim->end;
-                double_delimiter[1] = *delim->end;
-                double_delimiter[2] = '\0';
-                delim->tokens[delim->index] = malloc(3 * sizeof(char));
-                if (!delim->tokens[delim->index])
-                {
-                    printf("Memory allocation error \n");
-                    exit(EXIT_FAILURE);
-                }
-                ft_strncpy(delim->tokens[delim->index], double_delimiter, 3);
-                delim->index++;    
-                delim->start = delim->end + 2;
-                delim->end++;
-            }
-            else
-                handle_db_del_next(delim, delimiter);
-}
-
-void handle_start_del(t_delim *delim)
-{
-    int length;
-
-    if (delim->start != delim->end)
-    {
-        length = delim->end - delim->start;
-        delim->tokens[delim->index] = malloc((length + 1) * sizeof(char));
-        if (!delim->tokens[delim->index])
-        {
-            printf("error malloc !\n");
-            exit(EXIT_FAILURE);
-        }
-        ft_strncpy(delim->tokens[delim->index], delim->start, length);
-        delim->tokens[delim->index][length] = '\0';
-        delim->index++;
-    }
-}
-
-void handle_end_del(t_delim *delim)
-{
-    int length;
-
-    if (delim->start != delim->end)
-    {
-        length = delim->end - delim->start;
-        delim->tokens[delim->index] = malloc((length + 1) * sizeof(char));
-        if (!delim->tokens[delim->index])
-        {
-            printf("error malloc !\n");
-            exit(EXIT_FAILURE);
-        }
-        ft_strncpy(delim->tokens[delim->index], delim->start, length);
-        delim->tokens[delim->index][length] = '\0';
-        delim->index++;
-    }
-}
-
-void handle_quotes_del(int count1, int *match, char *str)
-{
-    int j;
-    int k;
-
-    j = count1 - 1;
-    k = count1;
-            while (j >= 0)
-            {
-                if (str[j] == '"')
-                {
-                    *match += 1;
-                    break;
-                }
-                j--;
-            }
-            while (k <= (int)ft_strlen(str))
-            {
-                if (str[k] == '"')
-                {
-                    *match += 1;
-                    break;
-                }
-                k++;
-            }
-        (void)match;
-}
-
-char** split_string(char *str, int *count)
-{
-    int count1 = 0;
-    int match = 0;
-    t_delim delim;
-   
-    init_struct_del(&delim, str);
-    while (*delim.end != '\0')
-    {   
-        count1++;
-        match = 0;
-         if (ft_strchr(delim.del, *delim.end) != NULL)
-         {
-           handle_quotes_del(count1, &match, str);
-            if (match != 2)
-            {
-                handle_start_del(&delim);
-                handle_db_del(&delim);
-            }
-        }
-        delim.end++;
-    }
-    handle_end_del(&delim);
-    *count = delim.index;
-    return (delim.tokens);
-}
-
 void handle_lexer(t_words *words, int *previous_is_builtin)
 {
     int i;
@@ -476,135 +362,396 @@ void handle_lexer(t_words *words, int *previous_is_builtin)
         }
         words->lexer[i]->dollar = 0;
 		if(count_dollars(words->wds_delim[i]))
-			dollars_handler(words->lexer, i, words);
+			dollars_handler(words->lexer, i, words, previous_is_builtin);
 		else
            create_lexer(words, previous_is_builtin, words->lexer, i);
     }
     *previous_is_builtin = 0;
 	words->lexer[i] = 0;
 }
-void free_tokens(char ***tokens, int token_count)
+
+char delim(char *delimiter, char letter)
 {
     int i;
 
     i = 0;
-    while (i < token_count)
-        free(tokens[i++]);
+    while (delimiter[i])
+    {
+        if (delimiter[i] == letter)
+            return (letter);
+        i++;
+    }
+    return (0);
 }
 
-void manage_delim(t_words *words)
+void delimiter(char *word)
+{
+    int db_quote_open;
+    int s_quote_open;
+    int i;
+
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+    char *delimiter = "><|";
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+                i++;
+        }
+        i++;
+    }
+}
+
+int count_delim(char *word)
+{
+    int db_quote_open;
+    int s_quote_open;
+    int i;
+	int count;
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+	count = 0;
+    char *delimiter = "><|";
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+            {
+                printf("%c%c detected index : %d!\n", delim(delimiter, word[i]), delim(delimiter, word[i]), i);
+				count++;
+                i++;
+            }
+            else
+            {
+                printf("%c detected index : %d!\n", delim(delimiter, word[i]), i);
+				count++;
+            }
+        }
+        i++;
+    }
+	return (count);
+}
+
+typedef struct s_delims
+{
+	int index;
+	char *delim;
+} t_delims;
+
+void free_delim(t_delims **delim, int nb_delim)
 {
     int i;
-    int token_count;
-    char **tokens;
+    (void)nb_delim;
+    i = 0;
+    while (delim[i])
+    {
+        free(delim[i]->delim);
+        free(delim[i]);
+        i++;
+    }
+    free(delim[i]);
+    free(delim);
+}
+
+t_delims **create_tab_delim(char *word, int nb_delim)
+{
+	int db_quote_open;
+    int s_quote_open;
+    int i;
+
+    db_quote_open = 0; 
+    s_quote_open = 0;
+    i = 0;
+    char *delimiter = "><|";
+	t_delims **delims;
+	int cursor_tab = 0;
+	delims = malloc(sizeof(t_delims *) * (nb_delim + 1));
+	delims[nb_delim] = 0;
+    while (word[i])
+    {
+        if (word[i] == '"' || word[i] == '\'')
+        {
+            if (word[i] == '\'')
+                s_quote_open = !s_quote_open;
+            else
+                db_quote_open = !db_quote_open;
+        }
+        if (word[i] == delim(delimiter, word[i]) && (!s_quote_open && !db_quote_open))
+        {
+            if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
+            {
+				delims[cursor_tab] = malloc(sizeof(t_delims) * 1);
+				delims[cursor_tab]->delim = malloc(sizeof(char) * (3));
+				delims[cursor_tab]->delim[0] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[1] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[2] = '\0';
+				delims[cursor_tab]->index = i;
+				cursor_tab++;
+                i++;
+            }
+            else
+            {
+				delims[cursor_tab] = malloc(sizeof(t_delims) * 1);
+				delims[cursor_tab]->delim = malloc(sizeof(char) * (2));
+				delims[cursor_tab]->delim[0] = delim(delimiter, word[i]);
+				delims[cursor_tab]->delim[1] = '\0';
+				delims[cursor_tab]->index = i;
+				cursor_tab++;
+            }
+        }
+        i++;
+    }
+	return (delims);
+}
+
+int count_with_delim(t_delims **delims, int nb_delim, char *word)
+{
+	int i;
+	int count = 0;
+	i = 0;
+    char *delimiter = "<>|";
+	while (delims[i])
+	{
+		if (i == 0 && i == nb_delim - 1 && delims[i]->index != 0)
+        {
+            count++;
+            if (word[delims[i]->index - 1] != '\0')
+                count++;
+            if (word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0' && word[delims[i]->index + ft_strlen(delims[i]->delim)] != delim(delimiter, word[delims[i]->index + 1]))
+                count++;
+        }
+        else if (i == 0 && delims[i]->index != 0)
+        {
+            count++;
+            if (word[delims[i]->index - 1] != '\0')
+                count++;
+        }
+        else if (i == nb_delim - 1 && delims[i]->index != 0)
+        {
+            count++;
+            if ((word[delims[i]->index - 1] != '\0') && (word[delims[i]->index - 1] != delim(delimiter, word[delims[i]->index - 1])))
+                count++;
+            if (word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0' && word[delims[i]->index + ft_strlen(delims[i]->delim)] != delim(delimiter, word[delims[i]->index + 1]))
+                count++;
+        }
+        else
+        {
+            count++;
+            if (delims[i]->index != 0)
+            {
+             if (word[delims[i]->index - 1] != '\0' && word[delims[i]->index - 1] != delim(delimiter, word[delims[i]->index -1]))
+                count++;
+            }
+            else if (nb_delim == 1 && word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0')
+                count++;
+        }
+		i++;
+	}
+	return (count);
+}
+
+char **create_words_tab(t_delims **delims, int nb_delim, char *word, int nb_words)
+{
+    char **sentence;
+    int i;
+    sentence = malloc(sizeof(char *) * (nb_words + 1));
+    sentence[nb_words] = NULL;
+    i = 0;
+    int j = 0;
+    int count = 0;
+    while (delims[i])
+    {
+        sentence[count] = ft_substr(word, j, (delims[i]->index - j));
+        if (!*sentence[count])
+        {
+            sentence[count] = ft_strdup(delims[i]->delim);
+        }
+        else
+        {
+            count++;
+            sentence[count] = ft_strdup(delims[i]->delim);
+        }
+        j = delims[i]->index + ft_strlen(delims[i]->delim);
+        if (i == nb_delim - 1 && word[delims[i]->index + ft_strlen(delims[i]->delim)] != '\0')
+        {
+            sentence[count] = ft_strdup(delims[i]->delim);
+            count++;
+            sentence[count] = ft_substr(word, delims[i]->index + ft_strlen(delims[i]->delim), (ft_strlen(word) - delims[i]->index));
+        }
+        count++;
+        i++;
+    }
+    printf("count : %d && nb_words : %d\n", count, nb_words);
+    return (sentence);
+}
+
+int check_quotes(char *command)
+{
+    char *quotes;
+
+    quotes = manage_quotes(command);
+    if (quotes)
+    {
+        free(quotes);
+        return (1);
+    }
+    return (0);
+}
+
+void free_words(t_words *words)
+{
+    int i;
 
     i = 0;
     while (i < words->num_words)
     {
-        token_count = 0;
-        tokens = split_string(words->words[i], &token_count);
-        if (!tokens)
-        {
-            printf("error malloc !\n");
-            exit(EXIT_FAILURE);
-        }
-        //free_tokens(&tokens, token_count);
-        for(int j = 0; j < token_count; j++)
-        {
-            free(tokens[j]);
-        }
-        free(tokens);
+        free(words->words[i++]);
+    }
+    free(words->words);
+}
+
+
+void free_wds_delim(t_words *words, int nb)
+{
+    int i;
+
+    i = 0;
+    while (i < nb)
+    {
+        free(words->wds_delim[i++]);
+    }
+    free(words->wds_delim[i]);
+    free(words->wds_delim);
+}
+
+void nb_words_with_delim(t_words *words)
+{
+    t_delims    **delim;
+    int nb_delim;
+    int i;
+    int nb_words;
+
+    i = 0;
+    while (i < words->num_words)
+    {
+		nb_delim = count_delim(words->words[i]);
+		delim = create_tab_delim(words->words[i], nb_delim);
+		nb_words = count_with_delim(delim, nb_delim, words->words[i]);
+        if (!nb_delim)
+            nb_words += 1;
+        words->count_del += nb_words;
+        free_delim(delim, nb_delim);
         i++;
-        words->count_del += token_count;
     }
     words->wds_delim = malloc(sizeof(char *) * (words->count_del + 1));
-    if (!words->wds_delim)
-    {
-        printf("error malloc !\n");
-        exit(EXIT_FAILURE);
-    }
     words->wds_delim[words->count_del] = 0;
 }
 
-void fill_with_delim(t_words *words)
+void free_temp_word(char **word)
 {
     int i;
-    int j;
-    int k;
-    int token_count;
-    char **tokens;
 
     i = 0;
-    j = 0;
+    while (word[i])
+    {
+        free(word[i]);
+        i++;
+    }
+    free(word[i]);
+    free(word);
+}
+
+void create_wds_lexer(t_words *words)
+{
+    t_delims **delim;
+    char **word;
+     int b = 0;
+     int i = 0;
     while (i < words->num_words)
     {
-        token_count = 0;
-        tokens = split_string(words->words[i], &token_count);
-        k = 0;
-        while (k < token_count)
+		int nb_delim = count_delim(words->words[i]);
+		delim = create_tab_delim(words->words[i], nb_delim);
+		int nb_words = count_with_delim(delim, nb_delim, words->words[i]);
+        word = create_words_tab(delim, nb_delim, words->words[i], nb_words);
+        free_delim(delim, nb_delim);
+        if (!nb_words)
         {
-            words->wds_delim[j] = ft_strdup(tokens[k]);
-            free(tokens[k]);
-            j++;
-            k++;
+            free_temp_word(word);
+            word = malloc(sizeof(char *) * 2);
+            word[0] = ft_strdup(words->words[i]);
+            word[1] = NULL;
         }
-        free(tokens);
+        int d = 0;
+        while (word[d])
+        {
+            words->wds_delim[b] = ft_strdup(word[d]);
+            free(word[d]);
+            b++;
+            d++;
+        }
+        free(word[d]);
+        free(word);
         i++;
     }
 }
 
-void free_struct(t_words *words)
+void free_lexer(t_words *words)
 {
     int i;
 
     i = 0;
-    while (i < words->num_words)
-        free(words->words[i++]);
-    free(words->words);
-    i = 0;
-    while (words->wds_delim[i])
-        free(words->wds_delim[i++]);
-    free(words->wds_delim);
-    i = 0;
-    while (words->lexer[i])    
+    while (words->lexer[i])
     {
-        free(words->lexer[i]->content);
+        //free(words->lexer[i]->content);
         free(words->lexer[i]);
         i++;
     }
-
+    free(words->lexer[i]);
+    free(words->lexer);
 }
 
-void	split_word(char *command, t_shell *shell)
+void split_word(char *command, t_shell *shell)
 {
     static int previous_is_builtin;
     t_words words;
-   
-	int i;
-	i = 0;
-
+    words.wds_delim = NULL;
     init_words_struct(&words, command);
-    split_words(&words);
-    manage_delim(&words);
-    fill_with_delim(&words);
+    if (check_quotes(command))
+        split_words(&words);
+    nb_words_with_delim(&words);
+    create_wds_lexer(&words);
     handle_lexer(&words, &previous_is_builtin);
-    while (i < words.count_del)
+    free_wds_delim(&words, words.count_del);
+    int j = 0;
+    while (j < words.count_del)
     {
         printf("Content : %s & flag : %d || dollar : %d\n", 
-        words.lexer[i]->content, words.lexer[i]->flag, words.lexer[i]->dollar);
-        i++;
+        words.lexer[j]->content, words.lexer[j]->flag, words.lexer[j]->dollar);
+        j++;
     }
-	get_cmdlist(words.lexer, shell);
+    free_words(&words);
+    get_cmdlist(words.lexer, shell);
+    free_lexer(&words);
     //free_struct(&words);
     //free(words.lexer);
-    //return (words.lexer);
 }
-
-//<< stop cat
-// > $USER
-// > cat
-// > stop
-// lefabreg
-// cat
-
-//cat | cat | ls
