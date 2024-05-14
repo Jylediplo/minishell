@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 12:59:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:20:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	get_echo_size(t_evar *evar, t_list *envp);
 void	get_echo(t_evar *evar, t_list *envp);
 
 //echo_main.c
-int	efftee_echo(t_shell *shell, char *to_echo);
+int	efftee_echo(char **cmd);
 
 //unset_main.c
 void	remove_envvar(t_list **envp, char *to_remove);

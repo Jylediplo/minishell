@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 23:10:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:11:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ char	*parse_quoted_sequence(t_evar *evar, char quotetype, t_list *envp)
 	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
 	{
 		if (*evar->newvalue == '$')
-			size_dol_substitution(evar, 0, envp);/*
-		else if (is_whitespace(*evar->newvalue))
-			return (save_next_evar(evar));*/
+			size_dol_substitution(evar, 0, envp);
 		else
 			increase_size_evar(evar);
 	}
@@ -80,12 +78,7 @@ void	get_evar_size(t_evar *evar, t_list *envp)
 		else if (!evar->quotetype)
 		{
 			if (*evar->newvalue == '$')
-				size_dol_substitution(evar, 0, envp);/*
-			else if (is_whitespace(*evar->newvalue))
-			{
-				save_next_evar(evar);
-				return (set_err_status(evar, STOP));
-			}*/
+				size_dol_substitution(evar, 0, envp);
 			else
 				increase_size_evar(evar);
 		}
@@ -108,12 +101,21 @@ char	*parse_evar(t_evar *evar, char *newvalue, t_list *envp)
 	}
 	evar->error = NONE;
 	evar->newvalue_copy = ft_strdup(newvalue);
-	evar->newvalue_toset = (char *)malloc(sizeof(char) * (evar->size_evar + 1));
-	if (!evar->newvalue_toset)
+	if (!evar->newvalue_copy)
+	{
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
 		return (NULL);
+	}
+	evar->newvalue_toset = malloc(sizeof(char) * (evar->size_evar + 1));
+	if (!evar->newvalue_toset)
+	{
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		free(evar->newvalue_copy);
+		return (NULL);
+	}
 	get_evar(evar, envp);
 	if (evar->error == MALLOC)
-		ft_putstr_fd("petitcoq: malloc error\n", 2);
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
 	free(evar->newvalue_copy);
 	return (evar->newvalue_toset);
 }

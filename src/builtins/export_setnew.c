@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:04:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 18:06:00 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:12:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype, t_list *envp)
 	while (current_char(evar) != quotetype)
 	{
 		if (current_char(evar) == '$')
-			expand_dol(evar, 0, envp);/*
-		else if (is_whitespace(current_char(evar)))
-			return (set_err_status(evar, STOP));*/
+			expand_dol(evar, 0, envp);
 		else
 			copy_char(evar);
 		if (evar->error == MALLOC)
@@ -67,9 +65,7 @@ void	get_evar(t_evar *evar, t_list *envp)
 		else if (!evar->double_qchar && !evar->single_qchar)
 		{
 			if (current_char(evar) == '$')
-				expand_dol(evar, 0, envp);/*
-			else if (is_whitespace(current_char(evar)))
-				break ;*/
+				expand_dol(evar, 0, envp);
 			else
 				copy_char(evar);
 		}

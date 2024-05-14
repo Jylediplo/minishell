@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 16:51:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:19:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,5 @@ int	change_directory(t_cmd *cmd, t_shell *shell)
 		return (1);
 	change_oldpwd(shell, old);
 	change_pwd(shell);
-	show_me_the_way(shell->envp);
 	return (0);
 }
