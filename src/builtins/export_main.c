@@ -6,12 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:09:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:51:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
+#include "../../includes/execute.h"
 
 t_list	*copy_env(char **envp)
 {
@@ -40,9 +41,20 @@ t_list	*copy_env(char **envp)
 	return (head);
 }
 
-int	export_envar(t_shell *shell, char *exportcommand)
+int	export_envar(t_cmd *cmd, t_shell *shell)
 {
 	t_evar	evar;
+	int		i;
+	int		last_sigerror;
 
-	return (init_change_evar(shell, &evar, exportcommand));
+	i = 1;
+	last_sigerror = 0;
+	while (cmd->command[i])
+	{
+		if (init_change_evar(shell, &evar, cmd->command[i++]))
+			last_sigerror = g_current_sig;
+	}
+	if (last_sigerror)
+		g_current_sig = last_sigerror;
+	return (0);
 }

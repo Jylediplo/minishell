@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 23:10:49 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:48:06 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*parse_echo(t_list *envp, char *to_echo)
 	get_echo_size(&evar, envp);
 	if (evar.error != NONE && evar.error != STOP)
 	{
-		evar_error_message(&evar);
+		evar_error_message(&evar, NULL);
 		return (NULL);
 	}
 	evar.error = NONE;

@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 11:57:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:45:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	evar_error_message(t_evar *evar)
+void	evar_error_message(t_evar *evar, char *context)
 {
 	if (evar->error == MALLOC)
 		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
@@ -27,7 +27,9 @@ void	evar_error_message(t_evar *evar)
 		ft_putstr_fd("petitcoq: error: unclosed brace detected\n", 2);
 	else if (evar->error == INVALID_IDENTIFIER)
 	{
-		ft_putstr_fd("petitcoq: error: not a valid identifier\n", 2);
+		ft_putstr_fd("petitcoq: error: not a valid identifier `", 2);
+		ft_putstr_fd(context, 2);
+		ft_putstr_fd("'\n", 2);
 		g_current_sig = 1;
 	}
 }

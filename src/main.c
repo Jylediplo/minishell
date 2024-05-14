@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/14 14:51:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 19:44:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	mainloop(t_shell *shell)
 		{
 			free(command);
 			continue ;
-		}
+		}/*
 		if (!ft_strncmp(command, "exit", 4) && ft_strlen(command) == 4)
 		{
 			write(1, "exit\n", 5);
 			free(command);
 			break ;
-		}
+		}*/
 		split_word(command, shell);
 		free(command);
 	}
@@ -53,15 +53,10 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 
 	init_shell(argc, argv, envp, &shell);
-	export_envar(&shell, "T=test");
-	export_envar(&shell, "T+=test");
-	export_envar(&shell, "T+=test");
-	unset_envvar(&shell, "T");
 	//show_me_the_way(shell.envp);
 	//efftee_echo(&shell, "\"     \"-n '   'bonjour a tous$SHLVL''\"$AHA\"");
 	//efftee_echo(&shell, "'   'bonjour a tous$SHLVL''\"$AHA\"");
 	mainloop(&shell);
-	//export_envar(&shell, "HOME\"=\"'   yooo''''...${HOME}...$?'${UNL_UCKY}?PANTOINE/${SHLVL}");
 	//efftee_echo(&shell, "''$TEST bonjour  a tous, NO NEWLINE$SHLVL''\"$AHA\"");
 	//unset_envvar(&shell, "PATHe HOME ${ABC} ahahahahah");
 	free_envp(shell.envp);

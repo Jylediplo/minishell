@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 15:28:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 19:56:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 {
 	int		i;
 	t_list	*head;
-	char	**cmd;
-	t_cmd	*cmd_ptr;
 
 	i = 0;
 	head = init_cmdlist_size();
@@ -114,9 +112,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	}
 	if (!copy_all_cmds(head->next))
 		;//print_commands(head->next);
-	cmd_ptr = head->next->content;
-	cmd = cmd_ptr->command;
-	efftee_echo(cmd);
+	dispatch_commands(head, shell, lexer);
 	free_lexer(lexer);
 	free_command_arrays(head);
 	free_cmdlist(head);

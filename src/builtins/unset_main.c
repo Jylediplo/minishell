@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:10:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:02:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,12 @@ void	remove_envvar(t_list **envp, char *to_remove)
 	}
 }
 
-int	unset_envvar(t_shell *shell, char *unsetcommand)
+int	unset_envvar(t_cmd *cmd, t_shell *shell)
 {
-	remove_envvar(&shell->envp, unsetcommand);
+	int	i;
+
+	i = 1;
+	while (cmd->command[i])
+		remove_envvar(&shell->envp, cmd->command[i++]);
 	return (0);
 }

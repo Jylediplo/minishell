@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 12:07:25 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:57:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ typedef	struct s_lexer
         BUILTIN = 263,
         HEREDOC = 264,
         APPEND = 265,
-        DELIMITER = 266,
-    
 	}	flag;
 	char *content;
 	int dollar;

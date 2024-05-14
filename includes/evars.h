@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 15:20:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:46:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EVARS_H
 
 # include "../libft/libft.h"
+# include "execute.h"
 # include <stdlib.h>
 # include <stdio.h>
 
@@ -108,7 +109,7 @@ int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
 char	*save_next_evar(t_evar *evar);
 
 //handle_errors.c
-void	evar_error_message(t_evar *evar);
+void	evar_error_message(t_evar *evar, char *context);
 void	malloc_error_dol(t_evar *evar);
 void	set_err_status(t_evar *evar, int status);
 
@@ -120,7 +121,7 @@ void	free_envp_value_exit(t_list *head, char *value);
 void	free_value_exit(char *value);
 
 //export_main.c
-int		export_envar(t_shell *shell, char *exportcommand);
+int		export_envar(t_cmd *cmd, t_shell *shell);
 
 //modify_envp.c
 void	print_envp(t_list *envp);
@@ -144,7 +145,7 @@ int	efftee_echo(char **cmd);
 
 //unset_main.c
 void	remove_envvar(t_list **envp, char *to_remove);
-int		unset_envvar(t_shell *shell, char *unsetcommand);
+int		unset_envvar(t_cmd *cmd, t_shell *shell);
 
 //env_main.c
 int		show_me_the_way(t_list *envp);

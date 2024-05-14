@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 12:59:01 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:52:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 		{
 			iter->content = strjoin_free(iter->content,
 					ft_strchr(newvar->content, '=') + 1);
-			free(newvar);
+			ft_lstdelone(newvar, free);
 			return ;
 		}
 		iter = iter->next;
@@ -96,11 +96,19 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 
 void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 {
+	char	*value_dup;
 	t_list	*newvar;
 
-	newvar = ft_lstnew(value);
+	value_dup = ft_strdup(value);
+	if (!value_dup)
+	{
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		return ;
+	}
+	newvar = ft_lstnew(value_dup);
 	if (!newvar)
 	{
+		free(value_dup);
 		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
 		return ;
 	}

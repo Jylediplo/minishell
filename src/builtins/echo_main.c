@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 20:27:44 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 15:51:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 17:21:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ int	efftee_echo(char **cmd)
 	}
 	if (len == 1 && !no_newline)
 		printf("\n");
+	g_current_sig = 0;
 	return (0);
 }
