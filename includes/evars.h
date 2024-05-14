@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:46:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:07:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ typedef struct s_evar
 		UNCLOSED_BRACE,
 		STOP,
 		INVALID_IDENTIFIER,
-	}	error;
+	}	e_error;
 	struct
 	{
 		int		append;
 		char	*plus_str;
 		char	*equal_str;
 		char	operator;
-	}	change_evar;
+	}	s_change_evar;
 	int		size_evar;
 	int		size_expanded_var;
 	int		id_toset;
@@ -55,13 +55,15 @@ typedef struct s_evar
 }	t_evar;
 # ifndef T_SHELL
 #  define T_SHELL
-typedef struct  s_shell
+
+typedef struct s_shell
 {
-    int     argc;
-    char    **argv;
+	int		argc;
+	char	**argv;
 	t_list	*envp;
-}   t_shell;
+}	t_shell;
 # endif
+
 char	*parse_evar(t_evar *evar, char *newvalue, t_list *envp);
 void	get_evar(t_evar *evar, t_list *envp);
 void	find_next_quotes(t_evar *evar, char *string, int index);
@@ -141,7 +143,7 @@ void	get_echo_size(t_evar *evar, t_list *envp);
 void	get_echo(t_evar *evar, t_list *envp);
 
 //echo_main.c
-int	efftee_echo(char **cmd);
+int		efftee_echo(char **cmd);
 
 //unset_main.c
 void	remove_envvar(t_list **envp, char *to_remove);

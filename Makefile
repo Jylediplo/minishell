@@ -30,6 +30,7 @@ SRCS 				= main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
 					execute/execute_heredocs.c \
+					execute/execute_heredocs_utils.c \
 					execute/execute_errors.c \
 					execute/execute_free_utils.c \
 					execute/execute_set_redirections.c \

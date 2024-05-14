@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:47:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:14:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,26 @@ int	valid_identifier(char *identifier, char operator)
 
 int	get_next_operator(t_evar *evar, char *parsed_command)
 {
-	evar->change_evar.plus_str = NULL;
-	evar->change_evar.equal_str = NULL;
-	evar->change_evar.append = 0;
-	evar->change_evar.plus_str = ft_strchr(parsed_command, '+');
-	evar->change_evar.equal_str = ft_strchr(parsed_command, '=');
-	if ((!evar->change_evar.plus_str && evar->change_evar.equal_str)
-		|| (evar->change_evar.plus_str > evar->change_evar.equal_str
-			&& evar->change_evar.equal_str))
-		evar->change_evar.operator = '=';
-	else if ((evar->change_evar.plus_str < evar->change_evar.equal_str)
-		&& evar->change_evar.equal_str)
-		evar->change_evar.operator = '+';
-	else if (evar->change_evar.plus_str && !evar->change_evar.equal_str)
+	evar->s_change_evar.plus_str = NULL;
+	evar->s_change_evar.equal_str = NULL;
+	evar->s_change_evar.append = 0;
+	evar->s_change_evar.plus_str = ft_strchr(parsed_command, '+');
+	evar->s_change_evar.equal_str = ft_strchr(parsed_command, '=');
+	if ((!evar->s_change_evar.plus_str && evar->s_change_evar.equal_str)
+		|| (evar->s_change_evar.plus_str > evar->s_change_evar.equal_str
+			&& evar->s_change_evar.equal_str))
+		evar->s_change_evar.operator = '=';
+	else if ((evar->s_change_evar.plus_str < evar->s_change_evar.equal_str)
+		&& evar->s_change_evar.equal_str)
+		evar->s_change_evar.operator = '+';
+	else if (evar->s_change_evar.plus_str && !evar->s_change_evar.equal_str)
 	{
 		set_err_status(evar, INVALID_IDENTIFIER);
-		evar->change_evar.operator = '\0';
+		evar->s_change_evar.operator = '\0';
 		return (1);
 	}
 	else
-		evar->change_evar.operator = '\0';
+		evar->s_change_evar.operator = '\0';
 	return (0);
 }
 
@@ -78,11 +78,11 @@ int	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 		evar_error_message(evar, parsed_command);
 		return (1);
 	}
-	else if (evar->change_evar.operator)
+	else if (evar->s_change_evar.operator)
 	{
-		if (evar->change_evar.operator == '+')
-			evar->change_evar.append = 1;
-		if (valid_identifier(parsed_command, evar->change_evar.operator))
+		if (evar->s_change_evar.operator == '+')
+			evar->s_change_evar.append = 1;
+		if (valid_identifier(parsed_command, evar->s_change_evar.operator))
 		{
 			add_to_envp(shell, evar, parsed_command);
 			return (0);

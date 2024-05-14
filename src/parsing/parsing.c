@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 00:03:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:34:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,21 +298,21 @@ void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int
 	else
 		lexer[i]->content = ft_strdup(words->wds_delim[i]);
 	if (is_matching(words->wds_delim[i], "|", 1, previous_is_builtin))
-		lexer[i]->flag = PIPE;
+		lexer[i]->e_flag = PIPE;
 	else if (is_matching(words->wds_delim[i], ">", 1, previous_is_builtin))
-		lexer[i]->flag = GREATER;
+		lexer[i]->e_flag = GREATER;
 	else if (is_matching(words->wds_delim[i], "<", 1, previous_is_builtin))
-		lexer[i]->flag = LESSER;
+		lexer[i]->e_flag = LESSER;
 	else if (is_matching(words->wds_delim[i], "<<", 2, previous_is_builtin))
-		lexer[i]->flag = HEREDOC;
+		lexer[i]->e_flag = HEREDOC;
 	else if (is_matching(words->wds_delim[i], ">>", 2, previous_is_builtin))
-		lexer[i]->flag = APPEND;
+		lexer[i]->e_flag = APPEND;
 	else
 	{
-		lexer[i]->flag = WORD;
+		lexer[i]->e_flag = WORD;
 		if (is_builtin(lexer[i]->content))
 		{
-			lexer[i]->flag = BUILTIN;
+			lexer[i]->e_flag = BUILTIN;
 			*previous_is_builtin = 1;
 		}
 	}
@@ -320,7 +320,7 @@ void create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer, int
 void dollars_handler(t_lexer **lexer, int i, t_words *words, int *previous)
 {
     lexer[i]->dollar = 1;
-    lexer[i]->flag = WORD;
+    lexer[i]->e_flag = WORD;
     lexer[i]->content = ft_strdup(words->wds_delim[i]);
     if (i == 0)
         *previous = 1;

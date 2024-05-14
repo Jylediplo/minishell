@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 02:29:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:33:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
 	char	*temp;
 
 	*index += 1;
-	while (lexer[*index] && lexer[*index]->flag != PIPE)
+	while (lexer[*index] && lexer[*index]->e_flag != PIPE)
 	{
 		temp = parse_echo(envp, lexer[*index]->content);
 		if (!temp)
@@ -39,7 +39,7 @@ int	replace_parsed_content(t_lexer **lexer,
 {
 	if (is_builtin(newval))
 	{
-		lexer[*index]->flag = BUILTIN;
+		lexer[*index]->e_flag = BUILTIN;
 		free(lexer[*index]->content);
 		lexer[*index]->content = newval;
 		if (parse_builtin_sequence(lexer, index, envp))
@@ -61,7 +61,7 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 	i = 0;
 	while (lexer[i])
 	{
-		if (lexer[i]->flag == BUILTIN)
+		if (lexer[i]->e_flag == BUILTIN)
 		{
 			if (parse_builtin_sequence(lexer, &i, envp))
 				return (NULL);

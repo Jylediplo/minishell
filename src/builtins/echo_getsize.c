@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:48:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:16:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*parse_quoted_sequence_echo(t_evar *evar, char quotetype, t_list *envp)
 {
 	if (!ft_strchr(evar->newvalue + 1, quotetype))
 		return (set_err_status(evar, UNCLOSED_QUOTE), NULL);
-	while (*evar->newvalue != quotetype && evar->error != BAD_SUBSTITUTION)
+	while (*evar->newvalue != quotetype && evar->e_error != BAD_SUBSTITUTION)
 	{
 		if (*evar->newvalue == '$')
 			size_dol_substitution(evar, 0, envp);
@@ -25,8 +25,8 @@ char	*parse_quoted_sequence_echo(t_evar *evar, char quotetype, t_list *envp)
 	}
 	evar->newvalue++;
 	while (*evar->newvalue != quotetype
-		&& evar->error != BAD_SUBSTITUTION
-		&& evar->error != MALLOC)
+		&& evar->e_error != BAD_SUBSTITUTION
+		&& evar->e_error != MALLOC)
 	{
 		if (*evar->newvalue == '$' && quotetype == '\"')
 			size_dol_substitution(evar, 1, envp);
@@ -53,8 +53,8 @@ void	get_echo_size(t_evar *evar, t_list *envp)
 			else
 				increase_size_evar(evar);
 		}
-		if (evar->error == BAD_SUBSTITUTION
-			|| evar->error == MALLOC
+		if (evar->e_error == BAD_SUBSTITUTION
+			|| evar->e_error == MALLOC
 			|| !evar->newvalue)
 			return ;
 		find_next_quotes(evar, evar->newvalue, 0);
@@ -67,12 +67,12 @@ char	*parse_echo(t_list *envp, char *to_echo)
 
 	init_evar(&evar, to_echo);
 	get_echo_size(&evar, envp);
-	if (evar.error != NONE && evar.error != STOP)
+	if (evar.e_error != NONE && evar.e_error != STOP)
 	{
 		evar_error_message(&evar, NULL);
 		return (NULL);
 	}
-	evar.error = NONE;
+	evar.e_error = NONE;
 	evar.newvalue_copy = ft_strdup(to_echo);
 	if (!evar.newvalue_copy)
 		return (NULL);
@@ -83,7 +83,7 @@ char	*parse_echo(t_list *envp, char *to_echo)
 		return (NULL);
 	}
 	get_echo(&evar, envp);
-	if (evar.error == MALLOC)
+	if (evar.e_error == MALLOC)
 		ft_putstr_fd("petitcoq: malloc error\n", 2);
 	free(evar.newvalue_copy);
 	return (evar.newvalue_toset);

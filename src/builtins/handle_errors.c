@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:45:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:14:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	evar_error_message(t_evar *evar, char *context)
 {
-	if (evar->error == MALLOC)
+	if (evar->e_error == MALLOC)
 		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
-	else if (evar->error == BAD_SUBSTITUTION)
+	else if (evar->e_error == BAD_SUBSTITUTION)
 	{
 		ft_putstr_fd("petitcoq: error: bad substitution\n", 2);
 		g_current_sig = 1;
 	}
-	else if (evar->error == UNCLOSED_QUOTE)
+	else if (evar->e_error == UNCLOSED_QUOTE)
 		ft_putstr_fd("petitcoq: error: unclosed quote detected\n", 2);
-	else if (evar->error == UNCLOSED_BRACE)
+	else if (evar->e_error == UNCLOSED_BRACE)
 		ft_putstr_fd("petitcoq: error: unclosed brace detected\n", 2);
-	else if (evar->error == INVALID_IDENTIFIER)
+	else if (evar->e_error == INVALID_IDENTIFIER)
 	{
 		ft_putstr_fd("petitcoq: error: not a valid identifier `", 2);
 		ft_putstr_fd(context, 2);
@@ -45,5 +45,5 @@ void	malloc_error_dol(t_evar *evar)
 
 void	set_err_status(t_evar *evar, int status)
 {
-	evar->error = status;
+	evar->e_error = status;
 }

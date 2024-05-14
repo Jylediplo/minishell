@@ -6,16 +6,17 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 01:35:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:01:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/get_next_line.h"
 #include "../../includes/minishell.h"
+#include "../../includes/evars.h"
 #include <limits.h>
 
-void	sanitise_tempfile_name(t_cmd *cmd)
+static void	sanitise_tempfile_name(t_cmd *cmd)
 {
 	int	i;
 
@@ -30,7 +31,7 @@ void	sanitise_tempfile_name(t_cmd *cmd)
 	}
 }
 
-char	*name_tempfile(t_cmd *cmd)
+static char	*name_tempfile(t_cmd *cmd)
 {
 	char	*name;
 	char	random[11];
@@ -59,7 +60,7 @@ char	*name_tempfile(t_cmd *cmd)
 	return (name);
 }
 
-int	open_temp(char *filename, t_cmd *cmd)
+static int	open_temp(char *filename, t_cmd *cmd)
 {
 	int	fd;
 
@@ -73,7 +74,7 @@ int	open_temp(char *filename, t_cmd *cmd)
 	return (fd);
 }
 
-int	create_heredoc(char *delimiter, t_cmd *cmd)
+int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
 {
 	int		tmp_fd;
 	char	*line;
@@ -90,13 +91,14 @@ int	create_heredoc(char *delimiter, t_cmd *cmd)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
-		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-			&& line[ft_strlen(delimiter)] == '\n')
+		if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
+			&& line[ft_strlen(delimiter->content)] == '\n')
 		{
 			free(line);
 			break ;
 		}
-		write(tmp_fd, line, ft_strlen(line));
+		delimiter->quote_removed = 0;
+		expand_dollars_heredocs(tmp_fd, line, envp, delimiter->quote_removed);
 		free(line);
 	}
 	close(tmp_fd);

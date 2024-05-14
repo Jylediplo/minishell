@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:04:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 14:12:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:13:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype, t_list *envp)
 			expand_dol(evar, 0, envp);
 		else
 			copy_char(evar);
-		if (evar->error == MALLOC)
+		if (evar->e_error == MALLOC)
 			return ;
 	}
 	evar->id_copy++;
@@ -41,7 +41,7 @@ void	copy_quoted_sequence(t_evar *evar, char quotetype, t_list *envp)
 			expand_dol(evar, 1, envp);
 		else
 			copy_char(evar);
-		if (evar->error == MALLOC)
+		if (evar->e_error == MALLOC)
 			return ;
 	}
 	if (current_char(evar))
@@ -69,7 +69,7 @@ void	get_evar(t_evar *evar, t_list *envp)
 			else
 				copy_char(evar);
 		}
-		if (evar->error == STOP || evar->error == MALLOC)
+		if (evar->e_error == STOP || evar->e_error == MALLOC)
 		{
 			evar->newvalue_toset[evar->id_toset] = '\0';
 			return ;

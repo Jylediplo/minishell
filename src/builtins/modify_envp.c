@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:52:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:15:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
 		return ;
 	}
-	if (!evar->change_evar.append)
+	if (!evar->s_change_evar.append)
 	{
 		if (!get_envvar_value(&shell->envp, (char *)newvar->content))
 			ft_lstadd_back(&shell->envp, newvar);
