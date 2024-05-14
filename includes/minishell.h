@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 00:02:16 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:07:25 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void		free_history_data(void *data);
 // env variables and export functions
 t_list  *copy_env(char **envp);
 void	free_envp(t_list *envp);
-int    	export_envar(t_shell *shell, char *to_change);
 char	*set_new_evar(t_shell *shell, char *newvalue);
 
 // history

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 19:03:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:59:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		is_legal_sigsub_copy(t_evar *evar);
 //export_identifier.c
 int		valid_identifier(char *identifier, char operator);
 int		valid_identifier_char(char c);
-void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
+int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
 
 //export_identifier_utils.c
 char	*save_next_evar(t_evar *evar);

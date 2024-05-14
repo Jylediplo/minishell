@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/06 19:56:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:10:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,6 @@ void	remove_envvar(t_list **envp, char *to_remove)
 
 int	unset_envvar(t_shell *shell, char *unsetcommand)
 {
-	char	*parsed_command;
-	t_evar	evar;
-
-	parsed_command = parse_evar(&evar, unsetcommand, shell->envp);
-	if (!parsed_command)
-		return (1);
-	remove_envvar(&shell->envp, parsed_command);
-	free(parsed_command);
-	while (evar.set_next)
-	{
-		parsed_command = parse_evar(&evar, evar.set_next, shell->envp);
-		if (!parsed_command)
-			return (1);
-		remove_envvar(&shell->envp, parsed_command);
-		free(parsed_command);
-	}
+	remove_envvar(&shell->envp, unsetcommand);
 	return (0);
 }

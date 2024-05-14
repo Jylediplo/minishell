@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:58:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/06 19:56:20 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:11:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ char	*strjoin_free(char *s1, const char *s2)
 	res = ft_strjoin(s1, s2);
 	if (!res)
 	{
-		free(s1);
-		ft_putstr_fd("error: malloc failed\n", 2);
-		return (NULL);
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		return (s1);
 	}
 	free(s1);
 	return (res);

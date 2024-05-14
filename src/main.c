@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/14 02:18:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:12:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,12 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 
 	init_shell(argc, argv, envp, &shell);
-	unset_envvar(&shell, "A");
 	export_envar(&shell, "T=test");
-	//show_me_the_way(shell.envp);
+	export_envar(&shell, "T+=test");
+	export_envar(&shell, "T+=test");
+	unset_envvar(&shell, "T");
+	show_me_the_way(shell.envp);
+	efftee_echo(&shell, "$?");
 	//efftee_echo(&shell, "\"     \"-n '   'bonjour a tous$SHLVL''\"$AHA\"");
 	//efftee_echo(&shell, "'   'bonjour a tous$SHLVL''\"$AHA\"");
 	mainloop(&shell);

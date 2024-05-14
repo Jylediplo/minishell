@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 19:48:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:59:01 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*get_envvar_value(t_list **envp, char *envvar)
 	return (NULL);
 }
 
-void	remove_plus_in_envvar(t_list *newvar)
+int	remove_plus_in_envvar(t_list *newvar)
 {
 	char	*value;
 	char	*res;
@@ -52,10 +52,17 @@ void	remove_plus_in_envvar(t_list *newvar)
 	plus_operator = ft_strchr(value, '+');
 	len = plus_operator - value;
 	res = (char *)malloc(sizeof(char) * (ft_strlen(value)));
+	if (!res)
+	{
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		free(newvar);
+		return (1);
+	}
 	ft_memcpy(res, value, len);
 	ft_memcpy(res + len, plus_operator + 1, ft_strlen(value) - len);
 	free(newvar->content);
 	newvar->content = res;
+	return (0);
 }
 
 void	append_to_envvar(t_list *envp, t_list *newvar)
@@ -75,15 +82,15 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 		if (!ft_strncmp(envp_value, newvar_value, len)
 			&& envp_value[len] == '=')
 		{
-			printf("Append to the following: <%s>\n", envp_value);
 			iter->content = strjoin_free(iter->content,
 					ft_strchr(newvar->content, '=') + 1);
-			ft_lstdelone(newvar, free);
+			free(newvar);
 			return ;
 		}
 		iter = iter->next;
 	}
-	remove_plus_in_envvar(newvar);
+	if (remove_plus_in_envvar(newvar))
+		return ;
 	ft_lstadd_back(&envp, newvar);
 }
 
@@ -94,7 +101,7 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 	newvar = ft_lstnew(value);
 	if (!newvar)
 	{
-		ft_putstr_fd("error: malloc failed\n", 2);
+		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
 		return ;
 	}
 	if (!evar->change_evar.append)
@@ -106,16 +113,4 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 		return ;
 	}
 	append_to_envvar(shell->envp, newvar);
-}
-
-void	print_envp(t_list *envp)
-{
-	t_list	*iter;
-
-	iter = envp;
-	while (iter)
-	{
-		printf("%s\n", (char *)iter->content);
-		iter = iter->next;
-	}
 }

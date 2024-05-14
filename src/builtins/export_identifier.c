@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 20:52:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:06:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,13 @@ int	get_next_operator(t_evar *evar, char *parsed_command)
 	return (0);
 }
 
-void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
+int	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 {
 	if (get_next_operator(evar, parsed_command))
+	{
 		evar_error_message(evar);
+		return (1);
+	}
 	else if (evar->change_evar.operator)
 	{
 		if (evar->change_evar.operator == '+')
@@ -82,7 +85,7 @@ void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 		if (valid_identifier(parsed_command, evar->change_evar.operator))
 		{
 			add_to_envp(shell, evar, parsed_command);
-			return ;
+			return (0);
 		}
 		else
 		{
@@ -90,5 +93,5 @@ void	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 			evar_error_message(evar);
 		}
 	}
-	free(parsed_command);
+	return (1);
 }

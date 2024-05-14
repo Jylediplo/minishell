@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 18:14:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:09:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,7 @@ t_list	*copy_env(char **envp)
 
 int	export_envar(t_shell *shell, char *exportcommand)
 {
-	char	*parsed_command;
 	t_evar	evar;
 
-	parsed_command = parse_evar(&evar, exportcommand, shell->envp);
-	if (!parsed_command)
-		return (1);
-	init_change_evar(shell, &evar, parsed_command);
-	while (evar.set_next)
-	{
-		parsed_command = parse_evar(&evar, evar.set_next, shell->envp);
-		if (!parsed_command)
-			return (1);
-		init_change_evar(shell, &evar, parsed_command);
-	}
-	return (0);
+	return (init_change_evar(shell, &evar, exportcommand));
 }
