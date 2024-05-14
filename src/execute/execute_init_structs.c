@@ -6,13 +6,52 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 23:25:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 02:29:44 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
+
+int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
+{
+	char	*temp;
+
+	*index += 1;
+	while (lexer[*index] && lexer[*index]->flag != PIPE)
+	{
+		temp = parse_echo(envp, lexer[*index]->content);
+		if (!temp)
+		{
+			free_current_lexer(lexer, *index);
+			return (1);
+		}
+		free(lexer[*index]->content);
+		lexer[*index]->content = temp;
+		*index += 1;
+	}
+	return (0);
+}
+
+int	replace_parsed_content(t_lexer **lexer,
+		int *index, char *newval, t_list *envp)
+{
+	if (is_builtin(newval))
+	{
+		lexer[*index]->flag = BUILTIN;
+		free(lexer[*index]->content);
+		lexer[*index]->content = newval;
+		if (parse_builtin_sequence(lexer, index, envp))
+			return (1);
+	}
+	else
+	{
+		free(lexer[*index]->content);
+		lexer[*index]->content = newval;
+	}
+	return (0);
+}
 
 t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 {
@@ -22,7 +61,12 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 	i = 0;
 	while (lexer[i])
 	{
-		if (lexer[i]->dollar)
+		if (lexer[i]->flag == BUILTIN)
+		{
+			if (parse_builtin_sequence(lexer, &i, envp))
+				return (NULL);
+		}
+		if (lexer[i] && lexer[i]->dollar)
 		{
 			temp = parse_echo(envp, lexer[i]->content);
 			if (!temp)
@@ -30,12 +74,10 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 				free_current_lexer(lexer, i);
 				return (NULL);
 			}
-			if (is_builtin(temp))
-				lexer[i]->flag = BUILTIN;
-			free(lexer[i]->content);
-			lexer[i]->content = temp;
+			replace_parsed_content(lexer, &i, temp, envp);
 		}
-		i++;
+		if (!lexer[i++])
+			break ;
 	}
 	return (lexer);
 }
