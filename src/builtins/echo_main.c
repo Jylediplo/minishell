@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 20:27:44 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 14:48:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:01:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,18 @@ void	parse_flag(char *to_echo, int *no_newline)
 
 void	print_arg(char **cmd, int index, int no_newline)
 {
+	char	space;
+
+	space = 32;
 	if (!no_newline && !cmd[index + 1])
 		printf("%s\n", cmd[index]);
 	else if (no_newline && !cmd[index + 1])
 		write(1, cmd[index], ft_strlen(cmd[index]));
 	else
-		printf("%s ", cmd[index]);
+	{
+		write(1, cmd[index], ft_strlen(cmd[index]));
+		write(1, &space, 1);
+	}
 }
 
 int	efftee_echo(char **cmd)

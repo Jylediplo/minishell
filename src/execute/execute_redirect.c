@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 00:32:39 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 14:01:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:42:19 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	redirect_output(t_cmd *cmd)
 	int	fd;
 
 	fd = open(cmd->out,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror_context("open", cmd->out);
@@ -38,7 +38,7 @@ int	redirect_output(t_cmd *cmd)
 int	redirect_input(t_cmd *cmd)
 {
 	(void)cmd;
-	printf("Yes\n");	
+	printf("Yes\n");
 	return (1);
 }
 

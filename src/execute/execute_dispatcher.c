@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 15:00:15 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:03:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,8 @@ int	is_same_str(char *s1, char *s2)
 
 int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
-	//static int	first_call = 0;
 	int			saved;
 
-	//if (first_call++)
-		//return (0);
 	saved = dup(1);
 	dup_redirections(cmd);
 	if (is_same_str(cmd->command[0], "echo"))
@@ -59,6 +56,17 @@ int	executor(t_cmd *cmd, t_shell *shell)
 	return (1);
 }
 
+int	no_command(t_cmd *cmd)
+{
+	int			saved;
+
+	saved = dup(1);
+	dup_redirections(cmd);
+	dup2(saved, 1);
+	close(saved);
+	return (0);
+}
+
 int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 {
 	t_list	*iter;
@@ -68,12 +76,15 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	while (iter)
 	{
 		cmd = iter->content;
-		if (is_builtin(cmd->command[0]))
+		if (!cmd->command[0])
+			no_command(cmd);
+		else if (is_builtin(cmd->command[0]))
 			call_builtin(cmd, shell, cmdlist, lexer);
 		else
 			executor(cmd, shell);
 		iter = iter->next;
-	}/*
+	}
+	/*
 	while (wait(NULL) != -1)
 		;*/
 	return (1);

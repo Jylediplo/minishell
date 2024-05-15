@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:23:39 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:59:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,40 @@ int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
 	return (0);
 }
 
-int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
+static void	zero_cmdargs(t_cmd *cmd)
 {
 	cmd->in = NULL;
 	cmd->out = NULL;
 	cmd->tempfile_name = NULL;
 	cmd->command = NULL;
-	cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
-	if (!cmd->cmd_args)
+	cmd->cmd_args = NULL;
+}
+
+int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
+							t_cmd *cmd, t_list *envp)
+{
+	zero_cmdargs(cmd);
+	if (flag_redirect_stream(lexer, lexer_pos))
 	{
-		perror_context("malloc", NULL);
-		free(cmd);
-		return (1);
+		if (!is_legal_token(lexer, lexer_pos, cmd))
+			return (0);
+	}
+	else if (lexer[*lexer_pos]->e_flag == HEREDOC)
+	{
+		if (!is_legal_heredoc(lexer, lexer_pos, cmd, envp))
+			return (0);
+	}
+	if (lexer[*lexer_pos]
+		&& (lexer[*lexer_pos]->e_flag == WORD
+			|| lexer[*lexer_pos]->e_flag == BUILTIN))
+	{
+		cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
+		if (!cmd->cmd_args)
+		{
+			perror_context("malloc", NULL);
+			free(cmd);
+			return (1);
+		}
 	}
 	return (0);
 }
@@ -68,8 +90,12 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 		perror_context("malloc", NULL);
 		return (NULL);
 	}
-	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd))
+	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd, envp))
 		return (NULL);
+	if (!lexer[*lexer_pos]
+		|| (lexer[*lexer_pos]->e_flag != WORD
+			&& lexer[*lexer_pos]->e_flag != BUILTIN))
+		return (cmd);
 	*lexer_pos += 1;
 	if (get_size_command(lexer, lexer_pos, cmd, envp) == -1)
 	{
@@ -94,10 +120,9 @@ int	add_size_arg_node(t_lexer **lexer, int *lexer_pos,
 	if (lexer[*lexer_pos]->e_flag == PIPE)
 	{
 		*lexer_pos += 1;
-		if (lexer[*lexer_pos] && (lexer[*lexer_pos]->e_flag != WORD
-				&& lexer[*lexer_pos]->e_flag != BUILTIN))
+		if (!lexer[*lexer_pos])
 		{
-			unexpected_token_exec_err(lexer[*lexer_pos]->content);
+			unexpected_token_exec_err("newline");
 			return (1);
 		}
 	}

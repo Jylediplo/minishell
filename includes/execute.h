@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 00:53:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:27:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		get_cmdlist(t_lexer **lexer, t_shell *shell);
 //execute_flags.c
 int		get_size_command(t_lexer **lexer, int *lexer_pos,
 			t_cmd *cmd, t_list *envp);
-int		set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
+int		set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp);
 t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp);
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos,
 			t_list **cmds, t_list *envp);

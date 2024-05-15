@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 14:15:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:03:18 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,15 @@ int	filter_type_input(t_lexer **lexer, int *lexer_pos,
 		if (add_size_arg_node(lexer, lexer_pos, cmds, envp))
 			return (1);
 	}
-	else if (lexer[*lexer_pos]->e_flag == HEREDOC)
+	else if (lexer[*lexer_pos]->e_flag == HEREDOC
+		|| flag_redirect_stream(lexer, lexer_pos))
 	{
-		if (!is_legal_heredoc(lexer, lexer_pos, cmd, envp))
-			return (1);
+		if (!cmd->command)
+		{
+			if (add_size_arg_node(lexer, lexer_pos, cmds, envp))
+				return (1);
+		}
 	}
-	else if (flag_redirect_stream(lexer, lexer_pos))
-	{
-		if (!is_legal_token(lexer, lexer_pos, cmd))
-			return (1);
-	}
-	else
-		*lexer_pos += 1;
 	return (0);
 }
 
