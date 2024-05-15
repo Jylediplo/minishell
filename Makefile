@@ -37,6 +37,7 @@ SRCS 				= main.c \
 					execute/execute_utils.c \
 					execute/execute_transform_cmdlist.c \
 					execute/execute_init_structs.c \
+					execute/execute_redirect.c \
 					execute/execute_dispatcher.c \
 					history/manage_history.c \
 					history/manage_list.c \

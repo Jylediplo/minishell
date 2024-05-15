@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:01:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/14 23:42:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,5 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
 		expand_dollars_heredocs(tmp_fd, line, envp, delimiter->quote_removed);
 		free(line);
 	}
-	close(tmp_fd);
-	return (0);
+	return (close(tmp_fd));
 }

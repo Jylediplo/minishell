@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:20:18 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:15:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	print_commands(t_list *cmds)
 			printf("CMD[%d]: %s\n", i, args[i]);
 			i++;
 		}
-		printf("Input/output for this command: %s/%s\n", cmd->in, cmd->out);
+		//printf("Input/output for this command: %s/%s\n", cmd->in, cmd->out);
 		iter = iter->next;
 		i = 0;
 	}
@@ -112,7 +112,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 			break ;
 	}
 	if (!copy_all_cmds(head->next))
-		;//print_commands(head->next);
+		print_commands(head->next);
 	dispatch_commands(head, shell, lexer);
 	free_lexer(lexer);
 	free_command_arrays(head);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 19:55:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:00:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,38 @@ int	is_same_str(char *s1, char *s2)
 
 int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
+	//static int	first_call = 0;
+	int			saved;
+
+	//if (first_call++)
+		//return (0);
+	saved = dup(1);
+	dup_redirections(cmd);
 	if (is_same_str(cmd->command[0], "echo"))
 		efftee_echo(cmd->command);
-	if (is_same_str(cmd->command[0], "cd"))
+	else if (is_same_str(cmd->command[0], "cd"))
 		change_directory(cmd, shell);
-	if (is_same_str(cmd->command[0], "pwd"))
+	else if (is_same_str(cmd->command[0], "pwd"))
 		get_pwd();
-	if (is_same_str(cmd->command[0], "export"))
+	else if (is_same_str(cmd->command[0], "export"))
 		export_envar(cmd, shell);
-	if (is_same_str(cmd->command[0], "unset"))
+	else if (is_same_str(cmd->command[0], "unset"))
 		unset_envvar(cmd, shell);
-	if (is_same_str(cmd->command[0], "env"))
+	else if (is_same_str(cmd->command[0], "env"))
 		show_me_the_way(shell->envp);
-	if (is_same_str(cmd->command[0], "exit"))
+	else if (is_same_str(cmd->command[0], "exit"))
 		exit_petitcoq(cmd, cmdlist, lexer, shell);
+	dup2(saved, 1);
+	close(saved);
 	return (0);
+}
+
+int	executor(t_cmd *cmd, t_shell *shell)
+{
+	(void)cmd;
+	(void)shell;
+	printf("real command, not fake\n");
+	return (1);
 }
 
 int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
@@ -53,7 +70,11 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		cmd = iter->content;
 		if (is_builtin(cmd->command[0]))
 			call_builtin(cmd, shell, cmdlist, lexer);
+		else
+			executor(cmd, shell);
 		iter = iter->next;
-	}
+	}/*
+	while (wait(NULL) != -1)
+		;*/
 	return (1);
 }

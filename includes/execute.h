@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:09:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 00:53:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,7 @@ int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
 //pwd_main.c
 void	get_pwd(void);
+
+//execute_redirect.c
+int		dup_redirections(t_cmd *cmd);
 #endif
