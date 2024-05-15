@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 17:03:18 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:41:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 			break ;
 	}
 	if (!copy_all_cmds(head->next))
-		print_commands(head->next);
+		;//print_commands(head->next);
 	dispatch_commands(head, shell, lexer);
 	free_lexer(lexer);
 	free_command_arrays(head);

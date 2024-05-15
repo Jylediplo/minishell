@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 16:27:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:27:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,19 @@ int		cd_error_message(char *message);
 int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
 			t_lexer **lexer, t_shell *shell);
 
-//execute_dispatcher.c
-int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
-
 //pwd_main.c
 void	get_pwd(void);
+
+//execute_dispatcher.c
+int		call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
+int		no_command(t_cmd *cmd);
+int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
+
+//execute_onecommand.c
+int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
+
+//execute_normalcmd.c
+int	pimped_execve(t_cmd *cmd, t_shell *shell);
 
 //execute_redirect.c
 int		dup_redirections(t_cmd *cmd);

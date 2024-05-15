@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 17:03:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:30:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,27 @@ int	is_same_str(char *s1, char *s2)
 	return (0);
 }
 
-int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+int	no_command(t_cmd *cmd)
 {
 	int			saved;
 
 	saved = dup(1);
 	dup_redirections(cmd);
+	dup2(saved, 1);
+	close(saved);
+	return (0);
+}
+
+int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+{
+	int			saved;
+
+	saved = dup(1);
+	if (dup_redirections(cmd))
+	{
+		close(saved);
+		return (1);
+	}
 	if (is_same_str(cmd->command[0], "echo"))
 		efftee_echo(cmd->command);
 	else if (is_same_str(cmd->command[0], "cd"))
@@ -48,44 +63,48 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	return (0);
 }
 
-int	executor(t_cmd *cmd, t_shell *shell)
+int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
-	(void)cmd;
-	(void)shell;
-	printf("real command, not fake\n");
+	pid_t	pid;
+	int		pipe_fds[2];
+
+	if (pipe(pipe_fds) == -1)
+		return (0);
+	pid = fork();
+	if (!pid)
+	{
+		if (dup2(pipe_fds[0], 0) == -1)
+			printf("couldnt use the pipe!\n");
+		if (dup2(pipe_fds[1], 1) == -1)
+			printf("couldnt use the pipe!\n");
+		if (!cmd->command[0])
+			no_command(cmd);
+		else if (is_builtin(cmd->command[0]))
+			call_builtin(cmd, shell, cmdlist, lexer);
+		else
+			pimped_execve(cmd, shell);
+		exit(g_current_sig);
+	}
 	return (1);
-}
-
-int	no_command(t_cmd *cmd)
-{
-	int			saved;
-
-	saved = dup(1);
-	dup_redirections(cmd);
-	dup2(saved, 1);
-	close(saved);
-	return (0);
 }
 
 int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 {
 	t_list	*iter;
 	t_cmd	*cmd;
+	int		status;
 
 	iter = cmdlist->next;
+	if (execute_one_command(cmdlist, shell, lexer))
+		return (1);
 	while (iter)
 	{
 		cmd = iter->content;
-		if (!cmd->command[0])
-			no_command(cmd);
-		else if (is_builtin(cmd->command[0]))
-			call_builtin(cmd, shell, cmdlist, lexer);
-		else
-			executor(cmd, shell);
+		fork_it_all(cmd, shell, cmdlist, lexer);
 		iter = iter->next;
 	}
-	/*
-	while (wait(NULL) != -1)
-		;*/
+	while (waitpid(-1, &status, 0) != -1)
+		;
+	g_current_sig = status;
 	return (1);
 }
