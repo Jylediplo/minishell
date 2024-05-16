@@ -87,33 +87,7 @@ char	*helper(int fd, char *buffer, int bytes_read);
 size_t	index_for_n(char *buffer);
 
 //parsing
-typedef	struct s_lexer
-{
-	enum
-	{
-		UNKNOWN = 258,
-		WORD = 259,
-		PIPE = 260,
-		GREATER = 261,
-        LESSER = 262,
-        BUILTIN = 263,
-        HEREDOC = 264,
-        APPEND = 265,
-	}	e_flag;
-	int		quote_removed;
-	char	*content;
-	int		dollar;
-	int		index;
-} t_lexer;
-
-
-void manage_path(char *cmd, char **envp);
-char  *correct_path(char *argv, char **local_path);
-char *find_path(char **envp);
-int find_str(char *to_find, char *str);
-void error(char *file, char **to_free1, char **to_free2);
-void free_split(char **str);
+#include "lexing.h"
 void	split_word(char *command, t_shell *shell);
-int is_builtin(char *word);
-char *manage_quotes(char *command);
+
 #endif

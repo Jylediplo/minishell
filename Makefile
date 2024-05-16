@@ -46,6 +46,18 @@ SRCS 				= main.c \
 					gnl/get_next_line.c \
 					gnl/get_next_line_utils.c \
 					parsing/parsing.c \
+					parsing/manage_quotes.c \
+					parsing/free_words.c \
+					parsing/split_words.c \
+					parsing/split_words1.c \
+					parsing/init_structs.c \
+					parsing/dollar_handler.c \
+					parsing/lexer.c \
+					parsing/count_delim.c \
+					parsing/count_delim1.c \
+					parsing/create_delim.c \
+					parsing/check_builtins.c \
+					parsing/fill_delim.c \
 
 OBJS 				= $(SRCS:%.c=$(OBJ_D)%.o)
 
@@ -87,6 +99,9 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+valgrind:       $(NAME)
+	valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 testexport:
 	HEADERS="$(HEADERS) export_tests.h"
