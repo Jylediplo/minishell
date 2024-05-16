@@ -73,9 +73,9 @@ void	split_word(char *command, t_shell *shell)
 	handle_lexer(&words, &previous_is_builtin, &values);
 	free_wds_delim(&words, words.count_del);
 	free_words(&words);
-	// for (int j = 0; j < words.count_del; j++)
-	// 	printf("word : %s and flag : %d and quote removed : %d\n",
-	// 		words.lexer[j]->content, words.lexer[j]->e_flag,
-	// 		words.lexer[j]->quote_removed);
+	for (int j = 0; j < words.count_del; j++)
+		printf("word : %s and flag : %d and quote removed : %d\n",
+			words.lexer[j]->content, words.lexer[j]->e_flag,
+			words.lexer[j]->quote_removed);
 	get_cmdlist(words.lexer, shell);
 }

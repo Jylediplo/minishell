@@ -1,5 +1,5 @@
 NAME 				= minishell
-CC 					= cc -fsanitize=address
+CC 					= cc #-fsanitize=address
 CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
