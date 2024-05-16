@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 16:59:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:14:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 int	add_size_arg_node(t_lexer **lexer, int *lexer_pos,
 						t_list **cmds, t_list *envp)
 {
-	t_cmd	*cmd;
-	t_list	*newcmd_size;
+	t_cmd		*cmd;
+	t_list		*newcmd_size;
 
 	if (lexer[*lexer_pos]->e_flag == PIPE)
 	{

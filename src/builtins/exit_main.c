@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 20:14:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:44:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ static int	exit_too_many_args(void)
 	return (1);
 }
 
-static void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell)
+void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell)
 {
-	printf("exit\n");
 	free_lexer(lexer);
 	free_command_arrays(cmdlist);
 	free_cmdlist(cmdlist);
@@ -79,6 +78,7 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 	if (len > 2)
 		return (exit_too_many_args());
 	g_current_sig = value;
+	printf("exit\n");
 	free_all_exit(lexer, cmdlist, shell);
 	return (0);
 }

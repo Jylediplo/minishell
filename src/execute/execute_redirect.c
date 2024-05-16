@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 00:32:39 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 10:47:16 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:30:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,46 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-int	redirect_output(t_cmd *cmd)
+int	transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2])
+{
+	if (cmd->nb > 1)
+		close(shell->previous_pipe);
+	if (cmd->nb == ft_lstsize(cmdlist->next))
+		close(pipe_fds[0]);
+	close(pipe_fds[1]);
+	shell->previous_pipe = pipe_fds[0];
+	return (0);
+}
+
+int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, int pipe_fds[2])
+{
+	if (nb_cmd > 1)
+	{
+		if (dup2(shell->previous_pipe, 0) == -1)
+		{
+			close(pipe_fds[0]);
+			close(pipe_fds[1]);
+			perror_context("dup2", NULL);
+			return (1);
+		}
+		close(shell->previous_pipe);
+	}
+	if (nb_cmd != ft_lstsize(cmdlist->next))
+	{
+		if (dup2(pipe_fds[1], 1) == -1)
+		{
+			close(pipe_fds[0]);
+			close(pipe_fds[1]);
+			perror_context("dup2", NULL);
+			return (1);
+		}
+	}
+	close(pipe_fds[0]);
+	close(pipe_fds[1]);
+	return (0);
+}
+
+static int	redirect_output(t_cmd *cmd)
 {
 	int	fd;
 
@@ -35,7 +74,7 @@ int	redirect_output(t_cmd *cmd)
 	return (0);
 }
 
-int	redirect_input(t_cmd *cmd)
+static int	redirect_input(t_cmd *cmd)
 {
 	int	fd;
 

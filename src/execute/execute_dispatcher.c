@@ -6,7 +6,11 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/05/16 19:16:36 by lefabreg         ###   ########lyon.fr   */
+=======
+/*   Updated: 2024/05/16 18:24:53 by pantoine         ###   ########.fr       */
+>>>>>>> 55f547c4f5f781670e98b32abd286b739ec528f3
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,49 +72,22 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 
 int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
-	static int	nb_cmd = 1;
 	pid_t		pid;
 	int			pipe_fds[2];
 
 	if (pipe(pipe_fds) == -1)
+	{
+		perror_context("pipe", NULL);
 		return (0);
+	}
 	pid = fork();
 	if (!pid)
 	{
-		if (nb_cmd > 1)
-		{
-			if (dup2(shell->previous_pipe, 0) == -1)
-				printf("couldnt use the pipe!\n");
-			close(shell->previous_pipe);
-		}
-		if (nb_cmd != ft_lstsize(cmdlist->next))
-		{
-			if (dup2(pipe_fds[1], 1) == -1)
-				printf("couldnt use the pipe!\n");
-		}
-		close(pipe_fds[1]);
-		close(pipe_fds[0]);
-		if (!cmd->command[0])
-			no_command(cmd);
-		else if (is_builtin(cmd->command[0]))
-			call_builtin(cmd, shell, cmdlist, lexer);
-		else
-			pimped_execve(cmd, shell);
-		exit(g_current_sig);
+		if (write_and_read_pipe(cmdlist, cmd->nb, shell, pipe_fds))
+			free_all_exit(lexer, cmdlist, shell);
+		executor(cmd, shell, cmdlist, lexer);
 	}
-	if (nb_cmd > 1)
-	{
-		if (close(shell->previous_pipe) == -1)
-			perror_context("close", NULL);
-	}
-	if (nb_cmd == ft_lstsize(cmdlist->next))
-	{
-		nb_cmd = 0;
-		close(pipe_fds[0]);
-	}
-	close(pipe_fds[1]);
-	shell->previous_pipe = pipe_fds[0];
-	nb_cmd++;
+	transfer_pipes(cmd, shell, cmdlist, pipe_fds);
 	return (1);
 }
 

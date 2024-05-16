@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 14:52:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:19:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,16 @@ char	**init_cmd_array(t_cmd *cmd)
 
 int	copy_all_cmds(t_list *head)
 {
+	int		i;
 	t_list	*iter;
 	t_cmd	*current_cmd;
 
 	iter = head;
+	i = 1;
 	while (iter)
 	{
 		current_cmd = iter->content;
+		current_cmd->nb = i++;
 		current_cmd->command = init_cmd_array(current_cmd);
 		if (!current_cmd->command)
 			return (1);
