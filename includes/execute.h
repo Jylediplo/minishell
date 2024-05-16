@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 23:38:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:25:25 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_cmd
 	t_list	*cmd_args;
 	char	*in;
 	char	*out;
+	int		nb;
 }	t_cmd;
 
 //execute_main_size.c
@@ -87,6 +88,7 @@ int		change_oldpwd(t_shell *shell, char *old);
 int		cd_error_message(char *message);
 
 //exit_main.c
+void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell);
 int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
 			t_lexer **lexer, t_shell *shell);
 
@@ -102,11 +104,14 @@ int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 int		init_pipeline(t_shell *shell);
 
 //execute_onecommand.c
-int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
+int		execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
 //execute_normalcmd.c
-int	pimped_execve(t_cmd *cmd, t_shell *shell);
+void	executor(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
+int		pimped_execve(t_cmd *cmd, t_shell *shell);
 
 //execute_redirect.c
+int		transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2]);
+int		write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, int pipefds[2]);
 int		dup_redirections(t_cmd *cmd);
 #endif
