@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:42:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:38:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	sanitise_tempfile_name(t_cmd *cmd)
 
 static char	*name_tempfile(t_cmd *cmd)
 {
+	static int	test = 0;
 	char	*name;
 	char	random[11];
 	int		random_fd;
@@ -53,11 +54,13 @@ static char	*name_tempfile(t_cmd *cmd)
 	}
 	random[10] = '\0';
 	name = ft_strjoin(HDNAME, random);
-	cmd->tempfile_name = name;
+	cmd->tempfile_name = ft_strjoin(HDNAME, ft_itoa(test));//name;
 	if (!name)
 		perror_context("malloc", NULL);
 	sanitise_tempfile_name(cmd);
-	return (name);
+	test++;
+	return (cmd->tempfile_name);
+	//return (name);
 }
 
 static int	open_temp(char *filename, t_cmd *cmd)

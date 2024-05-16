@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 19:30:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:33:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,28 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 
 int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
-	pid_t	pid;
-	int		pipe_fds[2];
+	static int	nb_cmd = 1;
+	pid_t		pid;
+	int			pipe_fds[2];
 
 	if (pipe(pipe_fds) == -1)
 		return (0);
 	pid = fork();
 	if (!pid)
 	{
-		if (dup2(pipe_fds[0], 0) == -1)
-			printf("couldnt use the pipe!\n");
-		if (dup2(pipe_fds[1], 1) == -1)
-			printf("couldnt use the pipe!\n");
+		if (nb_cmd > 1)
+		{
+			if (dup2(shell->previous_pipe, 0) == -1)
+				printf("couldnt use the pipe!\n");
+			close(shell->previous_pipe);
+		}
+		if (nb_cmd != ft_lstsize(cmdlist->next))
+		{
+			if (dup2(pipe_fds[1], 1) == -1)
+				printf("couldnt use the pipe!\n");
+		}
+		close(pipe_fds[1]);
+		close(pipe_fds[0]);
 		if (!cmd->command[0])
 			no_command(cmd);
 		else if (is_builtin(cmd->command[0]))
@@ -85,6 +95,15 @@ int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 			pimped_execve(cmd, shell);
 		exit(g_current_sig);
 	}
+	if (nb_cmd == ft_lstsize(cmdlist->next))
+		nb_cmd = 0;
+	if (nb_cmd > 1)
+		close(shell->previous_pipe);
+	close(pipe_fds[1]);
+	shell->previous_pipe = pipe_fds[0];
+	ft_putstr_fd(ft_itoa(shell->previous_pipe), 2);
+	ft_putstr_fd("\n", 2);
+	nb_cmd++;
 	return (1);
 }
 

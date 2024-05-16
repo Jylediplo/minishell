@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 19:26:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:34:19 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,14 @@
 
 int	pimped_execve(t_cmd *cmd, t_shell *shell)
 {
-	(void)cmd;
-	(void)shell;
-	printf("pimped execve\n");
+	char	**path;
+
+	//path = ft_split(get_envvar_value(&shell->envp, "PATH"), ':');
+	(void)path;
+	if (execve(cmd->command[0], cmd->command, NULL) == -1)
+	{
+		perror_context("execve", cmd->command[0]);
+		return (1);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:18:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:28:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct  s_shell
     int     argc;
     char    **argv;
     t_list	*envp;
+	int		previous_pipe;
 }   t_shell;
 # endif
 

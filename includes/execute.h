@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/15 19:27:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:38:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ void	get_pwd(void);
 int		call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
 int		no_command(t_cmd *cmd);
 int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
+
+//execute_dispatcher_utils.c
+int		init_pipeline(t_shell *shell);
 
 //execute_onecommand.c
 int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
