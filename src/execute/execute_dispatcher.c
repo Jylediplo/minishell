@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 14:33:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:33:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,18 @@ int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 			pimped_execve(cmd, shell);
 		exit(g_current_sig);
 	}
-	if (nb_cmd == ft_lstsize(cmdlist->next))
-		nb_cmd = 0;
 	if (nb_cmd > 1)
-		close(shell->previous_pipe);
+	{
+		if (close(shell->previous_pipe) == -1)
+			perror_context("close", NULL);
+	}
+	if (nb_cmd == ft_lstsize(cmdlist->next))
+	{
+		nb_cmd = 0;
+		close(pipe_fds[0]);
+	}
 	close(pipe_fds[1]);
 	shell->previous_pipe = pipe_fds[0];
-	ft_putstr_fd(ft_itoa(shell->previous_pipe), 2);
-	ft_putstr_fd("\n", 2);
 	nb_cmd++;
 	return (1);
 }

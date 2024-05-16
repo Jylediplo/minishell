@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 10:49:46 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:14:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 
 	init_shell(argc, argv, envp, &shell);
+	printf("pid: %d\n", getpid());
 	mainloop(&shell);
 	free_envp(shell.envp);
 	return (0);
