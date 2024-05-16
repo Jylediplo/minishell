@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:52:20 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 14:01:05 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/16 18:20:50 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	dollars_handler(t_lexer **lexer, t_to_free *values, t_words *words,
 		int *previous)
 {
 	lexer[values->i]->dollar = 1;
-	lexer[values->i]->flag = WORD;
+	lexer[values->i]->e_flag = WORD;
 	lexer[values->i]->content = ft_strdup(words->wds_delim[values->i]);
 	if (!lexer[values->i]->content)
 	{

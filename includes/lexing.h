@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:51 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 16:42:27 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/16 18:20:10 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_lexer
 		APPEND = 265,
 		DELIMITER = 266,
 
-	} flag;
+	} e_flag;
 	int			quote_removed;
 	char		*content;
 	int			dollar;
@@ -104,7 +104,8 @@ typedef struct s_to_free
 
 }				t_to_free;
 
-int				is_builtin(char *word, t_words *words, t_to_free *values);
+int				is_builtin1(char *word, t_words *words, t_to_free *values);
+int				is_builtin(char *word);
 // quotes
 char			*manage_quotes(char *command);
 int				check_quotes(char *command, t_list *envp);

@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:56:34 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 17:09:53 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/16 18:21:17 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ void	create_lexer(t_words *words, int *previous_is_builtin, t_lexer **lexer,
 {
 	check_for_previous_builtins(words, previous_is_builtin, lexer, values);
 	if (is_matching(words->wds_delim[values->i], "|", 1, previous_is_builtin))
-		lexer[values->i]->flag = PIPE;
+		lexer[values->i]->e_flag = PIPE;
 	else if (is_matching(words->wds_delim[values->i], ">", 1,
 			previous_is_builtin))
-		lexer[values->i]->flag = GREATER;
+		lexer[values->i]->e_flag = GREATER;
 	else if (is_matching(words->wds_delim[values->i], "<", 1,
 			previous_is_builtin))
-		lexer[values->i]->flag = LESSER;
+		lexer[values->i]->e_flag = LESSER;
 	else if (is_matching(words->wds_delim[values->i], "<<", 2,
 			previous_is_builtin))
-		lexer[values->i]->flag = HEREDOC;
+		lexer[values->i]->e_flag = HEREDOC;
 	else if (is_matching(words->wds_delim[values->i], ">>", 2,
 			previous_is_builtin))
-		lexer[values->i]->flag = APPEND;
+		lexer[values->i]->e_flag = APPEND;
 	else
 	{
-		lexer[values->i]->flag = WORD;
-		if (is_builtin(lexer[values->i]->content, words, values))
+		lexer[values->i]->e_flag = WORD;
+		if (is_builtin1(lexer[values->i]->content, words, values))
 		{
-			lexer[values->i]->flag = BUILTIN;
+			lexer[values->i]->e_flag = BUILTIN;
 			*previous_is_builtin = 1;
 		}
 	}

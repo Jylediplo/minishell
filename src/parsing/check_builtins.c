@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:10:28 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 15:08:48 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/16 18:20:17 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	fill_builtins(char **builtins)
 	builtins[6] = "exit";
 }
 
-int	is_builtin(char *word, t_words *words, t_to_free *values)
+int	is_builtin1(char *word, t_words *words, t_to_free *values)
 {
 	char	**builtins;
 	int		i;
@@ -58,5 +58,29 @@ int	is_matching(char *word, char *token, size_t length, int *previous)
 			*previous = 0;
 		return (1);
 	}
+	return (0);
+}
+
+int	is_builtin(char *word)
+{
+	char	**builtins;
+	int		i;
+
+	builtins = malloc(sizeof(char *) * 7);
+	if (!builtins)
+	{
+		printf("error Malloc, free avec ce que t as besoin\n");
+		exit(1);
+	}
+	fill_builtins(builtins);
+	i = 0;
+	while (i < 7)
+	{
+		if (!ft_strncmp(word, builtins[i], ft_strlen(word))
+			&& (ft_strlen(word) == ft_strlen(builtins[i])))
+			return (free(builtins), 1);
+		i++;
+	}
+	free(builtins);
 	return (0);
 }
