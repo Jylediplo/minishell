@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_dispatcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2024/05/16 19:16:36 by lefabreg         ###   ########lyon.fr   */
+=======
 /*   Updated: 2024/05/16 18:24:53 by pantoine         ###   ########.fr       */
+>>>>>>> 55f547c4f5f781670e98b32abd286b739ec528f3
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +61,10 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	else if (is_same_str(cmd->command[0], "env"))
 		show_me_the_way(shell->envp);
 	else if (is_same_str(cmd->command[0], "exit"))
-		exit_petitcoq(cmd, cmdlist, lexer, shell);
+      {
+                close(saved);
+        		exit_petitcoq(cmd, cmdlist, lexer, shell);
+		}
 	dup2(saved, 1);
 	close(saved);
 	return (0);
