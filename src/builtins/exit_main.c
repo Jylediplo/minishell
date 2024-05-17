@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 17:44:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:37:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 	i = 0;
 	len = count_args_exit(cmd);
 	if (len == 1)
+	{
+		printf("exit\n");
 		free_all_exit(lexer, cmdlist, shell);
+	}
 	if (cmd->command[1][0] == '-')
 		i++;
 	value = (unsigned char)ft_atoi(cmd->command[1]);

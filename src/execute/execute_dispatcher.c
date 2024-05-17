@@ -6,11 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/16 19:16:36 by lefabreg         ###   ########lyon.fr   */
-=======
-/*   Updated: 2024/05/16 18:24:53 by pantoine         ###   ########.fr       */
->>>>>>> 55f547c4f5f781670e98b32abd286b739ec528f3
+/*   Updated: 2024/05/17 11:39:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +104,6 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	}
 	while (waitpid(-1, &status, 0) != -1)
 		;
-	g_current_sig = status;
+	g_current_sig = WEXITSTATUS(status);
 	return (1);
 }

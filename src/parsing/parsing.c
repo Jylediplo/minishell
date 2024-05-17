@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 17:52:37 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/17 10:39:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void	split_word(char *command, t_shell *shell)
 	create_wds_lexer(&words, &values);
 	handle_lexer(&words, &previous_is_builtin, &values);
 	free_wds_delim(&words, words.count_del);
-	free_words(&words);
+	free_words(&words);/*
 	for (int j = 0; j < words.count_del; j++)
 		printf("word : %s and flag : %d and quote removed : %d\n",
 			words.lexer[j]->content, words.lexer[j]->e_flag,
-			words.lexer[j]->quote_removed);
+			words.lexer[j]->quote_removed);*/
 	get_cmdlist(words.lexer, shell);
 }

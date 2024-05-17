@@ -6,14 +6,14 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/26 13:52:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:34:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../includes/export_tests.h"
 
-int	g_current_sig = 0;
+unsigned char	g_current_sig = 0;
 
 void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 {

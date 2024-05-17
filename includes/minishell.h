@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 14:28:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:35:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct  s_shell
 
 /// functions prototype
 // signals
-extern int	g_current_sig;
+extern unsigned char	g_current_sig;
 void		handle_signals(void);
 
 void		free_history_data(void *data);

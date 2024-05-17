@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 14:27:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:35:26 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-extern int	g_current_sig;
+extern unsigned char	g_current_sig;
 typedef struct s_evar
 {
 	enum

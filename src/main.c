@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 16:14:33 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:35:51 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/evars.h"
 #include "../includes/execute.h"
 
-int	g_current_sig = 0;
+unsigned char	g_current_sig = 0;
 
 int	mainloop(t_shell *shell)
 {
