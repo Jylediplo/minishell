@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/18 18:11:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 21:01:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,68 @@ static int	delist_envp(t_shell *shell)
 	return (0);
 }
 
+int	reset_shlvl(t_shell *shell)
+{
+	char	*to_export;
+	t_evar	evar;
+
+	to_export = ft_strdup("SHLVL=1");
+	if (!to_export)
+	{
+		perror_context("malloc", NULL);
+		return (1);
+	}
+	if (init_change_evar(shell, &evar, to_export))
+	{
+		free(to_export);
+		return (1);
+	}
+	return (0);
+}
+
+int	increase_shlvl(t_shell *shell)
+{
+	int		shlvl;
+	char	*shlvl_value;
+	char	*to_export;
+	t_evar	evar;
+	
+	shlvl_value = get_envvar_value(&shell->envp, "SHLVL");
+	if (!shlvl_value || !shlvl_value[0])
+		return (reset_shlvl(shell));
+	shlvl = ft_atoi(shlvl_value);
+	if (!shlvl)
+		return (1);
+	shlvl++;
+	shlvl_value = ft_itoa(shlvl);
+	if (!shlvl_value)
+	{
+		perror_context("malloc", NULL);
+		return (1);
+	}
+	to_export = ft_strjoin("SHLVL=", shlvl_value);
+	free(shlvl_value);
+	if (!to_export)
+	{
+		perror_context("malloc", NULL);
+		return (1);
+	}
+	if (init_change_evar(shell, &evar, to_export))
+	{
+		free(to_export);
+		return (1);
+	}
+	printf("new shlvl value: %s\n", get_envvar_value(&shell->envp, "SHLVL"));
+	return (0);
+}
+
 int	pimped_execve(t_cmd *cmd, t_shell *shell)
 {
 
 	if (dup_redirections(cmd))
 		return (1);
+	if (increase_shlvl(shell))
+		return (1);	
 	if (delist_envp(shell))
 		return (1);
 	if (!is_executable(cmd))
