@@ -41,6 +41,7 @@ SRCS 				= main.c \
 					execute/execute_dispatcher.c \
 					execute/execute_onecommand.c \
 					execute/execute_normalcmd.c \
+					execute/execute_pathfinding.c \
 					history/manage_history.c \
 					history/manage_list.c \
 					gnl/get_next_line.c \

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 18:25:25 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:13:18 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ int		execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 //execute_normalcmd.c
 void	executor(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
 int		pimped_execve(t_cmd *cmd, t_shell *shell);
+
+//execute_pathfinding.c
+int		is_executable(t_cmd *cmd);
+void	free_split(char **tofree);
+int		find_executable_path(t_cmd *cmd, t_shell *shell);
 
 //execute_redirect.c
 int		transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2]);
