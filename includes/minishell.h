@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 11:35:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 09:57:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
 // libft
 # include "../libft/libft.h"
 //errors
@@ -35,6 +36,7 @@ typedef struct  s_shell
     int     argc;
     char    **argv;
     t_list	*envp;
+	char	**envp_char;
 	int		previous_pipe;
 }   t_shell;
 # endif

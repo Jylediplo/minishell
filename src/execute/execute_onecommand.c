@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 11:39:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:34:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexe
 		free_all_exit(lexer, cmdlist, shell);
 	}
 	waitpid(-1, &status, 0);
-	g_current_sig = WEXITSTATUS(status);
+	if (WEXITSTATUS(status) == 2)
+		g_current_sig = 125 + WEXITSTATUS(status);
 	return (0);
 }
 

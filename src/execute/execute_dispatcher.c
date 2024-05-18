@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 11:39:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 09:54:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	else if (is_same_str(cmd->command[0], "env"))
 		show_me_the_way(shell->envp);
 	else if (is_same_str(cmd->command[0], "exit"))
-      {
+    {
                 close(saved);
         		exit_petitcoq(cmd, cmdlist, lexer, shell);
-		}
+	}
 	dup2(saved, 1);
 	close(saved);
 	return (0);
@@ -104,6 +104,7 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	}
 	while (waitpid(-1, &status, 0) != -1)
 		;
-	g_current_sig = WEXITSTATUS(status);
+	if (WEXITSTATUS(status) == 2)
+		g_current_sig = 125 + WEXITSTATUS(status);
 	return (1);
 }
