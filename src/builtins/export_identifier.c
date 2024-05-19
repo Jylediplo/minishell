@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:14:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:30:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	valid_identifier_char(char c)
 	return (0);
 }
 
-int	valid_identifier(char *identifier, char operator)
+static int	valid_identifier(char *identifier, char operator)
 {
 	int	i;
 

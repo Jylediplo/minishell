@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/18 09:54:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:27:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-int	is_same_str(char *s1, char *s2)
+static int	is_same_str(char *s1, char *s2)
 {
 	if (ft_strlen(s1) != ft_strlen(s2))
 		return (0);
@@ -58,15 +58,15 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 		show_me_the_way(shell->envp);
 	else if (is_same_str(cmd->command[0], "exit"))
     {
-                close(saved);
-        		exit_petitcoq(cmd, cmdlist, lexer, shell);
+		close(saved);
+		exit_petitcoq(cmd, cmdlist, lexer, shell);
 	}
 	dup2(saved, 1);
 	close(saved);
 	return (0);
 }
 
-int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+static int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
 	pid_t		pid;
 	int			pipe_fds[2];
@@ -82,6 +82,13 @@ int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 		if (write_and_read_pipe(cmdlist, cmd->nb, shell, pipe_fds))
 			free_all_exit(lexer, cmdlist, shell);
 		executor(cmd, shell, cmdlist, lexer);
+	}
+	else if (pid == -1)
+	{
+		close(pipe_fds[0]);
+		close(pipe_fds[1]);
+		perror_context("fork", NULL);
+		return (0);
 	}
 	transfer_pipes(cmd, shell, cmdlist, pipe_fds);
 	return (1);
@@ -99,7 +106,8 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	while (iter)
 	{
 		cmd = iter->content;
-		fork_it_all(cmd, shell, cmdlist, lexer);
+		if (!fork_it_all(cmd, shell, cmdlist, lexer))
+			return (0);
 		iter = iter->next;
 	}
 	while (waitpid(-1, &status, 0) != -1)

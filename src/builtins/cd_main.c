@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:19:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:02:30 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/execute.h"
 #include "../../includes/evars.h"
 
-int	count_args_cd(t_cmd *cmd)
+static int	count_args_cd(t_cmd *cmd)
 {
 	int		len;
 
@@ -26,7 +26,7 @@ int	count_args_cd(t_cmd *cmd)
 	return (len);
 }
 
-int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
+static int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
 {
 	char	*home;
 

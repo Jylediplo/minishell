@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:43:40 by pantoine          #+#    #+#             */
-/*   Updated: 2024/04/25 19:57:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:28:37 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-int	is_legal_sigsub_copy(t_evar *evar)
+static int	is_legal_sigsub_copy(t_evar *evar)
 {
 	int	i;
 	int	count;
@@ -39,7 +39,7 @@ int	is_legal_sigsub_copy(t_evar *evar)
 	return (1);
 }
 
-int	is_legal_sigsub_count(t_evar *evar)
+static int	is_legal_sigsub_count(t_evar *evar)
 {
 	int	i;
 	int	count;

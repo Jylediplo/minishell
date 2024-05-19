@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:24:25 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:57:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
+static int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 {
 	if (lexer[*lexer_pos - 1]->e_flag == LESSER)
 		cmd->in = lexer[*lexer_pos]->content;
-		/*open(lexer[*lexer_pos]->content, O_RDONLY);*/
 	else if (lexer[*lexer_pos - 1]->e_flag == GREATER)
 	{
 		cmd->out = lexer[*lexer_pos]->content;

@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:02:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:43:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	remove_envvar(t_list **envp, char *to_remove)
+static void	remove_envvar(t_list **envp, char *to_remove)
 {
 	t_list	*iter;
 	t_list	*previous;

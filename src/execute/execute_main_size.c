@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 19:57:43 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:45:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content)
 	return (0);
 }
 
-int	filter_type_input(t_lexer **lexer, int *lexer_pos,
+static int	filter_type_input(t_lexer **lexer, int *lexer_pos,
 						t_list **cmds, t_list *envp)
 {
 	t_cmd	*cmd;

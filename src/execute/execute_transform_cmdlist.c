@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 18:19:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:00:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**free_previous_args(char **tofree, int i)
 	return (NULL);
 }
 
-char	**init_cmd_array(t_cmd *cmd)
+static char	**init_cmd_array(t_cmd *cmd)
 {
 	int		i;
 	t_list	*args;

@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 10:39:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 11:49:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ void	split_word(char *command, t_shell *shell)
 		printf("word : %s and flag : %d and quote removed : %d\n",
 			words.lexer[j]->content, words.lexer[j]->e_flag,
 			words.lexer[j]->quote_removed);*/
+	if (!words.lexer[0])
+		return ;
 	get_cmdlist(words.lexer, shell);
 }

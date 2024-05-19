@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/17 11:35:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:35:20 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(int argc, char **argv, char **envp)
 
 	init_shell(argc, argv, envp, &shell);
 	get_cmdlist(argv[1], shell.envp);
-	//print_envp(shell.envp);
 	free_envp(shell.envp);
 	return (0);
 }

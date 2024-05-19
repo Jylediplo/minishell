@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 19:37:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 12:54:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
+static int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
 {
 	while (lexer[*lexer_pos] && lexer[*lexer_pos]->e_flag != PIPE)
 	{
@@ -51,7 +51,7 @@ static void	zero_cmdargs(t_cmd *cmd)
 	cmd->cmd_args = NULL;
 }
 
-int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
+static int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
 							t_cmd *cmd, t_list *envp)
 {
 	zero_cmdargs(cmd);
@@ -80,7 +80,7 @@ int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
 	return (0);
 }
 
-t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
+static t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 {
 	t_cmd	*cmd;
 

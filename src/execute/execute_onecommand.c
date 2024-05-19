@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 16:34:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:31:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+static int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
 	pid_t	id;
 	int		status;
@@ -29,7 +29,7 @@ int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexe
 	else if (id == -1)
 	{
 		perror_context("fork", NULL);
-		free_all_exit(lexer, cmdlist, shell);
+		return (1);
 	}
 	waitpid(-1, &status, 0);
 	if (WEXITSTATUS(status) == 2)

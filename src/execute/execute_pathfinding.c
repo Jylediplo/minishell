@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/18 18:13:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:10:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	search_and_match_path(char **paths, t_cmd *cmd)
 	return (0);
 }
 
-void	free_split(char **tofree)
+static void	free_split(char **tofree)
 {
 	int	i;
 

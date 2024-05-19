@@ -1,5 +1,5 @@
 NAME 				= minishell
-CC 					= cc #-fsanitize=address
+CC 					= cc -fsanitize=address
 CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
@@ -13,7 +13,6 @@ SRCS 				= main.c \
 					builtins/export_sub_lastsig.c \
 					builtins/export_sub_lastsig_utils.c \
 					builtins/export_identifier.c \
-					builtins/export_identifier_utils.c \
 					builtins/handle_errors.c \
 					builtins/free_utils_export.c \
 					builtins/modify_envp.c \

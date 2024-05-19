@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 10:38:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:37:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ static char	*name_tempfile(t_cmd *cmd)
 	}
 	random[10] = '\0';
 	name = ft_strjoin(HDNAME, random);
+	if (cmd->tempfile_name)
+	{
+		unlink(cmd->tempfile_name);
+		free(cmd->tempfile_name);
+		cmd->tempfile_name = NULL;
+	}
 	cmd->tempfile_name = ft_strjoin(HDNAME, ft_itoa(test));//name;
 	if (!name)
 		perror_context("malloc", NULL);

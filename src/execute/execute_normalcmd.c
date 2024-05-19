@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/18 21:01:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 11:30:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,7 @@ int	increase_shlvl(t_shell *shell)
 	if (!shlvl_value || !shlvl_value[0])
 		return (reset_shlvl(shell));
 	shlvl = ft_atoi(shlvl_value);
-	if (!shlvl)
-		return (1);
-	shlvl++;
-	shlvl_value = ft_itoa(shlvl);
+	shlvl_value = ft_itoa(++shlvl);
 	if (!shlvl_value)
 	{
 		perror_context("malloc", NULL);
@@ -104,7 +101,6 @@ int	increase_shlvl(t_shell *shell)
 		free(to_export);
 		return (1);
 	}
-	printf("new shlvl value: %s\n", get_envvar_value(&shell->envp, "SHLVL"));
 	return (0);
 }
 
