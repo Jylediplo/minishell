@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 00:32:39 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 16:20:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:41:01 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	redirect_output(t_cmd *cmd)
 	int	fd;
 
 	fd = open(cmd->out,
-			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			O_WRONLY | O_CREAT | cmd->outtype, 0644);
 	if (fd == -1)
 	{
 		perror_context("open", cmd->out);

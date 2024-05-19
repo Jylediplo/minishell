@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 18:23:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:47:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_cmd
 	t_list	*cmd_args;
 	char	*in;
 	char	*out;
+	int		outtype;
 	int		nb;
 }	t_cmd;
 

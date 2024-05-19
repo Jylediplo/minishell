@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:57:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:47:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	else if (lexer[*lexer_pos - 1]->e_flag == GREATER)
 	{
 		cmd->out = lexer[*lexer_pos]->content;
-		/*open(lexer[*lexer_pos]->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 644);*/
+		cmd->outtype = O_TRUNC;
 	}
 	else if (lexer[*lexer_pos - 1]->e_flag == APPEND)
+	{
 		cmd->out = lexer[*lexer_pos]->content;
-		/*cmd->out = open(lexer[*lexer_pos]->content,
-				O_WRONLY | O_CREAT | O_APPEND, 644);*/
+		cmd->outtype = O_APPEND;
+	}
 	return (0);
 }
 
