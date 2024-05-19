@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 18:47:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 23:55:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,21 @@
 # define HDNAME ".hdtmp"
 # include "minishell.h"
 
-typedef struct s_cmd
+typedef struct	s_cmd
 {
 	char	**command;
 	char	*tempfile_name;
 	t_list	*cmd_args;
 	char	*in;
-	char	*out;
+	t_list	*out;
 	int		outtype;
 	int		nb;
 }	t_cmd;
+typedef struct	s_outfile
+{
+	char	*name;
+	int		outtype;
+}	t_outfile;
 
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 00:32:39 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 18:41:01 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/20 00:12:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,24 @@ int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, int pipe_fd
 
 static int	redirect_output(t_cmd *cmd)
 {
-	int	fd;
+	int			fd;
+	t_list		*iter;
+	t_outfile	*outfile;
 
-	fd = open(cmd->out,
-			O_WRONLY | O_CREAT | cmd->outtype, 0644);
-	if (fd == -1)
+	iter = cmd->out;
+	while (iter)
 	{
-		perror_context("open", cmd->out);
-		return (1);
+		outfile = iter->content;
+		fd = open(outfile->name,
+				O_WRONLY | O_CREAT | outfile->outtype, 0644);
+		if (fd == -1)
+		{
+			perror_context("open", outfile->name);
+			return (1);
+		}
+		iter = iter->next;
+		if (iter)
+			close(fd);
 	}
 	if (dup2(fd, 1) == -1)
 	{
