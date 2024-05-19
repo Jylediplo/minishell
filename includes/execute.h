@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 13:10:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:23:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,14 @@ int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 //execute_transform_cmdlist.c
 int		copy_all_cmds(t_list *head);
 
-//cd_main.c
-int		change_directory(t_cmd *cmd, t_shell *shell);
-
-//cd_utils.c
-int		change_pwd(t_shell *shell);
-int		change_oldpwd(t_shell *shell, char *old);
-int		cd_error_message(char *message);
-
-//exit_main.c
-void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell);
-int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
-			t_lexer **lexer, t_shell *shell);
-
-//pwd_main.c
-void	get_pwd(void);
-
 //execute_dispatcher.c
+int		is_same_str(char *s1, char *s2);
 int		call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
 int		no_command(t_cmd *cmd);
 int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
+
+//execute_dispatcher_utils.c
+int		dispatch_builtin(t_cmd *cmd, t_shell *shell);
 
 //execute_onecommand.c
 int		execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);

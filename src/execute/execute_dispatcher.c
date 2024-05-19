@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 13:27:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:29:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-static int	is_same_str(char *s1, char *s2)
+int	is_same_str(char *s1, char *s2)
 {
 	if (ft_strlen(s1) != ft_strlen(s2))
 		return (0);
@@ -25,44 +25,48 @@ static int	is_same_str(char *s1, char *s2)
 
 int	no_command(t_cmd *cmd)
 {
-	int			saved;
+	int		saved_in;
+	int		saved_out;
 
-	saved = dup(1);
-	dup_redirections(cmd);
-	dup2(saved, 1);
-	close(saved);
+	saved_in = dup(STDIN_FILENO);
+	saved_out = dup(STDOUT_FILENO);
+	if (dup_redirections(cmd))
+	{
+		close(saved_in);
+		close(saved_out);
+	}
+	dup2(saved_in, STDIN_FILENO);
+	dup2(saved_out, STDOUT_FILENO);
+	close(saved_in);
+	close(saved_out);
 	return (0);
 }
 
 int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 {
-	int			saved;
+	int		saved_out;
+	int		saved_in;
 
-	saved = dup(1);
+	saved_in = dup(STDIN_FILENO);
+	saved_out = dup(STDOUT_FILENO);
 	if (dup_redirections(cmd))
 	{
-		close(saved);
+		close(saved_in);
+		close(saved_out);
 		return (1);
 	}
-	if (is_same_str(cmd->command[0], "echo"))
-		efftee_echo(cmd->command);
-	else if (is_same_str(cmd->command[0], "cd"))
-		change_directory(cmd, shell);
-	else if (is_same_str(cmd->command[0], "pwd"))
-		get_pwd();
-	else if (is_same_str(cmd->command[0], "export"))
-		export_envar(cmd, shell);
-	else if (is_same_str(cmd->command[0], "unset"))
-		unset_envvar(cmd, shell);
-	else if (is_same_str(cmd->command[0], "env"))
-		show_me_the_way(shell->envp);
-	else if (is_same_str(cmd->command[0], "exit"))
+	if (is_same_str(cmd->command[0], "exit"))
     {
-		close(saved);
+		close(saved_in);
+		close(saved_out);
 		exit_petitcoq(cmd, cmdlist, lexer, shell);
 	}
-	dup2(saved, 1);
-	close(saved);
+	else
+		dispatch_builtin(cmd, shell);
+	dup2(saved_in, STDIN_FILENO);
+	dup2(saved_out, STDOUT_FILENO);
+	close(saved_in);
+	close(saved_out);
 	return (0);
 }
 
