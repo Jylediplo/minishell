@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:52:53 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:43:18 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:12:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,24 @@ void	free_single_cmd(t_list *args)
 		free(args);
 		args = temp;
 	}
+}
+
+void	free_outfiles(t_cmd *cmd)
+{
+	t_list		*iter;
+	t_list		*temp;
+
+	if (!cmd->out)
+		return ;
+	iter = cmd->out;
+	while (iter)
+	{
+		temp = iter->next;
+		free(iter->content);
+		free(iter);
+		iter = temp;
+	}
+
 }
 
 void	free_command_arrays(t_list *head)
@@ -74,6 +92,7 @@ void	free_cmdlist(t_list *cmds)
 		cmd = iter->content;
 		args = cmd->cmd_args;
 		free_single_cmd(args);
+		free_outfiles(cmd);
 		close_fds_remove_tmps(cmd);
 		free(cmd);
 		free(iter);

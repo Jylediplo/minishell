@@ -44,6 +44,10 @@ SRC = ft_isalpha.c \
       ft_lstiter.c \
       ft_lstmap.c
 
+ifeq ($(shell uname), Darwin)
+CC		= /opt/homebrew/opt/llvm/bin/clang -fsanitize=leak
+endif
+
 OBJS = $(SRC:.c=.o)
 
 %.o: %.c
