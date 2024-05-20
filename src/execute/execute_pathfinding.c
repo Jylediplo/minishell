@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 13:10:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/20 23:19:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	is_executable(t_cmd *cmd)
 {
-	if (!access(cmd->command[0], F_OK))
+	if (!access(cmd->command[0], F_OK | X_OK))
 		return (1);
 	return (0);
 }
@@ -64,6 +64,8 @@ int	find_executable_path(t_cmd *cmd, t_shell *shell)
 	char	**paths;
 	char	*path_value;
 	
+	if (ft_strchr(cmd->command[0], '/'))
+		return (0);
 	path_value = get_envvar_value(&shell->envp, "PATH");
 	if (!path_value)
 		return (0);
