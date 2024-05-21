@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 23:17:42 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:54:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,10 @@ int	pimped_execve(t_cmd *cmd, t_shell *shell)
 {
 
 	if (dup_redirections(cmd))
+	{
+		g_current_sig = 1;
 		return (1);
+	}
 	if (increase_shlvl(shell))
 		return (1);	
 	if (delist_envp(shell))
@@ -134,6 +137,12 @@ void	executor(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	else if (is_builtin(cmd->command[0]))
 		call_builtin(cmd, shell, cmdlist, lexer);
 	else
+	{
 		pimped_execve(cmd, shell);
+		if (errno == 2 && !g_current_sig)
+			g_current_sig = 2;
+		else if (errno == 13 && !g_current_sig)
+			g_current_sig = 13;
+	}
 	free_all_exit(lexer, cmdlist, shell);
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 11:40:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:51:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer
 	if (!id)
 	{
 		pimped_execve(cmd, shell);
+		if (errno == 2 && !g_current_sig)
+			g_current_sig = 2;
+		else if (errno == 13 && !g_current_sig)
+			g_current_sig = 13;
 		free_all_exit(lexer, cmdlist, shell);
 		return (1);
 	}
@@ -32,8 +36,12 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer
 		return (1);
 	}
 	waitpid(-1, &status, 0);
-	if (WEXITSTATUS(status) == 2)
-		g_current_sig = 125 + WEXITSTATUS(status);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
+		g_current_sig = 127;
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
+		g_current_sig = 126;
+	else
+		g_current_sig = WEXITSTATUS(status);
 	return (0);
 }
 

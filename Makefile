@@ -67,7 +67,7 @@ OBJ_D 				= objects/
 
 ifeq ($(shell uname), Darwin)
 READLINEDIR 		= $(shell brew --prefix readline)
-CC					= cc -fsanitize=leak#/usr/bin/clang 
+CC					= /usr/bin/clang #-fsanitize=leak
 endif
 
 INCLUDEDIR 			= includes

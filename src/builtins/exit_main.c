@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/17 16:01:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:22:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	exit_nonnumeric_arg(char *illegal_arg, t_list *cmdlist,
 	ft_putstr_fd("petitcoq: exit: ", 2);
 	ft_putstr_fd(illegal_arg, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
-	g_current_sig = 2;
+	g_current_sig = 255;
 	free_lexer(lexer);
 	free_command_arrays(cmdlist);
 	free_cmdlist(cmdlist);
