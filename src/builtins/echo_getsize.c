@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:16:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/20 23:26:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*parse_quoted_sequence_echo(t_evar *evar, char quotetype, t_list *envp)
 	return (evar->newvalue);
 }
 
-void	get_echo_size(t_evar *evar, t_list *envp)
+static void	get_echo_size(t_evar *evar, t_list *envp)
 {
 	while (*evar->newvalue)
 	{

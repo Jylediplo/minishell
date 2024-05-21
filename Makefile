@@ -1,5 +1,5 @@
 NAME 				= minishell
-CC 					= cc -fsanitize=leak
+CC 					= cc
 CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
@@ -67,8 +67,9 @@ OBJ_D 				= objects/
 
 ifeq ($(shell uname), Darwin)
 READLINEDIR 		= $(shell brew --prefix readline)
-CC					= /opt/homebrew/opt/llvm/bin/clang -fsanitize=leak
+CC					= cc -fsanitize=leak#/usr/bin/clang 
 endif
+
 INCLUDEDIR 			= includes
 CFLAGS				+= -I$(READLINEDIR)/include
 LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib

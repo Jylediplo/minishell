@@ -1,5 +1,5 @@
 NAME = libft.a
-CFLAGS = -Wall -Werror -Wextra -I include
+CFLAGS = -Wall -Wextra -Werror -I include
 SRC = ft_isalpha.c \
       ft_toupper.c \
       ft_isalnum.c \
@@ -45,7 +45,7 @@ SRC = ft_isalpha.c \
       ft_lstmap.c
 
 ifeq ($(shell uname), Darwin)
-CC		= /opt/homebrew/opt/llvm/bin/clang -fsanitize=leak
+CC		= /usr/bin/clang #-fsanitize=leak
 endif
 
 OBJS = $(SRC:.c=.o)

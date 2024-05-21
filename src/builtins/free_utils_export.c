@@ -6,12 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:11:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/07 16:46:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/21 13:22:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
+/*
 void	free_list(t_list *lst)
 {
 	t_list	*temp;
@@ -23,7 +24,7 @@ void	free_list(t_list *lst)
 		lst = temp;
 	}
 }
-
+*/
 void	free_envp(t_list *envp)
 {
 	t_list	*temp;
