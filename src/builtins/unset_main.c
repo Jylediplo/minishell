@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 19:47:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:52:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@ static int	is_valid_unset(char *to_remove)
 	t_evar	evar;
 
 	i = 0;
+	if (to_remove[i] >= '0' && to_remove[i] <= '9')
+	{
+		evar.e_error = INVALID_IDENTIFIER;
+		evar_error_message(&evar, to_remove);
+		return (0);
+	}
+	i++;
 	while (to_remove[i])
 	{
 		if (!valid_identifier_char(to_remove[i++]))
