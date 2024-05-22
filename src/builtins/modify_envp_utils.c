@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:58:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:11:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:21:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ char	*strjoin_free(char *s1, const char *s2)
 	res = ft_strjoin(s1, s2);
 	if (!res)
 	{
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		perror_context("malloc", NULL);
 		return (s1);
 	}
 	free(s1);
 	return (res);
 }
 
-void	replace_content(t_list *current, t_list *to_del, char *newvalue)
+static void	replace_content(t_list *current, t_list *to_del, char *newvalue)
 {
 	free(current->content);
 	current->content = ft_strdup(newvalue);
@@ -34,7 +34,7 @@ void	replace_content(t_list *current, t_list *to_del, char *newvalue)
 	free(to_del);
 	if (!current->content)
 	{
-		ft_putstr_fd("error: malloc failed\n", 2);
+		perror_context("malloc", NULL);
 		ft_lstdelone(current, free);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:11:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/21 13:22:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:11:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,22 @@ void	free_envp(t_list *envp)
 
 void	free_value_exit(char *value)
 {
+	perror_context("malloc", NULL);
 	free(value);
-	exit(EXIT_FAILURE);
+	exit(g_current_sig);
 }
 
 void	free_envp_value_exit(t_list *head, char *value)
 {
+	perror_context("malloc", NULL);
 	free(value);
 	free_envp(head);
-	exit(EXIT_FAILURE);
+	exit(g_current_sig);
 }
 
 void	free_envp_exit(t_list *head)
 {
+	perror_context("malloc", NULL);
 	free_envp(head);
-	exit(EXIT_FAILURE);
+	exit(g_current_sig);
 }

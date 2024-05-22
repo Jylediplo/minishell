@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:51:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:44:23 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_list	*copy_env(char **envp)
 	i = 1;
 	value = ft_strdup(envp[0]);
 	if (!value)
-		exit(EXIT_FAILURE);
+		free_value_exit(value);
 	head = ft_lstnew(value);
 	if (!head)
 		free_value_exit(value);

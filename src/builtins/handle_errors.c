@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:14:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:13:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	evar_error_message(t_evar *evar, char *context)
 {
 	if (evar->e_error == MALLOC)
+	{
 		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		g_current_sig = 1;
+	}
 	else if (evar->e_error == BAD_SUBSTITUTION)
 	{
 		ft_putstr_fd("petitcoq: error: bad substitution\n", 2);

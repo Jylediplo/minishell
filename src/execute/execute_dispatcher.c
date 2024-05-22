@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 23:14:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:00:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,12 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		iter = iter->next;
 	}
 	while (waitpid(-1, &status, 0) != -1)
-		;
-	if (WEXITSTATUS(status) == 2)
-		g_current_sig = 125 + WEXITSTATUS(status);
+		continue ;
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
+		g_current_sig = 127;
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
+		g_current_sig = 126;
+	else if (WIFEXITED(status))
+		g_current_sig = WEXITSTATUS(status);
 	return (1);
 }

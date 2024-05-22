@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/21 13:53:33 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:17:20 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void	perror_context(char *failed_command, char *context)
 	ft_putstr_fd(failed_command, 2);
 	ft_putstr_fd(": ", 2);
 	if (is_same_str(failed_command, "malloc"))
+	{
 		ft_putstr_fd("failure", 2);
+		g_current_sig = 1;
+	}
 	else
 		ft_putstr_fd(strerror(errno), 2);
 	if (context)
@@ -48,5 +51,4 @@ void	perror_context(char *failed_command, char *context)
 		ft_putstr_fd(context, 2);
 	}
 	ft_putstr_fd("\n", 2);
-	//g_current_sig = errno;
 }

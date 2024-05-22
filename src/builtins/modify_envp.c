@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:15:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:26:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,13 @@ char	*get_envvar_value(t_list **envp, char *envvar)
 		envp_value = iter->content;
 		if (!ft_strncmp(envp_value, envvar, len)
 			&& envp_value[len] == '=')
-		{
 			return (envp_value + len + 1);
-		}
 		iter = iter->next;
 	}
 	return (NULL);
 }
 
-int	remove_plus_in_envvar(t_list *newvar)
+static int	remove_plus_in_envvar(t_list *newvar)
 {
 	char	*value;
 	char	*res;
@@ -51,10 +49,10 @@ int	remove_plus_in_envvar(t_list *newvar)
 	value = newvar->content;
 	plus_operator = ft_strchr(value, '+');
 	len = plus_operator - value;
-	res = (char *)malloc(sizeof(char) * (ft_strlen(value)));
+	res = malloc(sizeof(char) * (ft_strlen(value)));
 	if (!res)
 	{
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		perror_context("malloc", NULL);
 		free(newvar);
 		return (1);
 	}
@@ -65,7 +63,7 @@ int	remove_plus_in_envvar(t_list *newvar)
 	return (0);
 }
 
-void	append_to_envvar(t_list *envp, t_list *newvar)
+static void	append_to_envvar(t_list *envp, t_list *newvar)
 {
 	t_list	*iter;
 	size_t	len;
@@ -73,7 +71,7 @@ void	append_to_envvar(t_list *envp, t_list *newvar)
 	char	*newvar_value;
 
 	iter = envp;
-	newvar_value = (char *)newvar->content;
+	newvar_value = newvar->content;
 	len = ft_strchr(newvar_value, '+') - newvar_value;
 	envp_value = NULL;
 	while (iter)
@@ -102,14 +100,14 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 	value_dup = ft_strdup(value);
 	if (!value_dup)
 	{
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		perror_context("malloc", NULL);
 		return ;
 	}
 	newvar = ft_lstnew(value_dup);
 	if (!newvar)
 	{
 		free(value_dup);
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		perror_context("malloc", NULL);
 		return ;
 	}
 	if (!evar->s_change_evar.append)
