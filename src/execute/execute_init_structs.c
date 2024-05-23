@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:48:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/23 21:14:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
+static int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
 {
 	char	*temp;
 
@@ -34,7 +34,7 @@ int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
 	return (0);
 }
 
-int	replace_parsed_content(t_lexer **lexer,
+static int	replace_parsed_content(t_lexer **lexer,
 		int *index, char *newval, t_list *envp)
 {
 	if (is_builtin(newval))

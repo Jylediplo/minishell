@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 23:26:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/23 20:26:43 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*parse_echo(t_list *envp, char *to_echo)
 
 	init_evar(&evar, to_echo);
 	get_echo_size(&evar, envp);
-	if (evar.e_error != NONE && evar.e_error != STOP)
+	if (evar.e_error != NONE)
 	{
 		evar_error_message(&evar, NULL);
 		return (NULL);
@@ -84,7 +84,7 @@ char	*parse_echo(t_list *envp, char *to_echo)
 	}
 	get_echo(&evar, envp);
 	if (evar.e_error == MALLOC)
-		ft_putstr_fd("petitcoq: malloc error\n", 2);
+		perror_context("malloc", NULL);
 	free(evar.newvalue_copy);
 	return (evar.newvalue_toset);
 }
