@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 19:52:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:09:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static int	remove_envvar(t_list **envp, char *to_remove)
 	if (!to_remove || !to_remove[0])
 		return (0);
 	len = ft_strlen(to_remove);
-	envp_value = NULL;
 	while (iter)
 	{
 		envp_value = iter->content;

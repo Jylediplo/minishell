@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:16:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:41:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,7 @@ t_list	*copy_env(char **envp)
 	char	*value;
 
 	head = NULL;
-	i = 0;/*
-	value = ft_strdup(envp[0]);
-	if (!value)
-		free_value_exit(value);
-	head = ft_lstnew(value);
-	if (!head)
-		free_value_exit(value);*/
+	i = 0;
 	while (envp[i])
 	{
 		value = ft_strdup(envp[i++]);

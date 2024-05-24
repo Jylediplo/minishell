@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:24:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:00:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,11 @@ void	free_current_lexer(t_lexer **lexer, int i)
 	free(lexer);
 }
 
-void	print_commands(t_list *cmds)
+int	free_lex_cmdlist(t_lexer **lexer, t_list *cmdlist)
 {
-	t_list	*iter;
-	char	**args;
-	t_cmd	*cmd;
-	int		i;
-
-	i = 0;
-	iter = cmds;
-	while (iter)
-	{
-		cmd = iter->content;
-		args = cmd->command;
-		while (args[i])
-		{
-			printf("CMD[%d]: %s\n", i, args[i]);
-			i++;
-		}
-		//printf("Input/output for this command: %s/%s\n", cmd->in, cmd->out);
-		iter = iter->next;
-		i = 0;
-	}
+	free_lexer(lexer);
+	free_cmdlist(cmdlist);
+	return (0);
 }
 
 int	get_cmdlist(t_lexer **lexer, t_shell *shell)
@@ -106,16 +89,10 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	while (lexer[i])
 	{
 		if (filter_type_input(lexer, &i, &head, shell->envp) == 1)
-		{
-			free_lexer(lexer);
-			free_command_arrays(head);
-			free_cmdlist(head);
-			free_envp(shell->envp);
-			exit(g_current_sig);
-		}
+			return (free_lex_cmdlist(lexer, head));
 	}
-	if (!copy_all_cmds(head->next))
-		;//print_commands(head->next);
+	if (copy_all_cmds(head->next))
+		return (free_lex_cmdlist(lexer, head));
 	dispatch_commands(head, shell, lexer);
 	free_lexer(lexer);
 	free_command_arrays(head);

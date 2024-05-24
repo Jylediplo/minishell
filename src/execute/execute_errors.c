@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:26:41 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:39:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,13 @@ void	perror_context(char *failed_command, char *context)
 		ft_putstr_fd(context, 2);
 	}
 	ft_putstr_fd("\n", 2);
-	g_current_sig = 1;
+	if (!is_same_str(failed_command, "execve"))
+		g_current_sig = 1;
+	else
+	{
+		if (errno == 2 && !g_current_sig)
+			g_current_sig = 2;
+		else if (errno == 13 && !g_current_sig)
+			g_current_sig = 13;
+	}
 }

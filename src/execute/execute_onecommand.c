@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:37:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:40:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,6 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 	if (!id)
 	{
 		pimped_execve(cmd, shell);
-		if (errno == 2 && !g_current_sig)
-			g_current_sig = 2;
-		else if (errno == 13 && !g_current_sig)
-			g_current_sig = 13;
 		free_all_exit(lexer, cmdlist, shell);
 		return (1);
 	}

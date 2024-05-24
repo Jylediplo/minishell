@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:28:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 12:31:58 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:10:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	reset_shlvl(t_shell *shell)
 		free(to_export);
 		return (1);
 	}
+	free(to_export);
 	return (0);
 }
 
