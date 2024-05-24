@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 23:55:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 12:30:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ int		get_cmdlist(t_lexer **lexer, t_shell *shell);
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos,
 			t_list **cmds, t_list *envp);
 
+//execute_flags_utils.c
+void	zero_cmdargs(t_cmd *cmd);
+int		delete_current_command(t_cmd *cmd);
+
 //execute_heredocs.c
 int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp);
 
@@ -56,7 +60,6 @@ void	unexpected_token_exec_err(char *error_token);
 void	perror_context(char *failed_command, char *context);
 
 //execute_free_utils.c
-void	close_fds_remove_tmps(t_cmd *cmd);
 void	free_single_cmd(t_list *args);
 void	free_command_arrays(t_list *head);
 void	free_cmdlist(t_list *cmds);
@@ -90,12 +93,21 @@ int		execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 void	executor(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
 int		pimped_execve(t_cmd *cmd, t_shell *shell);
 
+//execute_normalcmd_utils.c
+void	free_partial_envp_char(t_shell *shell, int i);
+int		reset_shlvl(t_shell *shell);
+int		export_newshlvl(t_shell *shell, char *shlvl_value);
+
 //execute_pathfinding.c
 int		is_executable(t_cmd *cmd);
+void	free_split(char **tofree);
 int		find_executable_path(t_cmd *cmd, t_shell *shell);
 
-//execute_redirect.c
+//execute_redirect_utils.c
 int		transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2]);
 int		write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, int pipefds[2]);
+int		open_outfile(t_outfile *outfile);
+
+//execute_redirect.c
 int		dup_redirections(t_cmd *cmd);
 #endif

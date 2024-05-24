@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/21 18:51:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:37:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,24 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-static int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+static int	wait_update_exitsig(void)
+{
+	int		status;
+
+	waitpid(-1, &status, 0);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
+		g_current_sig = 127;
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
+		g_current_sig = 126;
+	else
+		g_current_sig = WEXITSTATUS(status);
+	return (0);
+}
+
+static int	fork_one_command(t_cmd *cmd, t_shell *shell,
+								t_list *cmdlist, t_lexer **lexer)
 {
 	pid_t	id;
-	int		status;
 
 	id = fork();
 	if (!id)
@@ -35,13 +49,7 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer
 		perror_context("fork", NULL);
 		return (1);
 	}
-	waitpid(-1, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
-		g_current_sig = 127;
-	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
-		g_current_sig = 126;
-	else
-		g_current_sig = WEXITSTATUS(status);
+	wait_update_exitsig();
 	return (0);
 }
 
@@ -49,7 +57,7 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 {
 	t_cmd	*cmd;
 	t_list	*current;
-	
+
 	if (ft_lstsize(cmdlist->next) > 1)
 		return (0);
 	current = cmdlist->next;

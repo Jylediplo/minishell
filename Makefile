@@ -28,6 +28,7 @@ SRCS 				= main.c \
 					builtins/exit_main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
+					execute/execute_flags_utils.c \
 					execute/execute_heredocs.c \
 					execute/execute_heredocs_utils.c \
 					execute/execute_errors.c \
@@ -37,10 +38,12 @@ SRCS 				= main.c \
 					execute/execute_transform_cmdlist.c \
 					execute/execute_init_structs.c \
 					execute/execute_redirect.c \
+					execute/execute_redirect_utils.c \
 					execute/execute_dispatcher.c \
 					execute/execute_dispatcher_utils.c \
 					execute/execute_onecommand.c \
 					execute/execute_normalcmd.c \
+					execute/execute_normalcmd_utils.c \
 					execute/execute_pathfinding.c \
 					history/manage_history.c \
 					history/manage_list.c \

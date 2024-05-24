@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 13:37:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:34:39 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,25 @@ static void	sanitise_tempfile_name(t_cmd *cmd)
 	}
 }
 
+static char	*release_prev_tempfile(t_cmd *cmd, char random[11])
+{
+	char	*name;
+
+	random[10] = '\0';
+	name = ft_strjoin(HDNAME, random);
+	if (cmd->tempfile_name)
+	{
+		unlink(cmd->tempfile_name);
+		free(cmd->tempfile_name);
+		cmd->tempfile_name = NULL;
+	}
+	if (!name)
+		perror_context("malloc", NULL);
+	return (name);
+}
+
 static char	*name_tempfile(t_cmd *cmd)
 {
-	static int	test = 0;
 	char	*name;
 	char	random[11];
 	int		random_fd;
@@ -52,21 +68,10 @@ static char	*name_tempfile(t_cmd *cmd)
 		perror_context("read", "/dev/urandom");
 		return (NULL);
 	}
-	random[10] = '\0';
-	name = ft_strjoin(HDNAME, random);
-	if (cmd->tempfile_name)
-	{
-		unlink(cmd->tempfile_name);
-		free(cmd->tempfile_name);
-		cmd->tempfile_name = NULL;
-	}
-	cmd->tempfile_name = ft_strjoin(HDNAME, ft_itoa(test));//name;
-	if (!name)
-		perror_context("malloc", NULL);
+	name = release_prev_tempfile(cmd, random);
+	cmd->tempfile_name = name;
 	sanitise_tempfile_name(cmd);
-	test++;
 	return (cmd->tempfile_name);
-	//return (name);
 }
 
 static int	open_temp(char *filename, t_cmd *cmd)
@@ -80,6 +85,8 @@ static int	open_temp(char *filename, t_cmd *cmd)
 		free(filename);
 		cmd->tempfile_name = NULL;
 	}
+	else
+		cmd->in = filename;
 	return (fd);
 }
 
@@ -95,7 +102,6 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
 	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
-	cmd->in = tmp_filename;
 	while (1)
 	{
 		write(1, "> ", 2);

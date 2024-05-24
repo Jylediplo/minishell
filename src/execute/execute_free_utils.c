@@ -6,20 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:52:53 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 11:12:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 12:13:20 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
-
-void	close_fds_remove_tmps(t_cmd *cmd)
-{
-	if (cmd->tempfile_name)
-		unlink(cmd->tempfile_name);
-	free(cmd->tempfile_name);
-}
 
 void	free_single_cmd(t_list *args)
 {
@@ -48,7 +41,6 @@ void	free_outfiles(t_cmd *cmd)
 		free(iter);
 		iter = temp;
 	}
-
 }
 
 void	free_command_arrays(t_list *head)
@@ -93,7 +85,9 @@ void	free_cmdlist(t_list *cmds)
 		args = cmd->cmd_args;
 		free_single_cmd(args);
 		free_outfiles(cmd);
-		close_fds_remove_tmps(cmd);
+		if (cmd->tempfile_name)
+			unlink(cmd->tempfile_name);
+		free(cmd->tempfile_name);
 		free(cmd);
 		free(iter);
 		iter = temp;

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:45:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:24:51 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 			free_lexer(lexer);
 			free_command_arrays(head);
 			free_cmdlist(head);
+			free_envp(shell->envp);
 			exit(g_current_sig);
 		}
 	}

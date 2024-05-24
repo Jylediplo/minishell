@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 11:00:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:52:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 		return (1);
 	}
 	if (is_same_str(cmd->command[0], "exit"))
-    {
+	{
 		close(saved_in);
 		close(saved_out);
 		exit_petitcoq(cmd, cmdlist, lexer, shell);
@@ -70,7 +70,8 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	return (0);
 }
 
-static int	fork_it_all(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
+static int	fork_it_all(t_cmd *cmd, t_shell *shell,
+							t_list *cmdlist, t_lexer **lexer)
 {
 	pid_t		pid;
 	int			pipe_fds[2];

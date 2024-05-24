@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/20 13:55:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:51:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-static int	add_outfile_node(t_cmd *cmd, t_lexer **lexer, int *lexer_pos, int outtype)
+static int	add_outfile_node(t_cmd *cmd, t_lexer **lexer,
+								int *lexer_pos, int outtype)
 {
 	t_outfile	*outfile;
 	t_list		*new_outfile;

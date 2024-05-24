@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:54:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 12:10:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-static int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
+static int	get_size_command(t_lexer **lexer, int *lexer_pos,
+								t_cmd *cmd, t_list *envp)
 {
 	while (lexer[*lexer_pos] && lexer[*lexer_pos]->e_flag != PIPE)
 	{
@@ -40,15 +41,6 @@ static int	get_size_command(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list 
 			break ;
 	}
 	return (0);
-}
-
-static void	zero_cmdargs(t_cmd *cmd)
-{
-	cmd->in = NULL;
-	cmd->out = NULL;
-	cmd->tempfile_name = NULL;
-	cmd->command = NULL;
-	cmd->cmd_args = NULL;
 }
 
 static int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
@@ -99,13 +91,7 @@ static t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 	*lexer_pos += 1;
 	if (get_size_command(lexer, lexer_pos, cmd, envp) == -1)
 	{
-		if (cmd->tempfile_name)
-		{
-			unlink(cmd->tempfile_name);
-			free(cmd->tempfile_name);
-		}
-		free_single_cmd(cmd->cmd_args);
-		free(cmd);
+		delete_current_command(cmd);
 		return (NULL);
 	}
 	return (cmd);
