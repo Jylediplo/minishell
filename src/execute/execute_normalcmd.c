@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:39:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:43:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,25 @@ static int	increase_shlvl(t_shell *shell)
 	return (0);
 }
 
+static int	replace_with_executable(t_cmd *cmd, t_shell *shell)
+{
+	if (!is_executable(cmd) && !is_a_dir(cmd))
+	{
+		if (find_executable_path(cmd, shell))
+		{
+			free_split(shell->envp_char);
+			return (1);
+		}
+	}
+	else if (is_a_dir(cmd))
+	{
+		free_split(shell->envp_char);
+		is_a_dir_error(cmd);
+		return (1);
+	}
+	return (0);
+}
+
 int	pimped_execve(t_cmd *cmd, t_shell *shell)
 {
 	if (dup_redirections(cmd))
@@ -74,14 +93,8 @@ int	pimped_execve(t_cmd *cmd, t_shell *shell)
 		return (1);
 	if (delist_envp(shell))
 		return (1);
-	if (!is_executable(cmd))
-	{
-		if (find_executable_path(cmd, shell))
-		{
-			free_split(shell->envp_char);
-			return (1);
-		}
-	}
+	if (replace_with_executable(cmd, shell))
+		return (1);
 	if (execve(cmd->command[0], cmd->command, shell->envp_char) == -1)
 	{
 		perror_context("execve", cmd->command[0]);

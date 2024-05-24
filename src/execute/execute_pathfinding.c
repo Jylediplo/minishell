@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:37:26 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:48:25 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,17 @@
 int	is_executable(t_cmd *cmd)
 {
 	if (!access(cmd->command[0], F_OK | X_OK))
+		return (1);
+	return (0);
+}
+
+int	is_a_dir(t_cmd *cmd)
+{
+	struct stat	stats;
+
+	stats.st_mode = 0;
+	stat(cmd->command[0], &stats);
+	if (S_ISDIR(stats.st_mode))
 		return (1);
 	return (0);
 }
@@ -64,8 +75,6 @@ int	find_executable_path(t_cmd *cmd, t_shell *shell)
 	char	**paths;
 	char	*path_value;
 
-	if (!cmd->command[0][0])
-		return (1);
 	if (ft_strchr(cmd->command[0], '/'))
 		return (0);
 	path_value = get_envvar_value(&shell->envp, "PATH");
@@ -73,7 +82,10 @@ int	find_executable_path(t_cmd *cmd, t_shell *shell)
 		return (0);
 	paths = ft_split(path_value, ':');
 	if (!paths)
-		return (0);
+	{
+		perror_context("malloc", NULL);
+		return (1);
+	}
 	if (search_and_match_path(paths, cmd))
 	{
 		free_split(paths);

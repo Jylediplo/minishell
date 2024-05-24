@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:51 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 18:20:10 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/24 16:57:18 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_lexer
 		HEREDOC = 264,
 		APPEND = 265,
 		DELIMITER = 266,
-
 	} e_flag;
 	int			quote_removed;
 	char		*content;

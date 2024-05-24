@@ -6,13 +6,22 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:28:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:10:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:37:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
+
+int	is_a_dir_error(t_cmd *cmd)
+{
+	ft_putstr_fd("petitcoq: ", 2);
+	ft_putstr_fd(cmd->command[0], 2);
+	ft_putstr_fd(": Is a directory\n", 2);
+	g_current_sig = 13;
+	return (1);
+}
 
 void	free_partial_envp_char(t_shell *shell, int i)
 {

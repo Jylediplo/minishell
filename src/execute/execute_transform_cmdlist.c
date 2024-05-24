@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:03:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:47:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,46 @@ char	**free_previous_args(char **tofree, int i)
 	return (NULL);
 }
 
+static int	count_nonempty_args(t_list *args)
+{
+	int		res;
+	t_list	*iter;
+	char	*cmd_arg;
+
+	iter = args;
+	res = 0;
+	while (iter)
+	{
+		cmd_arg = iter->content;
+		if (cmd_arg[0])
+			res++;
+		iter = iter->next;
+	}
+	return (res);
+}
+
 static char	**init_cmd_array(t_cmd *cmd)
 {
 	int		i;
 	t_list	*args;
 	char	**res;
+	char	*cmd_arg;
 
 	i = 0;
 	args = cmd->cmd_args;
-	res = malloc(sizeof(char *) * (ft_lstsize(args) + 1));
+	res = malloc(sizeof(char *) * (count_nonempty_args(args) + 1));
 	if (!res)
 		return (NULL);
 	while (args)
 	{
-		res[i] = ft_strdup(args->content);
-		if (!res[i])
-			return (free_previous_args(res, i));
+		cmd_arg = args->content;
+		if (cmd_arg[0])
+		{
+			res[i] = ft_strdup(args->content);
+			if (!res[i++])
+				return (free_previous_args(res, i));
+		}
 		args = args->next;
-		i++;
 	}
 	res[i] = NULL;
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 12:30:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:57:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 # define HDNAME ".hdtmp"
 # include "minishell.h"
+# include <sys/stat.h>
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	char	**command;
 	char	*tempfile_name;
@@ -26,7 +27,7 @@ typedef struct	s_cmd
 	int		outtype;
 	int		nb;
 }	t_cmd;
-typedef struct	s_outfile
+typedef struct s_outfile
 {
 	char	*name;
 	int		outtype;
@@ -79,7 +80,8 @@ int		copy_all_cmds(t_list *head);
 
 //execute_dispatcher.c
 int		is_same_str(char *s1, char *s2);
-int		call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
+int		call_builtin(t_cmd *cmd, t_shell *shell,
+			t_list *cmdlist, t_lexer **lexer);
 int		no_command(t_cmd *cmd);
 int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
@@ -94,18 +96,22 @@ void	executor(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer);
 int		pimped_execve(t_cmd *cmd, t_shell *shell);
 
 //execute_normalcmd_utils.c
+int		is_a_dir_error(t_cmd *cmd);
 void	free_partial_envp_char(t_shell *shell, int i);
 int		reset_shlvl(t_shell *shell);
 int		export_newshlvl(t_shell *shell, char *shlvl_value);
 
 //execute_pathfinding.c
 int		is_executable(t_cmd *cmd);
+int		is_a_dir(t_cmd *cmd);
 void	free_split(char **tofree);
 int		find_executable_path(t_cmd *cmd, t_shell *shell);
 
 //execute_redirect_utils.c
-int		transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2]);
-int		write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, int pipefds[2]);
+int		transfer_pipes(t_cmd *cmd, t_shell *shell,
+			t_list *cmdlist, int pipe_fds[2]);
+int		write_and_read_pipe(t_list *cmdlist, int nb_cmd,
+			t_shell *shell, int pipefds[2]);
 int		open_outfile(t_outfile *outfile);
 
 //execute_redirect.c
