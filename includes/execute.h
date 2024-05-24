@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 16:57:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:05:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_outfile
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
 t_lexer	**init_lex(t_list *envp, t_lexer **lexer);
-void	free_current_lexer(t_lexer **lexer, int i);
 t_list	*init_cmdlist_size(void);
 int		get_cmdlist(t_lexer **lexer, t_shell *shell);
 

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 15:47:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:43:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ static char	**init_cmd_array(t_cmd *cmd)
 	args = cmd->cmd_args;
 	res = malloc(sizeof(char *) * (count_nonempty_args(args) + 1));
 	if (!res)
+	{
+		perror_context("malloc", NULL);
 		return (NULL);
+	}
 	while (args)
 	{
 		cmd_arg = args->content;

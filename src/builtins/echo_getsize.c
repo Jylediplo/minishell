@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/23 20:26:43 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:09:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,14 @@ char	*parse_echo(t_list *envp, char *to_echo)
 	evar.e_error = NONE;
 	evar.newvalue_copy = ft_strdup(to_echo);
 	if (!evar.newvalue_copy)
+	{
+		perror_context("malloc", NULL);
 		return (NULL);
-	evar.newvalue_toset = (char *)malloc(sizeof(char) * (evar.size_evar + 1));
+	}
+	evar.newvalue_toset = malloc(sizeof(char) * (evar.size_evar + 1));
 	if (!evar.newvalue_toset)
 	{
+		perror_context("malloc", NULL);
 		free(evar.newvalue_copy);
 		return (NULL);
 	}

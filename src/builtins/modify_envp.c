@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 19:26:41 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 17:50:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int	remove_plus_in_envvar(t_list *newvar)
 	if (!res)
 	{
 		perror_context("malloc", NULL);
+		free(newvar->content);
 		free(newvar);
 		return (1);
 	}

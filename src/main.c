@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/18 20:33:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:36:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int	mainloop(t_shell *shell)
 		handle_signals();
 		command = readline("Super prompt > ");
 		if (!command)
-		{
-			printf("unlucky\n");
 			break ;
-		}
 		if (!ft_strncmp(command, "\n", 1))
 		{
 			free(command);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/13 15:07:12 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:31:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	copy_exitsig_value(t_evar *evar)
 	sigvalue = ft_itoa(g_current_sig);
 	if (!sigvalue)
 	{
-		set_err_status(evar, MALLOC);
+		malloc_error_dol(evar);
 		return (1);
 	}
 	ft_memcpy(evar->newvalue_toset + evar->id_toset,

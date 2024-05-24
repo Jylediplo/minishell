@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 15:20:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:53:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
 		temp = parse_echo(envp, lexer[*index]->content);
 		if (!temp)
 		{
-			free_current_lexer(lexer, *index);
+			free_lexer(lexer);
 			return (1);
 		}
 		free(lexer[*index]->content);
@@ -71,7 +71,7 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 			temp = parse_echo(envp, lexer[i]->content);
 			if (!temp)
 			{
-				free_current_lexer(lexer, i);
+				free_lexer(lexer);
 				return (NULL);
 			}
 			replace_parsed_content(lexer, &i, temp, envp);
