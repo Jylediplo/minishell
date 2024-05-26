@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:48:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:31:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 int		copy_all_cmds(t_list *head);
 
 //execute_dispatcher.c
-int		is_same_str(char *s1, char *s2);
 int		call_builtin(t_cmd *cmd, t_shell *shell,
 			t_list *cmdlist, t_lexer **lexer);
 int		no_command(t_cmd *cmd);
@@ -94,6 +93,10 @@ int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
 //execute_dispatcher_utils.c
 int		dispatch_builtin(t_cmd *cmd, t_shell *shell);
+int		is_same_str(char *s1, char *s2);
+int		reset_standard_in_out(int in, int out);
+int		save_standard_in_out(int *in, int *out);
+int		fork_failure(int pipe_fds[2], int previous_pipe);
 
 //execute_onecommand.c
 int		execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer);

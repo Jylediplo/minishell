@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 11:32:18 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:45:43 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell)
 
 int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 {
-	int		i;
-	int		len;
-	char	value;
+	int				i;
+	int				len;
 
 	i = 0;
 	len = count_args_exit(cmd);
@@ -73,7 +72,6 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 	}
 	if (cmd->command[1][0] == '-')
 		i++;
-	value = (unsigned char)ft_atoi(cmd->command[1]);
 	while (cmd->command[1][i])
 	{
 		if (!ft_isdigit(cmd->command[1][i++]))
@@ -81,7 +79,7 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 	}
 	if (len > 2)
 		return (exit_too_many_args());
-	g_current_sig = value;
+	g_current_sig = (unsigned char)ft_atoi(cmd->command[1]);
 	printf("exit\n");
 	free_all_exit(lexer, cmdlist, shell);
 	return (0);

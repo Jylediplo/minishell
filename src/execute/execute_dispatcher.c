@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 12:10:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:32:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,15 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-int	is_same_str(char *s1, char *s2)
-{
-	if (ft_strlen(s1) != ft_strlen(s2))
-		return (0);
-	if (!ft_strncmp(s1, s2, ft_strlen(s1)))
-		return (1);
-	return (0);
-}
-
 int	no_command(t_cmd *cmd)
 {
 	int		saved_in;
 	int		saved_out;
 
-	saved_in = dup(STDIN_FILENO);
-	saved_out = dup(STDOUT_FILENO);
-	if (dup_redirections(cmd))
-	{
-		close(saved_in);
-		close(saved_out);
-	}
-	dup2(saved_in, STDIN_FILENO);
-	dup2(saved_out, STDOUT_FILENO);
-	close(saved_in);
-	close(saved_out);
+	if (save_standard_in_out(&saved_in, &saved_out))
+		return (1);
+	dup_redirections(cmd);
+	reset_standard_in_out(saved_in, saved_out);
 	return (0);
 }
 
@@ -47,8 +31,8 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	int		saved_out;
 	int		saved_in;
 
-	saved_in = dup(STDIN_FILENO);
-	saved_out = dup(STDOUT_FILENO);
+	if (save_standard_in_out(&saved_in, &saved_out))
+		return (1);
 	if (dup_redirections(cmd))
 	{
 		close(saved_in);
@@ -57,24 +41,20 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 	}
 	if (is_same_str(cmd->command[0], "exit"))
 	{
-		close(saved_in);
-		close(saved_out);
+		reset_standard_in_out(saved_in, saved_out);
 		exit_petitcoq(cmd, cmdlist, lexer, shell);
 	}
 	else
 		dispatch_builtin(cmd, shell);
-	dup2(saved_in, STDIN_FILENO);
-	dup2(saved_out, STDOUT_FILENO);
-	close(saved_in);
-	close(saved_out);
+	reset_standard_in_out(saved_in, saved_out);
 	return (0);
 }
 
 static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 							t_list *cmdlist, t_lexer **lexer)
 {
-	pid_t		pid;
-	int			pipe_fds[2];
+	pid_t	pid;
+	int		pipe_fds[2];
 
 	if (pipe(pipe_fds) == -1)
 	{
@@ -95,18 +75,7 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 		executor(cmd, shell, cmdlist, lexer);
 	}
 	else if (pid == -1)
-	{
-		close(pipe_fds[0]);
-		close(pipe_fds[1]);
-		perror_context("fork", NULL);
-		if (shell->previous_pipe != -2)
-		{
-			while (wait(NULL) != -1)
-				;
-			close(shell->previous_pipe);
-		}
-		return (0);
-	}
+		return (fork_failure(pipe_fds, shell->previous_pipe));
 	transfer_pipes(cmd, shell, cmdlist, pipe_fds);
 	return (1);
 }
