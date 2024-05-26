@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:52:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 12:10:51 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 	if (pipe(pipe_fds) == -1)
 	{
 		perror_context("pipe", NULL);
+		if (shell->previous_pipe != -2)
+		{
+			while (wait(NULL) != -1)
+				;
+			close(shell->previous_pipe);
+		}
 		return (0);
 	}
 	pid = fork();
@@ -93,6 +99,12 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 		close(pipe_fds[0]);
 		close(pipe_fds[1]);
 		perror_context("fork", NULL);
+		if (shell->previous_pipe != -2)
+		{
+			while (wait(NULL) != -1)
+				;
+			close(shell->previous_pipe);
+		}
 		return (0);
 	}
 	transfer_pipes(cmd, shell, cmdlist, pipe_fds);
@@ -108,6 +120,7 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	iter = cmdlist->next;
 	if (execute_one_command(cmdlist, shell, lexer))
 		return (1);
+	shell->previous_pipe = -2;
 	while (iter)
 	{
 		cmd = iter->content;

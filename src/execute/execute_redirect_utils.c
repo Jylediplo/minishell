@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:50:16 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 11:47:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	write_and_read_pipe(t_list *cmdlist, int nb_cmd,
 	{
 		if (dup2(shell->previous_pipe, 0) == -1)
 		{
+			close(shell->previous_pipe);
 			close(pipe_fds[0]);
 			close(pipe_fds[1]);
 			perror_context("dup2", NULL);
