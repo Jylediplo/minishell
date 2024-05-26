@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 13:31:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:59:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int		add_size_arg_node(t_lexer **lexer, int *lexer_pos,
 //execute_flags_utils.c
 void	zero_cmdargs(t_cmd *cmd);
 int		delete_current_command(t_cmd *cmd);
+int		flag_redirect_stream(t_lexer **lexer, int *lexer_pos);
+int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 
 //execute_heredocs.c
 int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp);
@@ -61,6 +63,7 @@ int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp);
 //execute_heredocs_utils.c
 int		expand_dollars_heredocs(int fd, char *input,
 			t_list *envp, int noexpand);
+void	custom_unlink(char *to_unlink);
 
 //execute_errors.c
 int		newcmd_malloc_err(t_cmd *cmd);
@@ -77,10 +80,6 @@ void	free_lexer(t_lexer **lexer);
 int		is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int		is_legal_heredoc(t_lexer **lexer, int *lexer_pos,
 			t_cmd *cmd, t_list *envp);
-
-//execute_utils.c
-int		flag_redirect_stream(t_lexer **lexer, int *lexer_pos);
-int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 
 //execute_transform_cmdlist.c
 int		copy_all_cmds(t_list *head);

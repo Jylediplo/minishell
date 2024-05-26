@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:39:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 19:01:36 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	newcmd_malloc_err(t_cmd *cmd)
 	free_single_cmd(cmd->cmd_args);
 	if (cmd->tempfile_name)
 	{
-		unlink(cmd->tempfile_name);
+		custom_unlink(cmd->tempfile_name);
 		free(cmd->tempfile_name);
 	}
 	free(cmd);

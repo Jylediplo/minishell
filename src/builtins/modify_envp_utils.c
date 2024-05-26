@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:58:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 19:21:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:25:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,19 @@ char	*strjoin_free(char *s1, const char *s2)
 
 static void	replace_content(t_list *current, t_list *to_del, char *newvalue)
 {
-	free(current->content);
-	current->content = ft_strdup(newvalue);
-	free(to_del->content);
-	free(to_del);
-	if (!current->content)
+	char	*temp;
+
+	temp = ft_strdup(newvalue);
+	if (!temp)
 	{
 		perror_context("malloc", NULL);
-		ft_lstdelone(current, free);
+		ft_lstdelone(to_del, free);
+		return ;
 	}
+	free(current->content);
+	current->content = temp;
+	free(to_del->content);
+	free(to_del);
 }
 
 void	modify_envvar(t_list *envp, t_list *newvar)

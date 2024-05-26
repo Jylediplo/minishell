@@ -6,13 +6,19 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 22:45:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:58:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
+
+void	custom_unlink(char *to_unlink)
+{
+	if (unlink(to_unlink) == -1)
+		perror_context("unlink", NULL);
+}
 
 static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 {

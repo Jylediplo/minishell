@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:52:53 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 12:13:20 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 19:00:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	free_cmdlist(t_list *cmds)
 		free_single_cmd(args);
 		free_outfiles(cmd);
 		if (cmd->tempfile_name)
-			unlink(cmd->tempfile_name);
+			custom_unlink(cmd->tempfile_name);
 		free(cmd->tempfile_name);
 		free(cmd);
 		free(iter);

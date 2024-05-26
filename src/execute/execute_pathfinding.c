@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 18:46:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:53:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,11 @@ int	is_a_dir(t_cmd *cmd)
 	struct stat	stats;
 
 	stats.st_mode = 0;
-	stat(cmd->command[0], &stats);
+	if (stat(cmd->command[0], &stats) == -1)
+	{
+		perror_context("stat", NULL);
+		return (0);
+	}
 	if (S_ISDIR(stats.st_mode))
 		return (1);
 	return (0);

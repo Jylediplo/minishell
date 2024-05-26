@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 00:32:39 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 12:35:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 14:21:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	redirect_output(t_cmd *cmd)
 		if (iter)
 			close(fd);
 	}
-	if (dup2(fd, 1) == -1)
+	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		close(fd);
 		perror_context("dup2", NULL);
@@ -51,7 +51,7 @@ static int	redirect_input(t_cmd *cmd)
 		perror_context("open", cmd->in);
 		return (1);
 	}
-	if (dup2(fd, 0) == -1)
+	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		close(fd);
 		perror_context("dup2", NULL);

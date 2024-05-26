@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 11:34:39 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:59:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*release_prev_tempfile(t_cmd *cmd, char random[11])
 	name = ft_strjoin(HDNAME, random);
 	if (cmd->tempfile_name)
 	{
-		unlink(cmd->tempfile_name);
+		custom_unlink(cmd->tempfile_name);
 		free(cmd->tempfile_name);
 		cmd->tempfile_name = NULL;
 	}

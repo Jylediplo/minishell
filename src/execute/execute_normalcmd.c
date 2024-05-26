@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 12:01:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 14:04:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,7 @@ static int	replace_with_executable(t_cmd *cmd, t_shell *shell)
 int	pimped_execve(t_cmd *cmd, t_shell *shell)
 {
 	if (dup_redirections(cmd))
-	{
-		g_current_sig = 1;
 		return (1);
-	}
 	if (increase_shlvl(shell))
 		return (1);
 	if (delist_envp(shell))

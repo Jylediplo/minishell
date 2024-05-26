@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 13:32:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 16:07:30 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 		return (1);
 	if (dup_redirections(cmd))
 	{
-		close(saved_in);
-		close(saved_out);
+		reset_standard_in_out(saved_in, saved_out);
 		return (1);
 	}
 	if (is_same_str(cmd->command[0], "exit"))

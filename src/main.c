@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/24 18:36:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:35:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,8 @@ int	mainloop(t_shell *shell)
 		command = readline("Super prompt > ");
 		if (!command)
 			break ;
-		if (!ft_strncmp(command, "\n", 1))
-		{
-			free(command);
-			continue ;
-		}
-		split_word(command, shell);
+		if (!is_same_str(command, "\0"))
+			split_word(command, shell);
 		free(command);
 	}
 	return (0);
