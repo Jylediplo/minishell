@@ -6,13 +6,14 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 18:09:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:45:39 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-char	*parse_quoted_sequence_echo(t_evar *evar, char quotetype, t_list *envp)
+static char	*parse_quoted_sequence_echo(t_evar *evar,
+											char quotetype, t_list *envp)
 {
 	if (!ft_strchr(evar->newvalue + 1, quotetype))
 		return (set_err_status(evar, UNCLOSED_QUOTE), NULL);
@@ -38,7 +39,7 @@ char	*parse_quoted_sequence_echo(t_evar *evar, char quotetype, t_list *envp)
 	return (evar->newvalue);
 }
 
-static void	get_echo_size(t_evar *evar, t_list *envp)
+void	get_echo_size(t_evar *evar, t_list *envp)
 {
 	while (*evar->newvalue)
 	{
@@ -65,8 +66,7 @@ char	*parse_echo(t_list *envp, char *to_echo)
 {
 	t_evar	evar;
 
-	init_evar(&evar, to_echo);
-	get_echo_size(&evar, envp);
+	init_evar(&evar, to_echo, envp);
 	if (evar.e_error != NONE)
 	{
 		evar_error_message(&evar, NULL);
@@ -87,8 +87,6 @@ char	*parse_echo(t_list *envp, char *to_echo)
 		return (NULL);
 	}
 	get_echo(&evar, envp);
-	if (evar.e_error == MALLOC)
-		perror_context("malloc", NULL);
 	free(evar.newvalue_copy);
 	return (evar.newvalue_toset);
 }

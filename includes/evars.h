@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/23 20:28:20 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:22:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	current_char(t_evar *evar);
 void	copy_char(t_evar *evar);
 
 //export_getsize.c
-void	init_evar(t_evar *evar, char *newvalue);
+void	init_evar(t_evar *evar, char *newvalue, t_list *envp);
 
 //export_utils.c
 void	increase_expanded_var_size(t_evar *evar);
@@ -125,6 +125,7 @@ char	*strjoin_free(char *s1, const char *s2);
 void	modify_envvar(t_list *envp, t_list *newvar);
 
 //echo_getsize.c
+void	get_echo_size(t_evar *evar, t_list *envp);
 char	*parse_echo(t_list *envp, char *to_echo);
 
 //echo_setnew.c

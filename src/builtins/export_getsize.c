@@ -6,13 +6,13 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:06:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:21:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	init_evar(t_evar *evar, char *newvalue)
+void	init_evar(t_evar *evar, char *newvalue, t_list *envp)
 {
 	evar->size_evar = 0;
 	evar->id_toset = 0;
@@ -22,6 +22,7 @@ void	init_evar(t_evar *evar, char *newvalue)
 	evar->newvalue_toset = NULL;
 	evar->e_error = NONE;
 	evar->set_next = NULL;
+	get_echo_size(evar, envp);
 }
 
 char	*parse_quoted_sequence(t_evar *evar, char quotetype, t_list *envp)

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 18:05:58 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:48:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,17 @@ typedef struct s_outfile
 
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
-t_lexer	**init_lex(t_list *envp, t_lexer **lexer);
-t_list	*init_cmdlist_size(void);
 int		get_cmdlist(t_lexer **lexer, t_shell *shell);
+
+//execute_init_structs.c
+t_lexer	**init_lex(t_list *envp, t_lexer **lexer);
+t_list	*init_cmdlist_size(t_lexer **lexer);
+
+//execute_init_structs_utils.c
+int		parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp);
+int		replace_parsed_content(t_lexer **lexer,
+			int *index, char *newval, t_list *envp);
+int		parse_dollar_sequence(t_lexer **lexer, int *index, t_list *envp);
 
 //execute_flags.c
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos,
