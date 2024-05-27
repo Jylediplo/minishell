@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 17:19:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:08:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/minishell.h"
 #include "../../includes/execute.h"
 
-int	change_pwd(t_shell *shell)
+int	change_pwd(t_shell *shell, int fd)
 {
 	char	*to_export;
 	char	current[4096];
@@ -22,16 +22,16 @@ int	change_pwd(t_shell *shell)
 
 	if (!getcwd(current, 4096))
 	{
-		perror_context("getcwd", NULL);
+		perror_context("getcwd", NULL, fd);
 		return (1);
 	}
 	to_export = ft_strjoin("PWD=", current);
 	if (!to_export)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return (1);
 	}
-	if (init_change_evar(shell, &evar, to_export))
+	if (init_change_evar(shell, &evar, to_export, fd))
 	{
 		free(to_export);
 		return (1);
@@ -40,7 +40,7 @@ int	change_pwd(t_shell *shell)
 	return (0);
 }
 
-int	change_oldpwd(t_shell *shell, char *old)
+int	change_oldpwd(t_shell *shell, char *old, int fd)
 {
 	char	*to_export;
 	t_evar	evar;
@@ -48,10 +48,10 @@ int	change_oldpwd(t_shell *shell, char *old)
 	to_export = ft_strjoin("OLDPWD=", old);
 	if (!to_export)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return (1);
 	}
-	if (init_change_evar(shell, &evar, to_export))
+	if (init_change_evar(shell, &evar, to_export, cmd->error_pipe[1]))
 	{
 		free(to_export);
 		return (1);
@@ -60,11 +60,11 @@ int	change_oldpwd(t_shell *shell, char *old)
 	return (0);
 }
 
-int	cd_error_message(char *message)
+int	cd_error_message(char *message, int fd)
 {
-	ft_putstr_fd("petitcoq: cd: ", 2);
-	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("petitcoq: cd: ", fd);
+	ft_putstr_fd(message, fd);
+	ft_putstr_fd("\n", fd);
 	g_current_sig = 1;
 	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:18:12 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 16:07:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:47:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	is_same_str(char *s1, char *s2)
 	return (0);
 }
 
-int	reset_standard_in_out(int in, int out)
+int	reset_standard_in_out(int in, int out, int fd)
 {
 	if (dup2(in, STDIN_FILENO) == -1)
 		perror_context("dup2", NULL);
@@ -51,19 +51,19 @@ int	reset_standard_in_out(int in, int out)
 	return (0);
 }
 
-int	save_standard_in_out(int *in, int *out)
+int	save_standard_in_out(int *in, int *out, int fd)
 {
 	*in = dup(STDIN_FILENO);
 	if (*in == -1)
 	{
-		perror_context("dup", NULL);
+		perror_context("dup", NULL, fd);
 		return (1);
 	}
 	*out = dup(STDOUT_FILENO);
 	if (*out == -1)
 	{
 		close(*in);
-		perror_context("dup", NULL);
+		perror_context("dup", NULL, fd);
 		return (1);
 	}
 	return (0);

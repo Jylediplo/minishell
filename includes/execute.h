@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:44:37 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:46:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_cmd
 	t_list	*cmd_args;
 	char	*in;
 	t_list	*out;
+	int		*error_pipe;
 	int		outtype;
 	int		nb;
 }	t_cmd;
@@ -69,7 +70,7 @@ int		gnl_line_handler(t_lexer *delimiter, char *line);
 //execute_errors.c
 int		newcmd_malloc_err(t_cmd *cmd);
 void	unexpected_token_exec_err(char *error_token);
-void	perror_context(char *failed_command, char *context);
+void	perror_context(char *failed_command, char *context, int fd);
 
 //execute_free_utils.c
 void	free_single_cmd(t_list *args);
@@ -94,8 +95,8 @@ int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 //execute_dispatcher_utils.c
 int		dispatch_builtin(t_cmd *cmd, t_shell *shell);
 int		is_same_str(char *s1, char *s2);
-int		reset_standard_in_out(int in, int out);
-int		save_standard_in_out(int *in, int *out);
+int		reset_standard_in_out(int in, int out, int fd);
+int		save_standard_in_out(int *in, int *out, int fd);
 int		fork_failure(int pipe_fds[2], int previous_pipe);
 
 //execute_onecommand.c
@@ -119,9 +120,8 @@ int		find_executable_path(t_cmd *cmd, t_shell *shell);
 //execute_redirect_utils.c
 int		transfer_pipes(t_cmd *cmd, t_shell *shell,
 			t_list *cmdlist, int pipe_fds[2]);
-int		write_and_read_pipe(t_list *cmdlist, int nb_cmd,
-			t_shell *shell, int pipefds[2]);
-int		open_outfile(t_outfile *outfile);
+int		write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd);
+int		open_outfile(t_outfile *outfile, int fd);
 
 //execute_redirect.c
 int		dup_redirections(t_cmd *cmd);

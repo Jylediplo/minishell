@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/19 12:30:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:59:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ int	get_next_operator(t_evar *evar, char *parsed_command)
 	return (0);
 }
 
-int	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
+int	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command, int fd)
 {
 	if (get_next_operator(evar, parsed_command))
 	{
-		evar_error_message(evar, parsed_command);
+		evar_error_message(evar, parsed_command, fd);
 		return (1);
 	}
 	else if (evar->s_change_evar.operator)
@@ -84,13 +84,13 @@ int	init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command)
 			evar->s_change_evar.append = 1;
 		if (valid_identifier(parsed_command, evar->s_change_evar.operator))
 		{
-			add_to_envp(shell, evar, parsed_command);
+			add_to_envp(shell, evar, parsed_command, fd);
 			return (0);
 		}
 		else
 		{
 			set_err_status(evar, INVALID_IDENTIFIER);
-			evar_error_message(evar, parsed_command);
+			evar_error_message(evar, parsed_command, fd);
 		}
 	}
 	return (1);

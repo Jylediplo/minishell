@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 16:25:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:45:37 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,43 +25,46 @@ int	transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2])
 	return (0);
 }
 
-int	write_and_read_pipe(t_list *cmdlist, int nb_cmd,
-							t_shell *shell, int pipe_fds[2])
+int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 {
+	cmd->error_pipe = shell->error_pipes[nb_cmd - 1];
+	close(cmd->error_pipe[0]);
 	if (nb_cmd > 1)
 	{
 		if (dup2(shell->previous_pipe, 0) == -1)
 		{
-			perror_context("dup2", NULL);
+			perror_context("dup2", NULL, cmd->error_pipe[1]);
+			close(cmd->error_pipe[1]);
 			close(shell->previous_pipe);
-			close(pipe_fds[0]);
-			close(pipe_fds[1]);
+			close(shell->pipe_fds[0]);
+			close(shell->pipe_fds[1]);
 			return (1);
 		}
 		close(shell->previous_pipe);
 	}
 	if (nb_cmd != ft_lstsize(cmdlist->next))
 	{
-		if (dup2(pipe_fds[1], 1) == -1)
+		if (dup2(shell->pipe_fds[1], 1) == -1)
 		{
-			perror_context("dup2", NULL);
-			close(pipe_fds[0]);
-			close(pipe_fds[1]);
+			perror_context("dup2", NULL, cmd->error_pipe[1]);
+			close(cmd->error_pipe[1]);
+			close(shell->pipe_fds[0]);
+			close(shell->pipe_fds[1]);
 			return (1);
 		}
 	}
-	close(pipe_fds[0]);
-	close(pipe_fds[1]);
+	close(shell->pipe_fds[0]);
+	close(shell->pipe_fds[1]);
 	return (0);
 }
 
-int	open_outfile(t_outfile *outfile)
+int	open_outfile(t_outfile *outfile, int fd)
 {
 	int	fd;
 
 	fd = open(outfile->name,
 			O_WRONLY | O_CREAT | outfile->outtype, 0644);
 	if (fd == -1)
-		perror_context("open", outfile->name);
+		perror_context("open", outfile->name, fd);
 	return (fd);
 }

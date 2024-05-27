@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:52:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:05:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,10 @@ int		handle_questionmarks_in_braces_copy(t_evar *evar);
 
 //export_identifier.c
 int		valid_identifier_char(char c);
-int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
+int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command, int fd);
 
 //handle_errors.c
-void	evar_error_message(t_evar *evar, char *context);
+void	evar_error_message(t_evar *evar, char *context, int fd);
 void	malloc_error_dol(t_evar *evar);
 void	set_err_status(t_evar *evar, int status);
 
@@ -116,12 +116,12 @@ void	free_value_exit(char *value);
 int		export_envar(t_cmd *cmd, t_shell *shell);
 
 //modify_envp.c
-void	add_to_envp(t_shell *shell, t_evar *evar, char *value);
+void	add_to_envp(t_shell *shell, t_evar *evar, char *value, int fd);
 char	*get_envvar_value(t_list **envp, char *envvar);
 
 //modify_envp_utils.c
-char	*strjoin_free(char *s1, const char *s2);
-void	modify_envvar(t_list *envp, t_list *newvar);
+char	*strjoin_free(char *s1, const char *s2, int fd);
+void	modify_envvar(t_list *envp, t_list *newvar, int fd);
 
 //echo_getsize.c
 void	get_echo_size(t_evar *evar, t_list *envp);
@@ -144,8 +144,8 @@ int		change_directory(t_cmd *cmd, t_shell *shell);
 
 //cd_utils.c
 int		change_pwd(t_shell *shell);
-int		change_oldpwd(t_shell *shell, char *old);
-int		cd_error_message(char *message);
+int		change_oldpwd(t_shell *shell, char *old, int fd);
+int		cd_error_message(char *message, int fd);
 
 //exit_main.c
 void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell);

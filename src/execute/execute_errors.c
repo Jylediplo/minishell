@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 19:01:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:31:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ void	unexpected_token_exec_err(char *error_token)
 	g_current_sig = 2;
 }
 
-void	perror_context(char *failed_command, char *context)
+void	perror_context(char *failed_command, char *context, int fd)
 {
-	ft_putstr_fd("petitcoq: ", 2);
-	ft_putstr_fd(failed_command, 2);
-	ft_putstr_fd(": ", 2);
+	ft_putstr_fd("petitcoq: ", fd);
+	ft_putstr_fd(failed_command, fd);
+	ft_putstr_fd(": ", fd);
 	if (is_same_str(failed_command, "malloc"))
-		ft_putstr_fd("failure", 2);
+		ft_putstr_fd("failure", fd);
 	else
-		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd(strerror(errno), fd);
 	if (context)
 	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(context, 2);
+		ft_putstr_fd(": ", fd);
+		ft_putstr_fd(context, fd);
 	}
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("\n", fd);
 	if (!is_same_str(failed_command, "execve"))
 		g_current_sig = 1;
 	else

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:23:37 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 18:12:00 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:03:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*get_envvar_value(t_list **envp, char *envvar)
 	return (NULL);
 }
 
-static int	remove_plus_in_envvar(t_list *newvar)
+static int	remove_plus_in_envvar(t_list *newvar, int fd)
 {
 	char	*value;
 	char	*res;
@@ -52,7 +52,7 @@ static int	remove_plus_in_envvar(t_list *newvar)
 	res = malloc(sizeof(char) * (ft_strlen(value)));
 	if (!res)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		free(newvar->content);
 		free(newvar);
 		return (1);
@@ -64,7 +64,7 @@ static int	remove_plus_in_envvar(t_list *newvar)
 	return (0);
 }
 
-static void	append_to_envvar(t_list *envp, t_list *newvar)
+static void	append_to_envvar(t_list *envp, t_list *newvar, int fd)
 {
 	t_list	*iter;
 	size_t	len;
@@ -82,18 +82,18 @@ static void	append_to_envvar(t_list *envp, t_list *newvar)
 			&& envp_value[len] == '=')
 		{
 			iter->content = strjoin_free(iter->content,
-					ft_strchr(newvar->content, '=') + 1);
+					ft_strchr(newvar->content, '=') + 1, fd);
 			ft_lstdelone(newvar, free);
 			return ;
 		}
 		iter = iter->next;
 	}
-	if (remove_plus_in_envvar(newvar))
+	if (remove_plus_in_envvar(newvar, fd))
 		return ;
 	ft_lstadd_back(&envp, newvar);
 }
 
-void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
+void	add_to_envp(t_shell *shell, t_evar *evar, char *value, int fd)
 {
 	char	*value_dup;
 	t_list	*newvar;
@@ -101,14 +101,14 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 	value_dup = ft_strdup(value);
 	if (!value_dup)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return ;
 	}
 	newvar = ft_lstnew(value_dup);
 	if (!newvar)
 	{
 		free(value_dup);
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return ;
 	}
 	if (!evar->s_change_evar.append)
@@ -116,8 +116,8 @@ void	add_to_envp(t_shell *shell, t_evar *evar, char *value)
 		if (!get_envvar_value(&shell->envp, (char *)newvar->content))
 			ft_lstadd_back(&shell->envp, newvar);
 		else
-			modify_envvar(shell->envp, newvar);
+			modify_envvar(shell->envp, newvar, fd);
 		return ;
 	}
-	append_to_envvar(shell->envp, newvar);
+	append_to_envvar(shell->envp, newvar, fd);
 }

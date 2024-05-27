@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 14:16:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:37:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ typedef struct s_shell
 	t_list	*envp;
 	char	**envp_char;
 	int		previous_pipe;
+	int		pipe_fds[2];
+	int		**error_pipes;
 }	t_shell;
 # endif
 

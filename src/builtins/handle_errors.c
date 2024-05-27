@@ -6,33 +6,33 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:02:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/22 19:13:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:57:46 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-void	evar_error_message(t_evar *evar, char *context)
+void	evar_error_message(t_evar *evar, char *context, int fd)
 {
 	if (evar->e_error == MALLOC)
 	{
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		ft_putstr_fd("petitcoq: malloc: failure\n", fd);
 		g_current_sig = 1;
 	}
 	else if (evar->e_error == BAD_SUBSTITUTION)
 	{
-		ft_putstr_fd("petitcoq: error: bad substitution\n", 2);
+		ft_putstr_fd("petitcoq: error: bad substitution\n", fd);
 		g_current_sig = 1;
 	}
 	else if (evar->e_error == UNCLOSED_QUOTE)
-		ft_putstr_fd("petitcoq: error: unclosed quote detected\n", 2);
+		ft_putstr_fd("petitcoq: error: unclosed quote detected\n", fd);
 	else if (evar->e_error == UNCLOSED_BRACE)
-		ft_putstr_fd("petitcoq: error: unclosed brace detected\n", 2);
+		ft_putstr_fd("petitcoq: error: unclosed brace detected\n", fd);
 	else if (evar->e_error == INVALID_IDENTIFIER)
 	{
-		ft_putstr_fd("petitcoq: error: not a valid identifier `", 2);
-		ft_putstr_fd(context, 2);
-		ft_putstr_fd("'\n", 2);
+		ft_putstr_fd("petitcoq: error: not a valid identifier `", fd);
+		ft_putstr_fd(context, fd);
+		ft_putstr_fd("'\n", fd);
 		g_current_sig = 1;
 	}
 }
