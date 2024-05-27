@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/26 18:35:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:27:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	mainloop(t_shell *shell)
 		handle_signals();
 		command = readline("Super prompt > ");
 		if (!command)
-			break ;
+			return (g_current_sig);
 		if (!is_same_str(command, "\0"))
 			split_word(command, shell);
 		free(command);
@@ -43,9 +43,11 @@ void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
+	int		retval;
 
 	init_shell(argc, argv, envp, &shell);
-	mainloop(&shell);
+	retval = mainloop(&shell);
 	free_envp(shell.envp);
-	return (0);
+	printf("exit\n");
+	return (retval);
 }

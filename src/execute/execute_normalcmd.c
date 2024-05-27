@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 14:04:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:00:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ static int	increase_shlvl(t_shell *shell)
 
 static int	replace_with_executable(t_cmd *cmd, t_shell *shell)
 {
-	if (!is_executable(cmd) && !is_a_dir(cmd))
+	int	status;
+
+	status = is_executable(cmd);
+	if (!status)
 	{
 		if (find_executable_path(cmd, shell))
 		{
@@ -73,10 +76,9 @@ static int	replace_with_executable(t_cmd *cmd, t_shell *shell)
 			return (1);
 		}
 	}
-	else if (is_a_dir(cmd))
+	else if (status == 2)
 	{
 		free_split(shell->envp_char);
-		is_a_dir_error(cmd);
 		return (1);
 	}
 	return (0);

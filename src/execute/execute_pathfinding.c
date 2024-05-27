@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 18:53:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:05:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-int	is_executable(t_cmd *cmd)
-{
-	if (!access(cmd->command[0], F_OK | X_OK))
-		return (1);
-	return (0);
-}
-
-int	is_a_dir(t_cmd *cmd)
+static int	is_a_dir(t_cmd *cmd)
 {
 	struct stat	stats;
 
@@ -33,6 +26,20 @@ int	is_a_dir(t_cmd *cmd)
 	}
 	if (S_ISDIR(stats.st_mode))
 		return (1);
+	return (0);
+}
+
+int	is_executable(t_cmd *cmd)
+{
+	if (!access(cmd->command[0], F_OK | X_OK))
+	{
+		if (is_a_dir(cmd))
+		{
+			is_a_dir_error(cmd);
+			return (2);
+		}
+		return (1);
+	}
 	return (0);
 }
 

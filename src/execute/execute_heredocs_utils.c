@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 18:58:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 19:03:37 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 	to_expand = malloc(sizeof(char *) * (*i - j + 1));
 	if (!to_expand)
 	{
-		ft_putstr_fd("petitcoq: malloc error\n", 2);
+		perror_context("malloc", NULL);
 		return (1);
 	}
 	while (valid_identifier_char(input[j]))

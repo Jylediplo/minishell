@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 18:59:15 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:04:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ int		export_newshlvl(t_shell *shell, char *shlvl_value);
 
 //execute_pathfinding.c
 int		is_executable(t_cmd *cmd);
-int		is_a_dir(t_cmd *cmd);
 void	free_split(char **tofree);
 int		find_executable_path(t_cmd *cmd, t_shell *shell);
 

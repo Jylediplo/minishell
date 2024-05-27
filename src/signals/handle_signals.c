@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/07 13:57:31 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 11:19:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handler(int sig, siginfo_t *siginfo, void *unused)
 {
 	(void)siginfo;
 	(void)unused;
-	g_current_sig = sig;
+	g_current_sig = 128 + sig;
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
