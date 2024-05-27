@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:04:58 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 13:49:28 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:11:10 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	check_quotes(char *command, t_list *envp)
 	}
 	return (0);
 }
+
 void	current_is_quote(t_quote *cmd, char *command)
 {
 	if (!cmd->quote_open)

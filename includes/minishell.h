@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:52:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:16:55 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,9 @@ extern unsigned char	g_current_sig;
 void	handle_signals(void);
 void	free_history_data(void *data);
 
-// env variables and export functions
+// copy and free envp
 t_list	*copy_env(char **envp);
 void	free_envp(t_list *envp);
-char	*set_new_evar(t_shell *shell, char *newvalue);
 
 // history
 typedef struct s_data_h
@@ -76,8 +75,8 @@ void	restore_history(t_history *history);
 void	handle_history_error(t_list **list);
 void	add_to_list(char *command, t_history *history);
 void	add_to_history(char *command, t_history *history);
+//
 //get_next_line
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
@@ -91,5 +90,22 @@ size_t	index_for_n(char *buffer);
 
 //parsing
 void	split_word(char *command, t_shell *shell);
+typedef struct s_cwds
+{
+	char	**sentence;
+	int		i;
+	int		j;
+	int		count;
+}			t_cwds;
+typedef struct s_store_delim
+{
+	int			db_quote_open;
+	int			s_quote_open;
+	int			i;
+	char		*delimiter;
+	t_delims	**delims;
+	int			cursor_tab;
+
+}				t_store_delim;
 
 #endif

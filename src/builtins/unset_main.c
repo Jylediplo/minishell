@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 18:48:29 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 14:09:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:13:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,40 @@ static int	is_valid_unset(char *to_remove)
 	return (1);
 }
 
+static int	remove_node_from_env(t_list **envp, t_list *previous,
+									t_list *iter, char *to_remove)
+{
+	char	*envp_value;
+	size_t	len;
+
+	len = ft_strlen(to_remove);
+	envp_value = iter->content;
+	if (!ft_strncmp(envp_value, to_remove, len)
+		&& envp_value[len] == '=')
+	{
+		if (!previous)
+			*envp = iter->next;
+		else
+			previous->next = iter->next;
+		ft_lstdelone(iter, free);
+		return (1);
+	}
+	return (0);
+}
+
 static int	remove_envvar(t_list **envp, char *to_remove)
 {
 	t_list	*iter;
 	t_list	*previous;
-	char	*envp_value;
-	size_t	len;
 
 	iter = *envp;
 	if (!to_remove || !to_remove[0])
 		return (0);
-	len = ft_strlen(to_remove);
+	previous = NULL;
 	while (iter)
 	{
-		envp_value = iter->content;
-		if (!ft_strncmp(envp_value, to_remove, len)
-			&& envp_value[len] == '=')
-		{
-			previous->next = iter->next;
-			ft_lstdelone(iter, free);
+		if (remove_node_from_env(envp, previous, iter, to_remove))
 			return (0);
-		}
 		previous = iter;
 		iter = iter->next;
 	}

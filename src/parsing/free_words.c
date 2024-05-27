@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:28:36 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 16:47:21 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 14:13:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	free_words(t_words *words)
 	}
 	free(words->words);
 }
+
 void	free_temp_word(char **word)
 {
 	int	i;
@@ -66,6 +67,7 @@ void	free_lexer1(t_words *words, int index)
 	free(words->lexer[i]);
 	free(words->lexer);
 }
+
 void	free_delim(t_delims **delim)
 {
 	int	i;

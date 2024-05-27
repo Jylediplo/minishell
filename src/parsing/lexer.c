@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:56:34 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 13:49:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:12:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	check_for_previous_builtins(t_words *words, int *previous_is_builtin,
 	if (!(*previous_is_builtin))
 	{
 		lexer[values->i]->content = manage_quotes(words->wds_delim[values->i],
-													&has_quotes);
+				&has_quotes);
 		if (has_quotes)
 			lexer[values->i]->quote_removed = 1;
 		if (!lexer[values->i]->content)
