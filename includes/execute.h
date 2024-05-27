@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:04:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:44:37 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp);
 
 //execute_heredocs_utils.c
+void	custom_unlink(char *to_unlink);
 int		expand_dollars_heredocs(int fd, char *input,
 			t_list *envp, int noexpand);
-void	custom_unlink(char *to_unlink);
+int		gnl_line_handler(t_lexer *delimiter, char *line);
 
 //execute_errors.c
 int		newcmd_malloc_err(t_cmd *cmd);

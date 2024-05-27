@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 11:19:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:32:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void	handler(int sig, siginfo_t *siginfo, void *unused)
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		g_current_sig = 0;
+		write(1, "\0", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -38,5 +46,7 @@ void	handle_signals(void)
 	if ((sigaction(SIGUSR2, &catch, 0)) == -1)
 		return ;
 	if ((sigaction(SIGINT, &catch, 0)) == -1)
+		return ;
+	if ((sigaction(SIGQUIT, &catch, 0)) == -1)
 		return ;
 }

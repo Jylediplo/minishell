@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 19:03:37 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:43:30 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,23 @@ void	custom_unlink(char *to_unlink)
 {
 	if (unlink(to_unlink) == -1)
 		perror_context("unlink", NULL);
+}
+
+int	gnl_line_handler(t_lexer *delimiter, char *line)
+{
+	if (!line)
+	{
+		printf("\npetitcoq: warning: here-document delimited ");
+		printf("by end-of-file (wanted `%s')\n", delimiter->content);
+		return (1);
+	}
+	if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
+		&& line[ft_strlen(delimiter->content)] == '\n')
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
 }
 
 static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)

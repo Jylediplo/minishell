@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/18 09:57:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:52:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,53 +28,54 @@
 # include <errno.h>
 // libft
 # include "../libft/libft.h"
-//errors
+//parsing 
+# include "lexing.h"
 # ifndef T_SHELL
 #  define T_SHELL
-typedef struct  s_shell
+
+typedef struct s_shell
 {
-    int     argc;
-    char    **argv;
-    t_list	*envp;
+	int		argc;
+	char	**argv;
+	t_list	*envp;
 	char	**envp_char;
 	int		previous_pipe;
-}   t_shell;
+}	t_shell;
 # endif
 
 /// functions prototype
 // signals
 extern unsigned char	g_current_sig;
-void		handle_signals(void);
-
-void		free_history_data(void *data);
+void	handle_signals(void);
+void	free_history_data(void *data);
 
 // env variables and export functions
-t_list  *copy_env(char **envp);
+t_list	*copy_env(char **envp);
 void	free_envp(t_list *envp);
 char	*set_new_evar(t_shell *shell, char *newvalue);
 
 // history
 typedef struct s_data_h
 {
-    int nb;
-    char    *line;
-}   t_data_h;
+	int		nb;
+	char	*line;
+}	t_data_h;
 
 typedef struct s_history
 {
-    int fd;
-    int size;
-    t_list  *list;
-    t_list  *node;
-    t_data_h   *data;
-}   t_history;
+	int			fd;
+	int			size;
+	t_list		*list;
+	t_list		*node;
+	t_data_h	*data;
+}	t_history;
 
 void	ft_lst_display(t_list *lst);
-void    free_history_data(void	*data);
-void    restore_history(t_history *history);
+void	free_history_data(void	*data);
+void	restore_history(t_history *history);
 void	handle_history_error(t_list **list);
-void    add_to_list(char *command, t_history *history);
-void    add_to_history(char *command, t_history *history);
+void	add_to_list(char *command, t_history *history);
+void	add_to_history(char *command, t_history *history);
 //get_next_line
 
 # ifndef BUFFER_SIZE
@@ -89,7 +90,6 @@ char	*helper(int fd, char *buffer, int bytes_read);
 size_t	index_for_n(char *buffer);
 
 //parsing
-#include "lexing.h"
 void	split_word(char *command, t_shell *shell);
 
 #endif
