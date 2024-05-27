@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 11:27:48 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 13:20:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 unsigned char	g_current_sig = 0;
 
-int	mainloop(t_shell *shell)
+static int	mainloop(t_shell *shell)
 {
 	char	*command;
 
@@ -33,7 +33,7 @@ int	mainloop(t_shell *shell)
 	return (0);
 }
 
-void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
+static void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 {
 	shell->argc = argc;
 	shell->argv = argv;

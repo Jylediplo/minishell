@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:04:58 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 14:34:54 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 13:49:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ void	init_cmd(t_quote *cmd, char *command)
 int	check_quotes(char *command, t_list *envp)
 {
 	char	*quotes;
+	int		has_quotes;
 
-	quotes = manage_quotes(command);
+	has_quotes = 0;
+	quotes = manage_quotes(command, &has_quotes);
 	if (!quotes)
 	{
 		free_envp(envp);
@@ -78,7 +80,7 @@ void	current_is_not_quote(t_quote *cmd, char *command)
 	}
 }
 
-char	*manage_quotes(char *command)
+char	*manage_quotes(char *command, int *has_quotes)
 {
 	t_quote	cmd;
 
@@ -86,7 +88,10 @@ char	*manage_quotes(char *command)
 	while (cmd.i < cmd.input_length)
 	{
 		if (command[cmd.i] == '"' || command[cmd.i] == '\'')
+		{
+			*has_quotes = 1;
 			current_is_quote(&cmd, command);
+		}
 		else
 			current_is_not_quote(&cmd, command);
 		cmd.i++;
