@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:04:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:19:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:59:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,29 @@ void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd)
 	}
 }
 
+void	free_close_partial_pipe_array(t_shell *shell, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		close_pipe(shell->error_pipes[j]);
+		free(shell->error_pipes[j++]);
+	}
+	free(shell->error_pipes);
+	shell->error_pipes = NULL;
+}
+
 int	create_error_pipes(t_list *cmdlist, t_shell *shell)
 {
 	t_list	*iter;
 	int		i;
+	int		j;
 
 	iter = cmdlist->next;
 	i = 0;
+	j = 2;
 	shell->error_pipes = malloc(sizeof(int *) * ft_lstsize(iter));
 	if (!shell->error_pipes)
 	{
@@ -50,13 +66,23 @@ int	create_error_pipes(t_list *cmdlist, t_shell *shell)
 	}
 	while (iter)
 	{
-		shell->error_pipes[i] = malloc(sizeof(int) * 2);
-		if (pipe(shell->error_pipes[i++]) == -1)
+		if (i != j)
+			shell->error_pipes[i] = malloc(sizeof(int) * 2);
+		else
+			shell->error_pipes[i] = NULL;
+		if (!shell->error_pipes[i])
 		{
-			free(shell->error_pipes);
+			free_close_partial_pipe_array(shell, i);
+			perror_context("malloc", NULL, 2);
+			return (1);
+		}
+		if (pipe(shell->error_pipes[i]) == -1)
+		{
+			free_close_partial_pipe_array(shell, i);
 			perror_context("pipe", NULL, 2);
 			return (1);
 		}
+		i++;
 		iter = iter->next;
 	}
 	return (0);

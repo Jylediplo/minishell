@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:04:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:44:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	pimped_execve(t_cmd *cmd, t_shell *shell)
 		return (1);
 	if (replace_with_executable(cmd, shell))
 		return (1);
-	//close(cmd->error_pipe[1]);
+	//close(cmd->error_pipe[1]); if we close, no execve error reported but no open fd...
 	if (execve(cmd->command[0], cmd->command, shell->envp_char) == -1)
 	{
 		perror_context("execve", cmd->command[0], cmd->error_pipe[1]);

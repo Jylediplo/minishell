@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 18:40:26 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 18:43:38 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:59:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	free_error_pipes(t_shell *shell, t_list *cmdlist)
 	int		i;
 
 	i = 0;
+	if (!shell->error_pipes)
+		return ;
 	iter = cmdlist->next;
 	while (iter)
 	{

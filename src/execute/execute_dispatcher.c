@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 18:58:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:40:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 		exit_petitcoq(cmd, cmdlist, lexer, shell);
 	}
 	else
+	{
 		dispatch_builtin(cmd, shell);
-	reset_standard_in_out(saved_in, saved_out, cmd->error_pipe[1]);
+		reset_standard_in_out(saved_in, saved_out, cmd->error_pipe[1]);
+	}
 	return (0);
 }
 
