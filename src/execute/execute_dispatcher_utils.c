@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:18:12 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 18:47:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:43:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int	dispatch_builtin(t_cmd *cmd, t_shell *shell)
 	else if (is_same_str(cmd->command[0], "cd"))
 		change_directory(cmd, shell);
 	else if (is_same_str(cmd->command[0], "pwd"))
-		get_pwd();
+		get_pwd(cmd->error_pipe[1]);
 	else if (is_same_str(cmd->command[0], "export"))
 		export_envar(cmd, shell);
 	else if (is_same_str(cmd->command[0], "unset"))
-		unset_envvar(cmd, shell);
+		unset_envvar(cmd, shell, cmd->error_pipe[1]);
 	else if (is_same_str(cmd->command[0], "env"))
 		show_me_the_way(shell->envp);
 	return (0);
@@ -43,9 +43,9 @@ int	is_same_str(char *s1, char *s2)
 int	reset_standard_in_out(int in, int out, int fd)
 {
 	if (dup2(in, STDIN_FILENO) == -1)
-		perror_context("dup2", NULL);
+		perror_context("dup2", NULL, fd);
 	if (dup2(out, STDOUT_FILENO) == -1)
-		perror_context("dup2", NULL);
+		perror_context("dup2", NULL, fd);
 	close(in);
 	close(out);
 	return (0);
@@ -73,7 +73,7 @@ int	fork_failure(int pipe_fds[2], int previous_pipe)
 {
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
-	perror_context("fork", NULL);
+	perror_context("fork", NULL, 2);
 	if (previous_pipe != -2)
 	{
 		while (wait(NULL) != -1)

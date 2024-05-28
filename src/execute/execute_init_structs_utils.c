@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 10:46:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:46:49 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:22:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
 	*index += 1;
 	while (lexer[*index] && lexer[*index]->e_flag != PIPE)
 	{
-		temp = parse_echo(envp, lexer[*index]->content);
+		temp = parse_echo(envp, lexer[*index]->content, 2);
 		if (!temp)
 		{
 			free_lexer(lexer);
@@ -57,7 +57,7 @@ int	parse_dollar_sequence(t_lexer **lexer, int *index, t_list *envp)
 {
 	char	*temp;
 
-	temp = parse_echo(envp, lexer[*index]->content);
+	temp = parse_echo(envp, lexer[*index]->content, 2);
 	if (!temp)
 	{
 		free_lexer(lexer);

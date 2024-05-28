@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 13:51:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:37:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	*release_prev_tempfile(t_cmd *cmd, char random[11])
 		cmd->tempfile_name = NULL;
 	}
 	if (!name)
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 	return (name);
 }
 
@@ -58,14 +58,14 @@ static char	*name_tempfile(t_cmd *cmd)
 	random_fd = open("/dev/urandom", O_RDONLY);
 	if (random_fd == -1)
 	{
-		perror_context("open", "/dev/urandom");
+		perror_context("open", "/dev/urandom", 2);
 		return (NULL);
 	}
 	count = read(random_fd, random, 11);
 	close(random_fd);
 	if (count == -1)
 	{
-		perror_context("read", "/dev/urandom");
+		perror_context("read", "/dev/urandom", 2);
 		return (NULL);
 	}
 	name = release_prev_tempfile(cmd, random);
@@ -81,7 +81,7 @@ static int	open_temp(char *filename, t_cmd *cmd)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror_context("open", filename);
+		perror_context("open", filename, 2);
 		free(filename);
 		cmd->tempfile_name = NULL;
 	}

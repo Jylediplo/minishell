@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 17:08:28 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:39:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	**free_previous_args(char **tofree, int i)
 	while (j < i)
 		free(tofree[j++]);
 	free(tofree);
-	perror_context("malloc", NULL);
+	perror_context("malloc", NULL, 2);
 	return (NULL);
 }
 
@@ -68,7 +68,7 @@ static char	**init_cmd_array(t_cmd *cmd)
 	res = malloc(sizeof(char *) * (count_nonempty_args(args) + 1));
 	if (!res)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (NULL);
 	}
 	while (args)

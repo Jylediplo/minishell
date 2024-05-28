@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 19:05:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:34:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void	set_err_status(t_evar *evar, int status);
 void	free_envp(t_list *envp);
 void	free_envp_exit(t_list *head);
 void	free_envp_value_exit(t_list *head, char *value);
-void	free_value_exit(char *value);
 
 //export_main.c
 int		export_envar(t_cmd *cmd, t_shell *shell);
@@ -125,16 +124,16 @@ void	modify_envvar(t_list *envp, t_list *newvar, int fd);
 
 //echo_getsize.c
 void	get_echo_size(t_evar *evar, t_list *envp);
-char	*parse_echo(t_list *envp, char *to_echo);
+char	*parse_echo(t_list *envp, char *to_echo, int fd);
 
 //echo_setnew.c
-void	get_echo(t_evar *evar, t_list *envp);
+void	get_echo(t_evar *evar, t_list *envp, int fd);
 
 //echo_main.c
 int		efftee_echo(char **cmd);
 
 //unset_main.c
-int		unset_envvar(t_cmd *cmd, t_shell *shell);
+int		unset_envvar(t_cmd *cmd, t_shell *shell, int fd);
 
 //env_main.c
 int		show_me_the_way(t_list *envp);
@@ -143,7 +142,7 @@ int		show_me_the_way(t_list *envp);
 int		change_directory(t_cmd *cmd, t_shell *shell);
 
 //cd_utils.c
-int		change_pwd(t_shell *shell);
+int		change_pwd(t_shell *shell, int fd);
 int		change_oldpwd(t_shell *shell, char *old, int fd);
 int		cd_error_message(char *message, int fd);
 
@@ -153,6 +152,6 @@ int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
 			t_lexer **lexer, t_shell *shell);
 
 //pwd_main.c
-void	get_pwd(void);
+void	get_pwd(int fd);
 
 #endif

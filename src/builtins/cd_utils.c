@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 19:08:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:34:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	change_oldpwd(t_shell *shell, char *old, int fd)
 		perror_context("malloc", NULL, fd);
 		return (1);
 	}
-	if (init_change_evar(shell, &evar, to_export, cmd->error_pipe[1]))
+	if (init_change_evar(shell, &evar, to_export, fd))
 	{
 		free(to_export);
 		return (1);

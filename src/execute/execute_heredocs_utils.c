@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:43:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:38:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	custom_unlink(char *to_unlink)
 {
 	if (unlink(to_unlink) == -1)
-		perror_context("unlink", NULL);
+		perror_context("unlink", NULL, 2);
 }
 
 int	gnl_line_handler(t_lexer *delimiter, char *line)
@@ -52,7 +52,7 @@ static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 	to_expand = malloc(sizeof(char *) * (*i - j + 1));
 	if (!to_expand)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (1);
 	}
 	while (valid_identifier_char(input[j]))

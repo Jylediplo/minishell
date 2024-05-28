@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_main.c                                         :+:      :+:    :+:   */
+/*   execute_error_pipes_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 20:55:25 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:34:39 by pantoine         ###   ########.fr       */
+/*   Created: 2024/05/28 18:40:26 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/28 18:43:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-void	get_pwd(int fd)
+void	free_error_pipes(t_shell *shell, t_list *cmdlist)
 {
-	char	path[4096];
+	t_list	*iter;
+	int		i;
 
-	if (!getcwd(path, 4096))
+	i = 0;
+	iter = cmdlist->next;
+	while (iter)
 	{
-		perror_context("getcwd", NULL, fd);
-		g_current_sig = 1;
+		free(shell->error_pipes[i++]);
+		iter = iter->next;
 	}
-	else
-		printf("%s\n", path);
+	free(shell->error_pipes);
 }

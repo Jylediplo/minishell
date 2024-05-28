@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 18:39:50 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:38:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static int	add_outfile_node(t_cmd *cmd, t_lexer **lexer,
 	outfile = malloc(sizeof(t_outfile));
 	if (!outfile)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (1);
 	}
 	new_outfile = ft_lstnew(outfile);
 	if (!new_outfile)
 	{
 		free(outfile);
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (1);
 	}
 	outfile = new_outfile->content;

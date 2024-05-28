@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 18:45:37 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:41:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 	return (0);
 }
 
-int	open_outfile(t_outfile *outfile, int fd)
+int	open_outfile(t_outfile *outfile, int fd_err)
 {
 	int	fd;
 
 	fd = open(outfile->name,
 			O_WRONLY | O_CREAT | outfile->outtype, 0644);
 	if (fd == -1)
-		perror_context("open", outfile->name, fd);
+		perror_context("open", outfile->name, fd_err);
 	return (fd);
 }

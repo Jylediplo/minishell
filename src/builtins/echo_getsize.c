@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:03:48 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:45:39 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:40:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,31 @@ void	get_echo_size(t_evar *evar, t_list *envp)
 	}
 }
 
-char	*parse_echo(t_list *envp, char *to_echo)
+char	*parse_echo(t_list *envp, char *to_echo, int fd)
 {
 	t_evar	evar;
 
 	init_evar(&evar, to_echo, envp);
 	if (evar.e_error != NONE)
 	{
-		evar_error_message(&evar, NULL);
+		evar_error_message(&evar, NULL, fd);
 		return (NULL);
 	}
 	evar.e_error = NONE;
 	evar.newvalue_copy = ft_strdup(to_echo);
 	if (!evar.newvalue_copy)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return (NULL);
 	}
 	evar.newvalue_toset = malloc(sizeof(char) * (evar.size_evar + 1));
 	if (!evar.newvalue_toset)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		free(evar.newvalue_copy);
 		return (NULL);
 	}
-	get_echo(&evar, envp);
+	get_echo(&evar, envp, fd);
 	free(evar.newvalue_copy);
 	return (evar.newvalue_toset);
 }

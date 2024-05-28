@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:30:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:50:42 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content)
 	new_arg = ft_lstnew(newarg_content);
 	if (!new_arg)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (1);
 	}
 	ft_lstadd_back(&cmd->cmd_args, new_arg);
@@ -84,6 +84,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	if (copy_all_cmds(head->next))
 		return (free_lex_cmdlist(lexer, head));
 	dispatch_commands(head, shell, lexer);
+	free_error_pipes(shell, head);
 	free_lexer(lexer);
 	free_command_arrays(head);
 	free_cmdlist(head);

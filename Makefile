@@ -45,6 +45,8 @@ SRCS 				= main.c \
 					execute/execute_normalcmd.c \
 					execute/execute_normalcmd_utils.c \
 					execute/execute_pathfinding.c \
+					execute/execute_error_pipes.c \
+					execute/execute_error_pipes_utils.c \
 					history/manage_history.c \
 					history/manage_list.c \
 					gnl/get_next_line.c \

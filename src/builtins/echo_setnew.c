@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:04:06 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:19:20 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:24:30 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	copy_quoted_sequence_echo(t_evar *evar,
 		evar->id_copy++;
 }
 
-void	get_echo(t_evar *evar, t_list *envp)
+void	get_echo(t_evar *evar, t_list *envp, int fd)
 {
 	find_next_quotes(evar, evar->newvalue_copy, evar->id_copy);
 	while (current_char(evar))
@@ -55,7 +55,7 @@ void	get_echo(t_evar *evar, t_list *envp)
 		}
 		if (evar->e_error == MALLOC)
 		{
-			perror_context("malloc", NULL);
+			perror_context("malloc", NULL, fd);
 			return ;
 		}
 		find_next_quotes(evar, evar->newvalue_copy, evar->id_copy);

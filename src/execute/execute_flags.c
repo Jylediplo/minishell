@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 18:37:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:36:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
 		cmd->cmd_args = ft_lstnew(lexer[*lexer_pos]->content);
 		if (!cmd->cmd_args)
 		{
-			perror_context("malloc", NULL);
+			perror_context("malloc", NULL, 2);
 			free(cmd);
 			return (1);
 		}
@@ -79,7 +79,7 @@ static t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		return (NULL);
 	}
 	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd, envp))

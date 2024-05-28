@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 18:46:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:45:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ int		pimped_execve(t_cmd *cmd, t_shell *shell);
 //execute_normalcmd_utils.c
 int		is_a_dir_error(t_cmd *cmd);
 void	free_partial_envp_char(t_shell *shell, int i);
-int		reset_shlvl(t_shell *shell);
-int		export_newshlvl(t_shell *shell, char *shlvl_value);
+int		reset_shlvl(t_shell *shell, int fd);
+int		export_newshlvl(t_shell *shell, char *shlvl_value, int fd);
 
 //execute_pathfinding.c
 int		is_executable(t_cmd *cmd);
@@ -125,4 +125,14 @@ int		open_outfile(t_outfile *outfile, int fd);
 
 //execute_redirect.c
 int		dup_redirections(t_cmd *cmd);
+
+//execute_error_pipes.c
+void	close_pipe(int pipe[2]);
+void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd);
+int		create_error_pipes(t_list *cmdlist, t_shell *shell);
+int		read_error_messages(t_shell *shell, t_list *cmdlist);
+void	close_write_error_pipes(t_shell *shell, t_list *cmdlist);
+
+//execute_error_pipes_utils.c
+void	free_error_pipes(t_shell *shell, t_list *cmdlist);
 #endif

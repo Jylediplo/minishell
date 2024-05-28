@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:46:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:40:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
 
 	if (!begin_cmd->cmd_args)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(begin);
 		free(begin_cmd);
 		return (NULL);
@@ -51,7 +51,7 @@ static t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
 	head = ft_lstnew(begin_cmd);
 	if (!head)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(begin);
 		free(begin_cmd->cmd_args);
 		free(begin_cmd);
@@ -68,7 +68,7 @@ t_list	*init_cmdlist_size(t_lexer **lexer)
 	first_cmd = malloc(sizeof(t_cmd));
 	if (!first_cmd)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free_lexer(lexer);
 		return (NULL);
 	}
@@ -79,7 +79,7 @@ t_list	*init_cmdlist_size(t_lexer **lexer)
 	begin = ft_strdup("BEGIN");
 	if (!begin)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(first_cmd);
 		free_lexer(lexer);
 		return (NULL);

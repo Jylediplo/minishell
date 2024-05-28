@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/26 10:05:22 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:14:52 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 	id = fork();
 	if (!id)
 	{
+		close(cmd->error_pipe[0]);
 		pimped_execve(cmd, shell);
+		close(cmd->error_pipe[1]);
 		free_all_exit(lexer, cmdlist, shell);
 		return (1);
 	}
 	else if (id == -1)
 	{
-		perror_context("fork", NULL);
+		perror_context("fork", NULL, 2);
 		return (1);
 	}
 	wait_update_exitsig();
@@ -58,14 +60,18 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		return (0);
 	current = cmdlist->next;
 	cmd = current->content;
+	cmd->error_pipe = shell->error_pipes[cmd->nb - 1];
 	if (!cmd->command[0])
 	{
 		no_command(cmd);
+		close_pipe(cmd->error_pipe);
 		return (1);
 	}
 	else if (is_builtin(cmd->command[0]))
 		call_builtin(cmd, shell, cmdlist, lexer);
 	else
 		fork_one_command(cmd, shell, cmdlist, lexer);
+	close_write_error_pipes(shell, cmdlist);
+	read_error_messages(shell, cmdlist);
 	return (1);
 }

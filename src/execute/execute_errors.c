@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 18:31:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:38:31 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	newcmd_malloc_err(t_cmd *cmd)
 {
-	perror_context("malloc", NULL);
+	perror_context("malloc", NULL, 2);
 	free_single_cmd(cmd->cmd_args);
 	if (cmd->tempfile_name)
 	{

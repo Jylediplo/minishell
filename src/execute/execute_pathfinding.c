@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:10:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 11:05:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:52:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	is_a_dir(t_cmd *cmd)
 	stats.st_mode = 0;
 	if (stat(cmd->command[0], &stats) == -1)
 	{
-		perror_context("stat", NULL);
+		perror_context("stat", NULL, cmd->error_pipe[1]);
 		return (0);
 	}
 	if (S_ISDIR(stats.st_mode))
@@ -94,13 +94,13 @@ int	find_executable_path(t_cmd *cmd, t_shell *shell)
 	paths = ft_split(path_value, ':');
 	if (!paths)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, cmd->error_pipe[1]);
 		return (1);
 	}
 	if (search_and_match_path(paths, cmd))
 	{
 		free_split(paths);
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, cmd->error_pipe[1]);
 		return (1);
 	}
 	free_split(paths);

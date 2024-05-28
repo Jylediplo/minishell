@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:28:50 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/24 16:37:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:51:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	free_partial_envp_char(t_shell *shell, int i)
 	free(shell->envp_char);
 }
 
-int	reset_shlvl(t_shell *shell)
+int	reset_shlvl(t_shell *shell, int fd)
 {
 	char	*to_export;
 	t_evar	evar;
@@ -41,10 +41,10 @@ int	reset_shlvl(t_shell *shell)
 	to_export = ft_strdup("SHLVL=1");
 	if (!to_export)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return (1);
 	}
-	if (init_change_evar(shell, &evar, to_export))
+	if (init_change_evar(shell, &evar, to_export, fd))
 	{
 		free(to_export);
 		return (1);
@@ -53,7 +53,7 @@ int	reset_shlvl(t_shell *shell)
 	return (0);
 }
 
-int	export_newshlvl(t_shell *shell, char *shlvl_value)
+int	export_newshlvl(t_shell *shell, char *shlvl_value, int fd)
 {
 	char	*to_export;
 	t_evar	evar;
@@ -62,10 +62,10 @@ int	export_newshlvl(t_shell *shell, char *shlvl_value)
 	free(shlvl_value);
 	if (!to_export)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, fd);
 		return (1);
 	}
-	if (init_change_evar(shell, &evar, to_export))
+	if (init_change_evar(shell, &evar, to_export, fd))
 	{
 		free(to_export);
 		return (1);
