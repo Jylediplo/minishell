@@ -114,7 +114,9 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 		}
 	}
 	if (!copy_all_cmds(head->next))
-		;//print_commands(head->next);
+	{
+		//print_commands(head->next);
+	}
 	dispatch_commands(head, shell, lexer);
 	free_lexer(lexer);
 	free_command_arrays(head);
