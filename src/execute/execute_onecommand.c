@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 18:14:52 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:29:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@ static int	wait_update_exitsig(void)
 static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 								t_list *cmdlist, t_lexer **lexer)
 {
-	pid_t	id;
-
-	id = fork();
-	if (!id)
+	shell->children[cmd->nb - 1].childprocess_pid = fork();
+	if (!shell->children[cmd->nb - 1].childprocess_pid)
 	{
 		close(cmd->error_pipe[0]);
 		pimped_execve(cmd, shell);
@@ -42,7 +40,7 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 		free_all_exit(lexer, cmdlist, shell);
 		return (1);
 	}
-	else if (id == -1)
+	else if (shell->children[cmd->nb - 1].childprocess_pid == -1)
 	{
 		perror_context("fork", NULL, 2);
 		return (1);
@@ -60,7 +58,7 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		return (0);
 	current = cmdlist->next;
 	cmd = current->content;
-	cmd->error_pipe = shell->error_pipes[cmd->nb - 1];
+	cmd->error_pipe = shell->children[cmd->nb - 1].error_pipe;
 	if (!cmd->command[0])
 	{
 		no_command(cmd);
@@ -72,6 +70,6 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	else
 		fork_one_command(cmd, shell, cmdlist, lexer);
 	close_write_error_pipes(shell, cmdlist);
-	read_error_messages(shell, cmdlist);
+	//read_error_messages(shell, cmdlist);
 	return (1);
 }

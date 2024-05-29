@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 18:40:26 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:59:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:11:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,31 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-void	free_error_pipes(t_shell *shell, t_list *cmdlist)
+static void	free_close_partial_pipe_array(t_shell *shell, int i)
 {
-	t_list	*iter;
-	int		i;
+	int	j;
 
-	i = 0;
-	if (!shell->error_pipes)
-		return ;
-	iter = cmdlist->next;
-	while (iter)
+	j = 0;
+	while (j < i)
+		close_pipe(shell->children[j++].error_pipe);
+	free(shell->children);
+	shell->children = NULL;
+}
+
+int	open_error_pipes(t_shell *shell, int i)
+{
+	if (pipe(shell->children[i].error_pipe) == -1)
 	{
-		free(shell->error_pipes[i++]);
-		iter = iter->next;
+		free_close_partial_pipe_array(shell, i);
+		perror_context("pipe", NULL, 2);
+		return (1);
 	}
-	free(shell->error_pipes);
+	return (0);
+}
+
+void	free_error_pipes(t_shell *shell)
+{
+	if (!shell->children)
+		return ;
+	free(shell->children);
 }

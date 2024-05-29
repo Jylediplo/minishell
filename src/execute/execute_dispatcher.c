@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:40:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:35:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ int	call_builtin(t_cmd *cmd, t_shell *shell, t_list *cmdlist, t_lexer **lexer)
 static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 							t_list *cmdlist, t_lexer **lexer)
 {
-	pid_t	pid;
-
 	if (pipe(shell->pipe_fds) == -1)
 	{
 		perror_context("pipe", NULL, 2);
@@ -67,25 +65,56 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 		}
 		return (0);
 	}
-	pid = fork();
-	if (!pid)
+	shell->children[cmd->nb - 1].childprocess_pid = fork();
+	if (!shell->children[cmd->nb - 1].childprocess_pid)
 	{
 		close_unused_error_pipes(shell, cmdlist, cmd->nb);
 		if (write_and_read_pipe(cmdlist, cmd->nb, shell, cmd))
 			free_all_exit(lexer, cmdlist, shell);
 		executor(cmd, shell, cmdlist, lexer);
 	}
-	else if (pid == -1)
+	else if (shell->children[cmd->nb - 1].childprocess_pid == -1)
 		return (fork_failure(shell->pipe_fds, shell->previous_pipe));
 	transfer_pipes(cmd, shell, cmdlist, shell->pipe_fds);
 	return (1);
+}
+
+void	wait_for_children(t_shell *shell, t_list *cmdlist)
+{
+	int		status;
+	pid_t	pid;
+	int		remaining_children;
+	int		nb_cmd;
+	int		i;
+
+	i = 0;
+	nb_cmd = ft_lstsize(cmdlist->next);
+	remaining_children = nb_cmd;
+	while (remaining_children > 0)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == -1)
+			break ;
+		while (i < nb_cmd)
+		{
+			read_error_messages(shell, pid, i);
+			i++;
+		}
+		i = 0;
+		remaining_children--;
+	}
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
+		g_current_sig = 127;
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
+		g_current_sig = 126;
+	else if (WIFEXITED(status))
+		g_current_sig = WEXITSTATUS(status);
 }
 
 int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 {
 	t_list	*iter;
 	t_cmd	*cmd;
-	int		status;
 
 	iter = cmdlist->next;
 	if (create_error_pipes(cmdlist, shell))
@@ -101,14 +130,6 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		iter = iter->next;
 	}
 	close_write_error_pipes(shell, cmdlist);
-	read_error_messages(shell, cmdlist);
-	while (waitpid(-1, &status, 0) != -1)
-		continue ;
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
-		g_current_sig = 127;
-	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
-		g_current_sig = 126;
-	else if (WIFEXITED(status))
-		g_current_sig = WEXITSTATUS(status);
+	wait_for_children(shell, cmdlist);
 	return (1);
 }

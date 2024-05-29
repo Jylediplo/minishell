@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 18:45:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:30:09 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,11 @@ int		dup_redirections(t_cmd *cmd);
 void	close_pipe(int pipe[2]);
 void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd);
 int		create_error_pipes(t_list *cmdlist, t_shell *shell);
-int		read_error_messages(t_shell *shell, t_list *cmdlist);
+int		read_error_messages(t_shell *shell, pid_t pid, int i);
 void	close_write_error_pipes(t_shell *shell, t_list *cmdlist);
 
 //execute_error_pipes_utils.c
-void	free_error_pipes(t_shell *shell, t_list *cmdlist);
+int		open_error_pipes(t_shell *shell, int i);
+int		malloc_error_pipe(t_shell *shell, int i);
+void	free_error_pipes(t_shell *shell);
 #endif

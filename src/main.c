@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/28 18:49:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:04:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	init_shell(int argc, char **argv, char **envp, t_shell *shell)
 	shell->argc = argc;
 	shell->argv = argv;
 	shell->envp = copy_env(envp);
-	shell->error_pipes = NULL;
+	shell->children = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)

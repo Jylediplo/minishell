@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:04:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:59:31 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:28:39 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,83 +24,50 @@ void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd)
 {
 	int	i;
 	int	nb_pipes;
-	
+
 	i = 0;
 	nb_pipes = ft_lstsize(cmdlist->next);
 	while (i < nb_pipes)
 	{
 		if (i != nb_cmd - 1)
-			close_pipe(shell->error_pipes[i]);
+			close_pipe(shell->children[i].error_pipe);
 		i++;
 	}
-}
-
-void	free_close_partial_pipe_array(t_shell *shell, int i)
-{
-	int	j;
-
-	j = 0;
-	while (j < i)
-	{
-		close_pipe(shell->error_pipes[j]);
-		free(shell->error_pipes[j++]);
-	}
-	free(shell->error_pipes);
-	shell->error_pipes = NULL;
 }
 
 int	create_error_pipes(t_list *cmdlist, t_shell *shell)
 {
 	t_list	*iter;
 	int		i;
-	int		j;
 
 	iter = cmdlist->next;
 	i = 0;
-	j = 2;
-	shell->error_pipes = malloc(sizeof(int *) * ft_lstsize(iter));
-	if (!shell->error_pipes)
+	shell->children = malloc(sizeof(t_childprocess) * ft_lstsize(iter));
+	if (!shell->children)
 	{
 		perror_context("malloc", NULL, 2);
 		return (0);
 	}
 	while (iter)
 	{
-		if (i != j)
-			shell->error_pipes[i] = malloc(sizeof(int) * 2);
-		else
-			shell->error_pipes[i] = NULL;
-		if (!shell->error_pipes[i])
-		{
-			free_close_partial_pipe_array(shell, i);
-			perror_context("malloc", NULL, 2);
+		if (open_error_pipes(shell, i))
 			return (1);
-		}
-		if (pipe(shell->error_pipes[i]) == -1)
-		{
-			free_close_partial_pipe_array(shell, i);
-			perror_context("pipe", NULL, 2);
-			return (1);
-		}
+		shell->children[i].childprocess_pid = -2;
 		i++;
 		iter = iter->next;
 	}
 	return (0);
 }
 
-int	read_error_messages(t_shell *shell, t_list *cmdlist)
+int	read_error_messages(t_shell *shell, pid_t pid, int i)
 {
 	char	*err_msg;
-	int		i;
-	int		nb_pipes;
 
-	i = 0;
-	nb_pipes = ft_lstsize(cmdlist->next);
-	while (i < nb_pipes)
+	if (pid == shell->children[i].childprocess_pid)
 	{
 		while (1)
 		{
-			err_msg = get_next_line(shell->error_pipes[i][0]);
+			err_msg = get_next_line(shell->children[i].error_pipe[0]);
 			if (err_msg)
 			{
 				ft_putstr_fd(err_msg, 2);
@@ -108,11 +75,10 @@ int	read_error_messages(t_shell *shell, t_list *cmdlist)
 			}
 			else
 			{
-				close(shell->error_pipes[i][0]);
+				close(shell->children[i].error_pipe[0]);
 				break ;
 			}
 		}
-		i++;
 	}
 	return (0);
 }
@@ -123,5 +89,5 @@ void	close_write_error_pipes(t_shell *shell, t_list *cmdlist)
 
 	i = ft_lstsize(cmdlist->next) - 1;
 	while (i >= 0)
-		close(shell->error_pipes[i--][1]);
+		close(shell->children[i--].error_pipe[1]);
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 19:22:16 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:31:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ static int	exit_nonnumeric_arg(t_cmd *cmd, t_list *cmdlist,
 	ft_putstr_fd(cmd->command[1], cmd->error_pipe[1]);
 	ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
 	close(cmd->error_pipe[1]);
+	/*
 	if (ft_lstsize(cmdlist->next))
-		read_error_messages(shell, cmdlist);
+		read_error_messages(shell, cmdlist);*/
 	g_current_sig = 255;
 	free_all_exit(lexer, cmdlist, shell);
 	return (2);
@@ -49,7 +50,7 @@ static int	exit_too_many_args(int fd)
 
 void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell)
 {
-	free_error_pipes(shell, cmdlist);
+	free_error_pipes(shell);
 	free_lexer(lexer);
 	free_command_arrays(cmdlist);
 	free_cmdlist(cmdlist);

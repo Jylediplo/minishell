@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:41:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:05:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2])
 
 int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 {
-	cmd->error_pipe = shell->error_pipes[nb_cmd - 1];
+	cmd->error_pipe = shell->children[nb_cmd - 1].error_pipe;
 	close(cmd->error_pipe[0]);
 	if (nb_cmd > 1)
 	{
@@ -36,8 +36,7 @@ int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 			perror_context("dup2", NULL, cmd->error_pipe[1]);
 			close(cmd->error_pipe[1]);
 			close(shell->previous_pipe);
-			close(shell->pipe_fds[0]);
-			close(shell->pipe_fds[1]);
+			close_pipe(shell->pipe_fds);
 			return (1);
 		}
 		close(shell->previous_pipe);
@@ -48,13 +47,11 @@ int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 		{
 			perror_context("dup2", NULL, cmd->error_pipe[1]);
 			close(cmd->error_pipe[1]);
-			close(shell->pipe_fds[0]);
-			close(shell->pipe_fds[1]);
+			close_pipe(shell->pipe_fds);
 			return (1);
 		}
 	}
-	close(shell->pipe_fds[0]);
-	close(shell->pipe_fds[1]);
+	close_pipe(shell->pipe_fds);
 	return (0);
 }
 

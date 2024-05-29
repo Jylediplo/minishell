@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 16:37:41 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:04:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,24 @@
 # include "../libft/libft.h"
 //parsing 
 # include "lexing.h"
+
+typedef struct s_childprocess
+{
+	int		error_pipe[2];
+	pid_t	childprocess_pid;
+}	t_childprocess;
+
 # ifndef T_SHELL
 #  define T_SHELL
-
 typedef struct s_shell
 {
-	int		argc;
-	char	**argv;
-	t_list	*envp;
-	char	**envp_char;
-	int		previous_pipe;
-	int		pipe_fds[2];
-	int		**error_pipes;
+	int				argc;
+	char			**argv;
+	t_list			*envp;
+	char			**envp_char;
+	int				previous_pipe;
+	int				pipe_fds[2];
+	t_childprocess	*children;
 }	t_shell;
 # endif
 
