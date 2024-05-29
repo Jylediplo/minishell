@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:34:49 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:49:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,8 @@ int		change_oldpwd(t_shell *shell, char *old, int fd);
 int		cd_error_message(char *message, int fd);
 
 //exit_main.c
-void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell);
+void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell,
+			int is_child);
 int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
 			t_lexer **lexer, t_shell *shell);
 

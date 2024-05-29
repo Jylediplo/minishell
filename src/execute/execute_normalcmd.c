@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:57:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:38:58 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:49:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,5 @@ void	executor(t_cmd *cmd, t_shell *shell,
 	else
 		pimped_execve(cmd, shell);
 	close(cmd->error_pipe[1]);
-	free_all_exit(lexer, cmdlist, shell);
+	free_all_exit(lexer, cmdlist, shell, 1);
 }

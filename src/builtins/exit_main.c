@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 15:51:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:48:01 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	count_args_exit(t_cmd *cmd)
 static int	exit_nonnumeric_arg(t_cmd *cmd, t_list *cmdlist,
 						t_lexer **lexer, t_shell *shell)
 {
+	g_current_sig = 255;
 	if (ft_lstsize(cmdlist->next) == 1)
 	{
 		ft_putstr_fd("exit\n", cmd->error_pipe[1]);
@@ -35,6 +36,7 @@ static int	exit_nonnumeric_arg(t_cmd *cmd, t_list *cmdlist,
 		ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
 		close(cmd->error_pipe[1]);
 		read_error_messages(shell, shell->children[cmd->nb - 1].childprocess_pid, 0);
+		free_all_exit(lexer, cmdlist, shell, 0);
 	}
 	else
 	{
@@ -42,9 +44,8 @@ static int	exit_nonnumeric_arg(t_cmd *cmd, t_list *cmdlist,
 		ft_putstr_fd(cmd->command[1], cmd->error_pipe[1]);
 		ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
 		close(cmd->error_pipe[1]);
+		free_all_exit(lexer, cmdlist, shell, 1);
 	}
-	g_current_sig = 255;
-	free_all_exit(lexer, cmdlist, shell);
 	return (2);
 }
 
@@ -57,12 +58,12 @@ static int	exit_too_many_args(int fd, t_list *cmdlist)
 	return (1);
 }
 
-void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell)
+void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell, int is_child)
 {
-	free_error_pipes(shell);
+	free(shell->children);
 	free_lexer(lexer);
 	free_command_arrays(cmdlist);
-	free_cmdlist(cmdlist);
+	free_cmdlist(cmdlist, is_child);
 	free_envp(shell->envp);
 	exit(g_current_sig);
 }
@@ -82,8 +83,9 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 		{
 			printf("exit\n");
 			close(cmd->error_pipe[0]);
+			free_all_exit(lexer, cmdlist, shell, 0);
 		}
-		free_all_exit(lexer, cmdlist, shell);
+		free_all_exit(lexer, cmdlist, shell, 1);
 	}
 	if (cmd->command[1][0] == '-')
 		i++;
@@ -98,7 +100,11 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 	printf("exit\n");
 	close(cmd->error_pipe[1]);
 	if (ft_lstsize(cmdlist->next) == 1)
+	{
 		close(cmd->error_pipe[0]);
-	free_all_exit(lexer, cmdlist, shell);
+		free_all_exit(lexer, cmdlist, shell, 0);
+	}
+	else
+		free_all_exit(lexer, cmdlist, shell, 1);
 	return (0);
 }

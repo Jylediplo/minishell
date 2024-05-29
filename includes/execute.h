@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 14:07:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:41:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	perror_context(char *failed_command, char *context, int fd);
 //execute_free_utils.c
 void	free_single_cmd(t_list *args);
 void	free_command_arrays(t_list *head);
-void	free_cmdlist(t_list *cmds);
+void	free_cmdlist(t_list *cmds, int is_child);
 void	free_lexer(t_lexer **lexer);
 
 //execute_set_redirections.c
@@ -89,7 +89,6 @@ int		copy_all_cmds(t_list *head);
 //execute_dispatcher.c
 int		call_builtin(t_cmd *cmd, t_shell *shell,
 			t_list *cmdlist, t_lexer **lexer);
-void	wait_for_children(t_shell *shell, t_list *cmdlist);
 int		no_command(t_cmd *cmd);
 int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
@@ -127,15 +126,18 @@ int		open_outfile(t_outfile *outfile, int fd);
 //execute_redirect.c
 int		dup_redirections(t_cmd *cmd);
 
+//execute_wait_and_readerrors.c
+void	update_current_sig(int status);
+void	wait_for_children(t_shell *shell, t_list *cmdlist);
+int		read_error_messages(t_shell *shell, pid_t pid, int i);
+
 //execute_error_pipes.c
 void	close_pipe(int pipe[2]);
 void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd);
 int		create_error_pipes(t_list *cmdlist, t_shell *shell);
-int		read_error_messages(t_shell *shell, pid_t pid, int i);
 void	close_write_error_pipes(t_shell *shell, t_list *cmdlist);
 
 //execute_error_pipes_utils.c
 int		open_error_pipes(t_shell *shell, int i);
 int		malloc_error_pipe(t_shell *shell, int i);
-void	free_error_pipes(t_shell *shell);
 #endif

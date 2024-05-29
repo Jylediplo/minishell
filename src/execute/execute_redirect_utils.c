@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:47:49 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:05:16 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:27:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	transfer_pipes(t_cmd *cmd, t_shell *shell, t_list *cmdlist, int pipe_fds[2])
 int	write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd)
 {
 	cmd->error_pipe = shell->children[nb_cmd - 1].error_pipe;
-	close(cmd->error_pipe[0]);
 	if (nb_cmd > 1)
 	{
 		if (dup2(shell->previous_pipe, 0) == -1)

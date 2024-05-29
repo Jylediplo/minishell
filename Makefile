@@ -47,6 +47,7 @@ SRCS 				= main.c \
 					execute/execute_pathfinding.c \
 					execute/execute_error_pipes.c \
 					execute/execute_error_pipes_utils.c \
+					execute/execute_wait_and_readerrors.c \
 					history/manage_history.c \
 					history/manage_list.c \
 					gnl/get_next_line.c \
@@ -109,6 +110,6 @@ fclean: clean
 re: fclean all
 
 valgrind:       $(NAME)
-	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp env -i ./$(NAME)
+	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 .PHONY: all clean fclean re libft testexport

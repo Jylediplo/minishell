@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 15:12:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:41:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ static int	get_size_command(t_lexer **lexer, int *lexer_pos,
 		}
 		if (!lexer[*lexer_pos])
 			return (0);
-		if (lexer[*lexer_pos]->e_flag == PIPE)
-			break ;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:04:46 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 14:33:33 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:27:08 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	close_unused_error_pipes(t_shell *shell, t_list *cmdlist, int nb_cmd)
 	{
 		if (i != nb_cmd - 1)
 			close_pipe(shell->children[i].error_pipe);
+		else
+			close(shell->children[i].error_pipe[0]);
 		i++;
 	}
 }
@@ -55,30 +57,6 @@ int	create_error_pipes(t_list *cmdlist, t_shell *shell)
 		shell->children[i].childprocess_pid = -2;
 		i++;
 		iter = iter->next;
-	}
-	return (0);
-}
-
-int	read_error_messages(t_shell *shell, pid_t pid, int i)
-{
-	char	*err_msg;
-
-	if (pid == shell->children[i].childprocess_pid)
-	{
-		while (1)
-		{
-			err_msg = get_next_line(shell->children[i].error_pipe[0]);
-			if (err_msg)
-			{
-				ft_putstr_fd(err_msg, 2);
-				free(err_msg);
-			}
-			else
-			{
-				close(shell->children[i].error_pipe[0]);
-				break ;
-			}
-		}
 	}
 	return (0);
 }

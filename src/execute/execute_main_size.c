@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 15:15:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:44:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,19 @@ static int	filter_type_input(t_lexer **lexer, int *lexer_pos,
 	return (0);
 }
 
-int	free_lex_cmdlist(t_lexer **lexer, t_list *cmdlist)
+static int	free_lex_cmdlist(t_lexer **lexer, t_list *cmdlist)
 {
 	free_lexer(lexer);
-	free_cmdlist(cmdlist);
+	free_cmdlist(cmdlist, 0);
 	return (0);
+}
+
+static void	free_current_command(t_shell *shell, t_lexer **lexer, t_list *head)
+{
+	free(shell->children);
+	free_lexer(lexer);
+	free_command_arrays(head);
+	free_cmdlist(head, 0);
 }
 
 int	get_cmdlist(t_lexer **lexer, t_shell *shell)
@@ -73,7 +81,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	lexer = init_lex(shell->envp, lexer);
 	if (!lexer)
 	{
-		free_cmdlist(head);
+		free_cmdlist(head, 0);
 		return (1);
 	}
 	while (lexer[i])
@@ -84,9 +92,6 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	if (copy_all_cmds(head->next))
 		return (free_lex_cmdlist(lexer, head));
 	dispatch_commands(head, shell, lexer);
-	free_error_pipes(shell);
-	free_lexer(lexer);
-	free_command_arrays(head);
-	free_cmdlist(head);
+	free_current_command(shell, lexer, head);
 	return (0);
 }

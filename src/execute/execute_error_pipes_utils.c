@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 18:40:26 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:11:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:59:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,4 @@ int	open_error_pipes(t_shell *shell, int i)
 		return (1);
 	}
 	return (0);
-}
-
-void	free_error_pipes(t_shell *shell)
-{
-	if (!shell->children)
-		return ;
-	free(shell->children);
 }

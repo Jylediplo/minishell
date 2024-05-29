@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 14:53:28 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:49:06 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,7 @@ static int	wait_update_exitsig(void)
 	int		status;
 
 	waitpid(-1, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
-		g_current_sig = 127;
-	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
-		g_current_sig = 126;
-	else
-		g_current_sig = WEXITSTATUS(status);
+	update_current_sig(status);
 	return (0);
 }
 
@@ -37,7 +32,7 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 		close(cmd->error_pipe[0]);
 		pimped_execve(cmd, shell);
 		close(cmd->error_pipe[1]);
-		free_all_exit(lexer, cmdlist, shell);
+		free_all_exit(lexer, cmdlist, shell, 1);
 		return (1);
 	}
 	else if (shell->children[cmd->nb - 1].childprocess_pid == -1)
@@ -70,6 +65,7 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	else
 		fork_one_command(cmd, shell, cmdlist, lexer);
 	close_write_error_pipes(shell, cmdlist);
-	read_error_messages(shell, shell->children[cmd->nb - 1].childprocess_pid, 0);
+	read_error_messages(shell,
+		shell->children[cmd->nb - 1].childprocess_pid, 0);
 	return (1);
 }

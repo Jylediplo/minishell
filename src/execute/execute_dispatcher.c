@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 15:15:19 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:48:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,45 +70,13 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 	{
 		close_unused_error_pipes(shell, cmdlist, cmd->nb);
 		if (write_and_read_pipe(cmdlist, cmd->nb, shell, cmd))
-			free_all_exit(lexer, cmdlist, shell);
+			free_all_exit(lexer, cmdlist, shell, 1);
 		executor(cmd, shell, cmdlist, lexer);
 	}
 	else if (shell->children[cmd->nb - 1].childprocess_pid == -1)
 		return (fork_failure(shell->pipe_fds, shell->previous_pipe));
 	transfer_pipes(cmd, shell, cmdlist, shell->pipe_fds);
 	return (1);
-}
-
-void	wait_for_children(t_shell *shell, t_list *cmdlist)
-{
-	int		status;
-	pid_t	pid;
-	int		remaining_children;
-	int		nb_cmd;
-	int		i;
-
-	i = 0;
-	nb_cmd = ft_lstsize(cmdlist->next);
-	remaining_children = nb_cmd;
-	while (remaining_children > 0)
-	{
-		pid = waitpid(-1, &status, 0);
-		if (pid == -1)
-			break ;
-		while (i < nb_cmd)
-		{
-			read_error_messages(shell, pid, i);
-			i++;
-		}
-		i = 0;
-		remaining_children--;
-	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
-		g_current_sig = 127;
-	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
-		g_current_sig = 126;
-	else if (WIFEXITED(status))
-		g_current_sig = WEXITSTATUS(status);
 }
 
 int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
