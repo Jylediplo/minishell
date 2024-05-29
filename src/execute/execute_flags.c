@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:04:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:36:33 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:12:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static int	set_cmdargs_basevalues(t_lexer **lexer, int *lexer_pos,
 			free(cmd);
 			return (1);
 		}
+		*lexer_pos += 1;
 	}
 	return (0);
 }
@@ -84,11 +85,8 @@ static t_cmd	*init_cmdargs(t_lexer **lexer, int *lexer_pos, t_list *envp)
 	}
 	if (set_cmdargs_basevalues(lexer, lexer_pos, cmd, envp))
 		return (NULL);
-	if (!lexer[*lexer_pos]
-		|| (lexer[*lexer_pos]->e_flag != WORD
-			&& lexer[*lexer_pos]->e_flag != BUILTIN))
+	if (!lexer[*lexer_pos] || lexer[*lexer_pos]->e_flag == PIPE)
 		return (cmd);
-	*lexer_pos += 1;
 	if (get_size_command(lexer, lexer_pos, cmd, envp) == -1)
 	{
 		delete_current_command(cmd);

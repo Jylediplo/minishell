@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:29:49 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:53:28 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ int	execute_one_command(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 	else
 		fork_one_command(cmd, shell, cmdlist, lexer);
 	close_write_error_pipes(shell, cmdlist);
-	//read_error_messages(shell, cmdlist);
+	read_error_messages(shell, shell->children[cmd->nb - 1].childprocess_pid, 0);
 	return (1);
 }

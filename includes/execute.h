@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:30:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:07:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int		copy_all_cmds(t_list *head);
 //execute_dispatcher.c
 int		call_builtin(t_cmd *cmd, t_shell *shell,
 			t_list *cmdlist, t_lexer **lexer);
+void	wait_for_children(t_shell *shell, t_list *cmdlist);
 int		no_command(t_cmd *cmd);
 int		dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer);
 
