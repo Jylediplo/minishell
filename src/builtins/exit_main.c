@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:31:28 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:51:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,31 @@ static int	count_args_exit(t_cmd *cmd)
 static int	exit_nonnumeric_arg(t_cmd *cmd, t_list *cmdlist,
 						t_lexer **lexer, t_shell *shell)
 {
-	ft_putstr_fd("exit\n", cmd->error_pipe[1]);
-	ft_putstr_fd("petitcoq: exit: ", cmd->error_pipe[1]);
-	ft_putstr_fd(cmd->command[1], cmd->error_pipe[1]);
-	ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
-	close(cmd->error_pipe[1]);
-	/*
-	if (ft_lstsize(cmdlist->next))
-		read_error_messages(shell, cmdlist);*/
+	if (ft_lstsize(cmdlist->next) == 1)
+	{
+		ft_putstr_fd("exit\n", cmd->error_pipe[1]);
+		ft_putstr_fd("petitcoq: exit: ", cmd->error_pipe[1]);
+		ft_putstr_fd(cmd->command[1], cmd->error_pipe[1]);
+		ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
+		close(cmd->error_pipe[1]);
+		read_error_messages(shell, shell->children[cmd->nb - 1].childprocess_pid, 0);
+	}
+	else
+	{
+		ft_putstr_fd("petitcoq: exit: ", cmd->error_pipe[1]);
+		ft_putstr_fd(cmd->command[1], cmd->error_pipe[1]);
+		ft_putstr_fd(": numeric argument required\n", cmd->error_pipe[1]);
+		close(cmd->error_pipe[1]);
+	}
 	g_current_sig = 255;
 	free_all_exit(lexer, cmdlist, shell);
 	return (2);
 }
 
-static int	exit_too_many_args(int fd)
+static int	exit_too_many_args(int fd, t_list *cmdlist)
 {
-	ft_putstr_fd("exit\n", fd);
+	if (ft_lstsize(cmdlist->next) == 1)
+		ft_putstr_fd("exit\n", fd);
 	ft_putstr_fd("petitcoq: exit: too many arguments\n", fd);
 	g_current_sig = 1;
 	return (1);
@@ -84,7 +93,7 @@ int	exit_petitcoq(t_cmd *cmd, t_list *cmdlist, t_lexer **lexer, t_shell *shell)
 			exit_nonnumeric_arg(cmd, cmdlist, lexer, shell);
 	}
 	if (len > 2)
-		return (exit_too_many_args(cmd->error_pipe[1]));
+		return (exit_too_many_args(cmd->error_pipe[1], cmdlist));
 	g_current_sig = (unsigned char)ft_atoi(cmd->command[1]);
 	printf("exit\n");
 	close(cmd->error_pipe[1]);
