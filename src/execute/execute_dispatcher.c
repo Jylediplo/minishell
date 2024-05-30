@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execute_dispatcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
 /*   Updated: 2024/05/30 23:00:11 by pantoine         ###   ########.fr       */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   count_delim.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:02:55 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 17:33:56 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/31 00:35:49 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	init_del(t_del *del, int nb_delim)
 {
-	del->i = 0;
+	del->i = -1;
 	del->count = 0;
 	del->delimiter = "<>|";
 	del->nb_delim = nb_delim;
@@ -25,10 +25,12 @@ static void	init_del(t_del *del, int nb_delim)
 static void	manage_last_delim(t_del *del, char *word, t_delims **delims)
 {
 	del->count += 1;
-	if ((word[delims[del->i]->index - 1] != '\0') && (word[delims[del->i]->index
-				- 1] != delim(del->delimiter, word[delims[del->i]->index - 1])))
+	if ((word[delims[del->i]->index - 1] != '\0')
+		&& (word[delims[del->i]->index - 1]
+			!= delim(del->delimiter, word[delims[del->i]->index - 1])))
 		del->count += 1;
-	if ((word[delims[del->i]->index + ft_strlen(delims[del->i]->delim)] != '\0')
+	if ((word[delims[del->i]->index + ft_strlen(delims[del->i]->delim)]
+			!= '\0')
 		&& word[delims[del->i]->index
 			+ ft_strlen(delims[del->i]->delim)] != delim(del->delimiter,
 			word[delims[del->i]->index + 1]))
@@ -55,7 +57,7 @@ int	count_with_delim(t_delims **delims, int nb_delim, char *word)
 	t_del	del;
 
 	init_del(&del, nb_delim);
-	while (delims[del.i])
+	while (delims[++del.i])
 	{
 		if (del.i == 0 && del.i == nb_delim - 1 && delims[del.i]->index != 0)
 			manage_first_delim(&del, word, delims);
@@ -69,7 +71,6 @@ int	count_with_delim(t_delims **delims, int nb_delim, char *word)
 			manage_last_delim(&del, word, delims);
 		else
 			manage_inter_delim(&del, word, delims);
-		del.i++;
 	}
 	return (del.count);
 }
@@ -79,7 +80,7 @@ int	count_delim(char *word)
 	t_del	del;
 
 	init_del(&del, 0);
-	while (word[del.i])
+	while (word[++del.i])
 	{
 		if (word[del.i] == '"' || word[del.i] == '\'')
 		{
@@ -93,14 +94,9 @@ int	count_delim(char *word)
 		{
 			if (word[del.i + 1] == delim(del.delimiter, word[del.i])
 				&& word[del.i] != '|')
-			{
-				del.count++;
 				del.i++;
-			}
-			else
-				del.count++;
+			del.count++;
 		}
-		del.i++;
 	}
 	return (del.count);
 }

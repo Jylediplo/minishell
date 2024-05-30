@@ -11,15 +11,16 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "../../includes/execute.h"
 
 void	restore_history(t_history *history)
 {
 	char	*line;
 	char	*word;
 
-	history->fd = open(".history", O_RDONLY);
+	history->fd = open(".history", O_RDONLY | O_CREAT, 0644);
 	if (history->fd == -1)
-		perror("fd :");
+		return ((void)perror_context("open", ".history", 2));
 	line = "init";
 	while (line)
 	{

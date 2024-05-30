@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "../../includes/execute.h"
 
 void	free_history_data(void	*data)
 {
@@ -63,9 +64,9 @@ void	add_to_history(char *command, t_history *history)
 {
 	int	fd;
 
-	fd = open(".history", O_APPEND | O_WRONLY);
+	fd = open(".history", O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (fd == -1)
-		return ;
+		return ((void)perror_context("open", ".history", 2));
 	write(fd, command, ft_strlen(command));
 	write(fd, "\n", 1);
 	close(fd);

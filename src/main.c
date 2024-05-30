@@ -18,14 +18,17 @@ unsigned char	g_current_sig = 0;
 
 static int	mainloop(t_shell *shell)
 {
-	char	*command;
+	char		*command;
 
+	shell->history.list = NULL;
+	restore_history(&shell->history);
 	while (1)
 	{
 		handle_signals(shell);
 		command = readline("Super prompt > ");
 		if (!command)
 			return (g_current_sig);
+		add_to_history(command, &shell->history);
 		if (!is_same_str(command, "\0"))
 			split_word(command, shell);
 		free(command);
@@ -49,6 +52,7 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(argc, argv, envp, &shell);
 	retval = mainloop(&shell);
 	free_envp(shell.envp);
+	ft_lstclear(&shell.history.list, free_history_data);
 	printf("exit\n");
 	return (retval);
 }

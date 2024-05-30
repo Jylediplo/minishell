@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   check_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:10:28 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:07:45 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 00:39:58 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	check_for_previous_builtins(t_words *words, int *previous_is_builtin,
+		t_lexer **lexer, t_to_free *values)
+{
+	int	has_quotes;
+
+	has_quotes = 0;
+	if (!(*previous_is_builtin))
+	{
+		lexer[values->i]->content = manage_quotes(words->wds_delim[values->i],
+				&has_quotes);
+		if (has_quotes)
+			lexer[values->i]->quote_removed = 1;
+		if (!lexer[values->i]->content)
+		{
+			free_lexer1(words, values->i);
+			split_words_free(words, values->envp, values->command);
+		}
+	}
+	else
+	{
+		lexer[values->i]->content = ft_strdup(words->wds_delim[values->i]);
+		if (!lexer[values->i]->content)
+		{
+			free_lexer1(words, values->i);
+			split_words_free(words, values->envp, values->command);
+		}
+	}
+}
 
 static void	fill_builtins(char **builtins)
 {

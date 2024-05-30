@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   count_delim1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:20:24 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:08:40 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 00:23:12 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	delimiter(char *word)
 
 	db_quote_open = 0;
 	s_quote_open = 0;
-	i = 0;
+	i = -1;
 	delimiter = "><|";
-	while (word[i])
+	while (word[++i])
 	{
 		if (word[i] == '"' || word[i] == '\'')
 		{
@@ -70,6 +70,5 @@ void	delimiter(char *word)
 			if (word[i + 1] == delim(delimiter, word[i]) && word[i] != '|')
 				i++;
 		}
-		i++;
 	}
 }
