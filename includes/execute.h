@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:41:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:52:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ typedef struct s_outfile
 	int		outtype;
 }	t_outfile;
 
+//handle_signals.c
+void	handler(int sig, siginfo_t *siginfo, void *unused);
+void	handler_heredoc(int sig, siginfo_t *siginfo, void *unused);
+
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
 int		get_cmdlist(t_lexer **lexer, t_shell *shell);
@@ -50,7 +54,7 @@ int		parse_dollar_sequence(t_lexer **lexer, int *index, t_list *envp);
 
 //execute_flags.c
 int		add_size_arg_node(t_lexer **lexer, int *lexer_pos,
-			t_list **cmds, t_list *envp);
+			t_list **cmds, t_shell *shell);
 
 //execute_flags_utils.c
 void	zero_cmdargs(t_cmd *cmd);
@@ -58,8 +62,13 @@ int		delete_current_command(t_cmd *cmd);
 int		flag_redirect_stream(t_lexer **lexer, int *lexer_pos);
 int		flag_add_to_node(t_lexer **lexer, int *lexer_pos);
 
+//execute_modify_io.c
+int		reset_termsettings(struct termios *term_og);
+int		get_og_termsettings(struct termios *term_og);
+int		modify_termio(t_shell *shell);
+
 //execute_heredocs.c
-int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp);
+int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell);
 
 //execute_heredocs_utils.c
 void	custom_unlink(char *to_unlink);
@@ -81,7 +90,7 @@ void	free_lexer(t_lexer **lexer);
 //execute_set_redirections.c
 int		is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd);
 int		is_legal_heredoc(t_lexer **lexer, int *lexer_pos,
-			t_cmd *cmd, t_list *envp);
+			t_cmd *cmd, t_shell *shell);
 
 //execute_transform_cmdlist.c
 int		copy_all_cmds(t_list *head);

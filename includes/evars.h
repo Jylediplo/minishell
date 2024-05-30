@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:49:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:33:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,6 @@ typedef struct s_evar
 	char	*dol_expansion_value;
 	char	*set_next;
 }	t_evar;
-# ifndef T_SHELL
-#  define T_SHELL
-
-typedef struct s_shell
-{
-	int		argc;
-	char	**argv;
-	t_list	*envp;
-	int		previous_pipe;
-}	t_shell;
-# endif
 
 void	get_evar(t_evar *evar, t_list *envp);
 void	find_next_quotes(t_evar *evar, char *string, int index);

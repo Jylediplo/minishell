@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:44:03 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:39:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content)
 }
 
 static int	filter_type_input(t_lexer **lexer, int *lexer_pos,
-						t_list **cmds, t_list *envp)
+						t_list **cmds, t_shell *shell)
 {
 	t_cmd	*cmd;
 	t_list	*current_cmd;
@@ -39,7 +39,7 @@ static int	filter_type_input(t_lexer **lexer, int *lexer_pos,
 	cmd = current_cmd->content;
 	if (flag_add_to_node(lexer, lexer_pos))
 	{
-		if (add_size_arg_node(lexer, lexer_pos, cmds, envp))
+		if (add_size_arg_node(lexer, lexer_pos, cmds, shell))
 			return (1);
 	}
 	else if (lexer[*lexer_pos]->e_flag == HEREDOC
@@ -47,7 +47,7 @@ static int	filter_type_input(t_lexer **lexer, int *lexer_pos,
 	{
 		if (!cmd->command)
 		{
-			if (add_size_arg_node(lexer, lexer_pos, cmds, envp))
+			if (add_size_arg_node(lexer, lexer_pos, cmds, shell))
 				return (1);
 		}
 	}
@@ -86,7 +86,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	}
 	while (lexer[i])
 	{
-		if (filter_type_input(lexer, &i, &head, shell->envp) == 1)
+		if (filter_type_input(lexer, &i, &head, shell) == 1)
 			return (free_lex_cmdlist(lexer, head));
 	}
 	if (copy_all_cmds(head->next))

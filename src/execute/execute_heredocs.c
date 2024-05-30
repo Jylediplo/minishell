@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:37:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:33:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,12 @@ static int	open_temp(char *filename, t_cmd *cmd)
 	return (fd);
 }
 
-int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
+int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell)
 {
-	int		tmp_fd;
-	char	*line;
-	char	*tmp_filename;
+	int				tmp_fd;
+	char			*line;
+	char			*tmp_filename;
+	struct termios	term_og;
 
 	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
@@ -102,14 +103,41 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
 	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
+	if (get_og_termsettings(&term_og))
+		return (1);
+	if (modify_termio(shell))
+		return (1);
+	line = NULL;
 	while (1)
 	{
-		write(1, "> ", 2);
+		if (errno != EINTR || (errno == EINTR && line))
+			write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		if (gnl_line_handler(delimiter, line))
 			break ;
-		expand_dollars_heredocs(tmp_fd, line, envp, delimiter->quote_removed);
-		free(line);
+		else if (line)
+		{
+			expand_dollars_heredocs(tmp_fd, line, shell->envp, delimiter->quote_removed);
+			free(line);
+		}
+	}
+	//reset normal handler
+	shell->catcher.sa_sigaction = handler;
+	if ((sigaction(SIGINT, &shell->catcher, 0)) == -1)
+	{
+		close(tmp_fd);
+		return (1);
+	}
+	if ((sigaction(SIGQUIT, &shell->catcher, 0)) == -1)
+	{
+		close(tmp_fd);
+		return (1);
+	}
+	reset_termsettings(&term_og);
+	if (errno == EINTR && g_current_sig == 130)
+	{
+		close(tmp_fd);
+		return (1);
 	}
 	return (close(tmp_fd));
 }

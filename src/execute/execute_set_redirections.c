@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:38:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:47:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	return (0);
 }
 
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
+int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_shell *shell)
 {
 	*lexer_pos += 1;
 	if (lexer[*lexer_pos] && (lexer[*lexer_pos]->e_flag == WORD
 			|| lexer[*lexer_pos]->e_flag == BUILTIN))
 	{
-		if (create_heredoc(lexer[*lexer_pos], cmd, envp))
+		if (create_heredoc(lexer[*lexer_pos], cmd, shell))
 			return (0);
 		*lexer_pos += 1;
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 12:04:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 10:52:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 // signal
 # include <signal.h>
 // basic i/o
+# include <termios.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -41,20 +42,21 @@ typedef struct s_childprocess
 #  define T_SHELL
 typedef struct s_shell
 {
-	int				argc;
-	char			**argv;
-	t_list			*envp;
-	char			**envp_char;
-	int				previous_pipe;
-	int				pipe_fds[2];
-	t_childprocess	*children;
+	int					argc;
+	char				**argv;
+	t_list				*envp;
+	struct sigaction	catcher;
+	char				**envp_char;
+	int					previous_pipe;
+	int					pipe_fds[2];
+	t_childprocess		*children;
 }	t_shell;
 # endif
 
 /// functions prototype
 // signals
 extern unsigned char	g_current_sig;
-void	handle_signals(void);
+void	handle_signals(t_shell *shell);
 void	free_history_data(void *data);
 
 // copy and free envp

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 14:38:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:11:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,16 @@ void	custom_unlink(char *to_unlink)
 
 int	gnl_line_handler(t_lexer *delimiter, char *line)
 {
-	if (!line)
+	if (!line && errno != EINTR)
 	{
 		printf("\npetitcoq: warning: here-document delimited ");
 		printf("by end-of-file (wanted `%s')\n", delimiter->content);
 		return (1);
 	}
+	else if (errno == EINTR && g_current_sig == 130 && !line)
+		return (1);
+	else if (errno == EINTR && g_current_sig == 131 && !line)
+		return (0);
 	if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
 		&& line[ft_strlen(delimiter->content)] == '\n')
 	{
