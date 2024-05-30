@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 23:18:32 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:24:25 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:47:12 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,46 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
+static int	add_outfile_node(t_cmd *cmd, t_lexer **lexer,
+								int *lexer_pos, int outtype)
+{
+	t_outfile	*outfile;
+	t_list		*new_outfile;
+
+	outfile = malloc(sizeof(t_outfile));
+	if (!outfile)
+	{
+		perror_context("malloc", NULL, 2);
+		return (1);
+	}
+	new_outfile = ft_lstnew(outfile);
+	if (!new_outfile)
+	{
+		free(outfile);
+		perror_context("malloc", NULL, 2);
+		return (1);
+	}
+	outfile = new_outfile->content;
+	outfile->name = lexer[*lexer_pos]->content;
+	outfile->outtype = outtype;
+	ft_lstadd_back(&cmd->out, new_outfile);
+	return (0);
+}
+
+static int	redirect_stream(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 {
 	if (lexer[*lexer_pos - 1]->e_flag == LESSER)
 		cmd->in = lexer[*lexer_pos]->content;
-		/*open(lexer[*lexer_pos]->content, O_RDONLY);*/
 	else if (lexer[*lexer_pos - 1]->e_flag == GREATER)
 	{
-		cmd->out = lexer[*lexer_pos]->content;
-		/*open(lexer[*lexer_pos]->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 644);*/
+		if (add_outfile_node(cmd, lexer, lexer_pos, O_TRUNC))
+			return (1);
 	}
 	else if (lexer[*lexer_pos - 1]->e_flag == APPEND)
-		cmd->out = lexer[*lexer_pos]->content;
-		/*cmd->out = open(lexer[*lexer_pos]->content,
-				O_WRONLY | O_CREAT | O_APPEND, 644);*/
+	{
+		if (add_outfile_node(cmd, lexer, lexer_pos, O_APPEND))
+			return (1);
+	}
 	return (0);
 }
 
@@ -38,7 +63,8 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	if (lexer[*lexer_pos] && (lexer[*lexer_pos]->e_flag == WORD
 			|| lexer[*lexer_pos]->e_flag == BUILTIN))
 	{
-		redirect_stream(lexer, lexer_pos, cmd);
+		if (redirect_stream(lexer, lexer_pos, cmd))
+			return (0);
 		*lexer_pos += 1;
 		return (1);
 	}
@@ -51,13 +77,13 @@ int	is_legal_token(t_lexer **lexer, int *lexer_pos, t_cmd *cmd)
 	return (0);
 }
 
-int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_list *envp)
+int	is_legal_heredoc(t_lexer **lexer, int *lexer_pos, t_cmd *cmd, t_shell *shell)
 {
 	*lexer_pos += 1;
 	if (lexer[*lexer_pos] && (lexer[*lexer_pos]->e_flag == WORD
 			|| lexer[*lexer_pos]->e_flag == BUILTIN))
 	{
-		if (create_heredoc(lexer[*lexer_pos], cmd, envp))
+		if (create_heredoc(lexer[*lexer_pos], cmd, shell))
 			return (0);
 		*lexer_pos += 1;
 		return (1);

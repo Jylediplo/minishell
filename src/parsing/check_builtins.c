@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:10:28 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 18:20:17 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 14:07:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	is_builtin1(char *word, t_words *words, t_to_free *values)
 	builtins = malloc(sizeof(char *) * 7);
 	if (!builtins)
 	{
-        free_lexer1(words, values->i);
+		free_lexer1(words, values->i);
 		split_words_free(words, values->envp, values->command);
 	}
 	fill_builtins(builtins);

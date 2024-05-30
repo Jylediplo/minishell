@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:33:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:40:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,8 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-int	parse_builtin_sequence(t_lexer **lexer, int *index, t_list *envp)
-{
-	char	*temp;
-
-	*index += 1;
-	while (lexer[*index] && lexer[*index]->e_flag != PIPE)
-	{
-		temp = parse_echo(envp, lexer[*index]->content);
-		if (!temp)
-		{
-			free_current_lexer(lexer, *index);
-			return (1);
-		}
-		free(lexer[*index]->content);
-		lexer[*index]->content = temp;
-		*index += 1;
-	}
-	return (0);
-}
-
-int	replace_parsed_content(t_lexer **lexer,
-		int *index, char *newval, t_list *envp)
-{
-	if (is_builtin(newval))
-	{
-		lexer[*index]->e_flag = BUILTIN;
-		free(lexer[*index]->content);
-		lexer[*index]->content = newval;
-		if (parse_builtin_sequence(lexer, index, envp))
-			return (1);
-	}
-	else
-	{
-		free(lexer[*index]->content);
-		lexer[*index]->content = newval;
-	}
-	return (0);
-}
-
 t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 {
-	char	*temp;
 	int		i;
 
 	i = 0;
@@ -68,13 +28,8 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 		}
 		if (lexer[i] && lexer[i]->dollar)
 		{
-			temp = parse_echo(envp, lexer[i]->content);
-			if (!temp)
-			{
-				free_current_lexer(lexer, i);
+			if (parse_dollar_sequence(lexer, &i, envp))
 				return (NULL);
-			}
-			replace_parsed_content(lexer, &i, temp, envp);
 		}
 		if (!lexer[i++])
 			break ;
@@ -82,13 +37,13 @@ t_lexer	**init_lex(t_list *envp, t_lexer **lexer)
 	return (lexer);
 }
 
-t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
+static t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
 {
 	t_list	*head;
 
 	if (!begin_cmd->cmd_args)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(begin);
 		free(begin_cmd);
 		return (NULL);
@@ -96,7 +51,7 @@ t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
 	head = ft_lstnew(begin_cmd);
 	if (!head)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(begin);
 		free(begin_cmd->cmd_args);
 		free(begin_cmd);
@@ -105,7 +60,7 @@ t_list	*create_begin_cmd(t_cmd *begin_cmd, char *begin)
 	return (head);
 }
 
-t_list	*init_cmdlist_size(void)
+t_list	*init_cmdlist_size(t_lexer **lexer)
 {
 	char	*begin;
 	t_cmd	*first_cmd;
@@ -113,7 +68,8 @@ t_list	*init_cmdlist_size(void)
 	first_cmd = malloc(sizeof(t_cmd));
 	if (!first_cmd)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
+		free_lexer(lexer);
 		return (NULL);
 	}
 	first_cmd->in = NULL;
@@ -123,8 +79,9 @@ t_list	*init_cmdlist_size(void)
 	begin = ft_strdup("BEGIN");
 	if (!begin)
 	{
-		perror_context("malloc", NULL);
+		perror_context("malloc", NULL, 2);
 		free(first_cmd);
+		free_lexer(lexer);
 		return (NULL);
 	}
 	first_cmd->cmd_args = ft_lstnew(begin);

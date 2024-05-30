@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:20:24 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 17:37:43 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 14:08:40 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,21 @@ void	manage_first_delim(t_del *del, char *word, t_delims **delims)
 	if (word[delims[del->i]->index + ft_strlen(delims[del->i]->delim)] != '\0'
 		&& word[delims[del->i]->index
 			+ ft_strlen(delims[del->i]->delim)] != delim(del->delimiter,
-				word[delims[del->i]->index + 1]))
+			word[delims[del->i]->index + 1]))
 		del->count++;
 }
 
 void	delimiter(char *word)
 {
 	char	*delimiter;
-	int	db_quote_open;
-	int	s_quote_open;
-	int	i;
+	int		db_quote_open;
+	int		s_quote_open;
+	int		i;
 
 	db_quote_open = 0;
 	s_quote_open = 0;
 	i = 0;
-    delimiter = "><|";
+	delimiter = "><|";
 	while (word[i])
 	{
 		if (word[i] == '"' || word[i] == '\'')

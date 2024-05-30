@@ -1,5 +1,5 @@
 NAME 				= minishell
-CC 					= cc #-fsanitize=address
+CC 					= cc
 CFLAGS 				= -Wall -Wextra -Werror -g
 
 SRCS 				= main.c \
@@ -13,7 +13,6 @@ SRCS 				= main.c \
 					builtins/export_sub_lastsig.c \
 					builtins/export_sub_lastsig_utils.c \
 					builtins/export_identifier.c \
-					builtins/export_identifier_utils.c \
 					builtins/handle_errors.c \
 					builtins/free_utils_export.c \
 					builtins/modify_envp.c \
@@ -29,18 +28,27 @@ SRCS 				= main.c \
 					builtins/exit_main.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
+					execute/execute_flags_utils.c \
 					execute/execute_heredocs.c \
 					execute/execute_heredocs_utils.c \
 					execute/execute_errors.c \
 					execute/execute_free_utils.c \
 					execute/execute_set_redirections.c \
-					execute/execute_utils.c \
 					execute/execute_transform_cmdlist.c \
 					execute/execute_init_structs.c \
+					execute/execute_init_structs_utils.c \
 					execute/execute_redirect.c \
+					execute/execute_redirect_utils.c \
 					execute/execute_dispatcher.c \
+					execute/execute_dispatcher_utils.c \
 					execute/execute_onecommand.c \
 					execute/execute_normalcmd.c \
+					execute/execute_normalcmd_utils.c \
+					execute/execute_pathfinding.c \
+					execute/execute_error_pipes.c \
+					execute/execute_error_pipes_utils.c \
+					execute/execute_wait_and_readerrors.c \
+					execute/execute_modify_io.c \
 					history/manage_history.c \
 					history/manage_list.c \
 					gnl/get_next_line.c \
@@ -66,7 +74,9 @@ OBJ_D 				= objects/
 
 ifeq ($(shell uname), Darwin)
 READLINEDIR 		= $(shell brew --prefix readline)
+CC					= /usr/bin/clang #-fsanitize=leak
 endif
+
 INCLUDEDIR 			= includes
 CFLAGS				+= -I$(READLINEDIR)/include
 LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
@@ -101,14 +111,6 @@ fclean: clean
 re: fclean all
 
 valgrind:       $(NAME)
-	valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
-
-testexport:
-	HEADERS="$(HEADERS) export_tests.h"
-	@make SRCS="$(filter-out main.c, $(SRCS) tests/export_tests.c tests/get_next_line/get_next_line.c tests/get_next_line/get_next_line_utils.c tests/export_main_test.c)"
-
-testexecute:
-	HEADERS="$(HEADERS) execute.h get_next_line.h"
-	@make SRCS="$(filter-out main.c, $(SRCS) tests/execute_tests.c)"
+	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp env -i ./$(NAME)
 
 .PHONY: all clean fclean re libft testexport

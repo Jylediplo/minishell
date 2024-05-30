@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_utils.c                                    :+:      :+:    :+:   */
+/*   execute_flags_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 21:00:14 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 23:24:48 by pantoine         ###   ########.fr       */
+/*   Created: 2024/05/24 12:05:25 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/30 14:43:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
-#include "../../includes/evars.h"
-#include "../../includes/minishell.h"
+
+void	zero_cmdargs(t_cmd *cmd)
+{
+	cmd->in = NULL;
+	cmd->out = NULL;
+	cmd->tempfile_name = NULL;
+	cmd->command = NULL;
+	cmd->cmd_args = NULL;
+}
+
+int	delete_current_command(t_cmd *cmd)
+{
+	if (cmd->tempfile_name)
+	{
+		custom_unlink(cmd->tempfile_name);
+		free(cmd->tempfile_name);
+	}
+	if (cmd->cmd_args)
+		free_single_cmd(cmd->cmd_args);
+	free(cmd);
+	return (0);
+}
 
 int	flag_redirect_stream(t_lexer **lexer, int *lexer_pos)
 {

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 18:19:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:44:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-char	**free_previous_args(char **tofree, int i)
+static char	**free_previous_args(char **tofree, int i)
 {
 	int	j;
 
@@ -22,28 +22,64 @@ char	**free_previous_args(char **tofree, int i)
 	while (j < i)
 		free(tofree[j++]);
 	free(tofree);
-	perror_context("malloc", NULL);
+	perror_context("malloc", NULL, 2);
 	return (NULL);
 }
 
-char	**init_cmd_array(t_cmd *cmd)
+static int	count_nonempty_args(t_list *args)
+{
+	int		res;
+	t_list	*iter;
+	char	*cmd_arg;
+
+	iter = args;
+	res = 0;
+	while (iter)
+	{
+		cmd_arg = iter->content;
+		if (cmd_arg[0])
+			res++;
+		iter = iter->next;
+	}
+	return (res);
+}
+
+static int	copy_arg(char **res, int *index, char *to_copy)
+{
+	res[*index] = ft_strdup(to_copy);
+	if (!res[*index])
+	{
+		free_previous_args(res, *index);
+		return (1);
+	}
+	*index += 1;
+	return (0);
+}
+
+static char	**init_cmd_array(t_cmd *cmd)
 {
 	int		i;
 	t_list	*args;
 	char	**res;
+	char	*cmd_arg;
 
 	i = 0;
 	args = cmd->cmd_args;
-	res = malloc(sizeof(char *) * (ft_lstsize(args) + 1));
+	res = malloc(sizeof(char *) * (count_nonempty_args(args) + 1));
 	if (!res)
+	{
+		perror_context("malloc", NULL, 2);
 		return (NULL);
+	}
 	while (args)
 	{
-		res[i] = ft_strdup(args->content);
-		if (!res[i])
-			return (free_previous_args(res, i));
+		cmd_arg = args->content;
+		if (cmd_arg[0])
+		{
+			if (copy_arg(res, &i, cmd_arg))
+				return (NULL);
+		}
 		args = args->next;
-		i++;
 	}
 	res[i] = NULL;
 	return (res);

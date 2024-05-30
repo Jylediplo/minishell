@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:19:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:13:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/execute.h"
 #include "../../includes/evars.h"
 
-int	count_args_cd(t_cmd *cmd)
+static int	count_args_cd(t_cmd *cmd)
 {
 	int		len;
 
@@ -22,11 +22,11 @@ int	count_args_cd(t_cmd *cmd)
 	while (cmd->command[len])
 		len++;
 	if (len > 2)
-		return (cd_error_message("too many arguments"));
+		return (cd_error_message("too many arguments", cmd->error_pipe[1]));
 	return (len);
 }
 
-int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
+static int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
 {
 	char	*home;
 
@@ -36,16 +36,18 @@ int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
 	{
 		home = get_envvar_value(envp, "HOME");
 		if (!home)
-			return (cd_error_message("HOME not set"));
+			return (cd_error_message("HOME not set", cmd->error_pipe[1]));
 		if (chdir(get_envvar_value(envp, "HOME")) == -1)
 		{
-			perror_context("cd", NULL);
+			perror_context("cd", NULL, cmd->error_pipe[1]);
+			g_current_sig = 1;
 			return (1);
 		}
 	}
 	else if (chdir(cmd->command[1]) == -1)
 	{
-		perror_context("cd", cmd->command[1]);
+		perror_context("cd", cmd->command[1], cmd->error_pipe[1]);
+		g_current_sig = 1;
 		return (1);
 	}
 	return (0);
@@ -55,16 +57,21 @@ int	change_directory(t_cmd *cmd, t_shell *shell)
 {
 	char	old[4096];
 	int		len;
+	int		valid_current;
 
+	valid_current = 1;
 	if (!getcwd(old, 4096))
 	{
-		perror_context("getcwd", NULL);
-		return (1);
+		perror_context("getcwd", NULL, cmd->error_pipe[1]);
+		g_current_sig = 1;
+		valid_current = 0;
 	}
 	len = count_args_cd(cmd);
 	if (get_chdir_status(len, cmd, &shell->envp))
 		return (1);
-	change_oldpwd(shell, old);
-	change_pwd(shell);
+	if (change_oldpwd(shell, old, cmd, valid_current))
+		return (1);
+	if (change_pwd(shell, cmd->error_pipe[1], cmd))
+		return (1);
 	return (0);
 }

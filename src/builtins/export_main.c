@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 18:51:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:18:47 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,8 @@ t_list	*copy_env(char **envp)
 	t_list	*head;
 	char	*value;
 
-	i = 1;
-	value = ft_strdup(envp[0]);
-	if (!value)
-		exit(EXIT_FAILURE);
-	head = ft_lstnew(value);
-	if (!head)
-		free_value_exit(value);
+	head = NULL;
+	i = 0;
 	while (envp[i])
 	{
 		value = ft_strdup(envp[i++]);
@@ -51,7 +46,7 @@ int	export_envar(t_cmd *cmd, t_shell *shell)
 	last_sigerror = 0;
 	while (cmd->command[i])
 	{
-		if (init_change_evar(shell, &evar, cmd->command[i++]))
+		if (init_change_evar(shell, &evar, cmd->command[i++], cmd->error_pipe[1]))
 			last_sigerror = g_current_sig;
 	}
 	if (last_sigerror)

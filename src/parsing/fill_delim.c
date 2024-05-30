@@ -6,22 +6,11 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:25:20 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 15:31:47 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 14:17:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-typedef struct s_store_delim
-{
-	int			db_quote_open;
-	int			s_quote_open;
-	int			i;
-	char		*delimiter;
-	t_delims	**delims;
-	int			cursor_tab;
-
-}				t_store_delim;
 
 static void	init_store_delim(t_store_delim *stk, int nb_delim)
 {
@@ -89,7 +78,7 @@ static void	store_s_delim(t_store_delim *stk, char *word, t_to_free *values,
 t_delims	**create_tab_delim(char *word, int nb_delim, t_to_free *values,
 		t_words *words)
 {
-	t_store_delim stk;
+	t_store_delim	stk;
 
 	init_store_delim(&stk, nb_delim);
 	while (word[stk.i])

@@ -6,40 +6,44 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:58:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 13:11:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:02:56 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 
-char	*strjoin_free(char *s1, const char *s2)
+char	*strjoin_free(char *s1, const char *s2, int fd)
 {
 	char	*res;
 
 	res = ft_strjoin(s1, s2);
 	if (!res)
 	{
-		ft_putstr_fd("petitcoq: malloc: failure\n", 2);
+		perror_context("malloc", NULL, fd);
 		return (s1);
 	}
 	free(s1);
 	return (res);
 }
 
-void	replace_content(t_list *current, t_list *to_del, char *newvalue)
+static void	replace_content(t_list *current, t_list *to_del, char *newvalue, int fd)
 {
+	char	*temp;
+
+	temp = ft_strdup(newvalue);
+	if (!temp)
+	{
+		perror_context("malloc", NULL, fd);
+		ft_lstdelone(to_del, free);
+		return ;
+	}
 	free(current->content);
-	current->content = ft_strdup(newvalue);
+	current->content = temp;
 	free(to_del->content);
 	free(to_del);
-	if (!current->content)
-	{
-		ft_putstr_fd("error: malloc failed\n", 2);
-		ft_lstdelone(current, free);
-	}
 }
 
-void	modify_envvar(t_list *envp, t_list *newvar)
+void	modify_envvar(t_list *envp, t_list *newvar, int fd)
 {
 	t_list	*iter;
 	size_t	len;
@@ -56,7 +60,7 @@ void	modify_envvar(t_list *envp, t_list *newvar)
 		if (!ft_strncmp(envp_value, newvar_value, len)
 			&& envp_value[len] == '=')
 		{
-			replace_content(iter, newvar, newvar_value);
+			replace_content(iter, newvar, newvar_value, fd);
 			return ;
 		}
 		iter = iter->next;

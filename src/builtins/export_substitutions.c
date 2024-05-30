@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:18:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/12 19:45:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:16:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	get_expanded_size(t_evar *evar, t_list *envp)
 	if (get_exitsig_size(evar))
 		return ;
 	evar->dol_expansion_variable
-		= (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
+		= malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
 		return (set_err_status(evar, MALLOC));
 	ft_memcpy(evar->dol_expansion_variable,
@@ -85,7 +85,7 @@ void	substitute_var(t_evar *evar, t_list *envp)
 	if (copy_exitsig_value(evar))
 		return ;
 	evar->dol_expansion_variable
-		= (char *)malloc(sizeof(char) * (evar->size_expanded_var + 1));
+		= malloc(sizeof(char) * (evar->size_expanded_var + 1));
 	if (!evar->dol_expansion_variable)
 		return (malloc_error_dol(evar));
 	ft_memcpy(evar->dol_expansion_variable,

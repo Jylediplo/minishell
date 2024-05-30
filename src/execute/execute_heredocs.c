@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 10:38:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:38:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,25 @@ static void	sanitise_tempfile_name(t_cmd *cmd)
 	}
 }
 
+static char	*release_prev_tempfile(t_cmd *cmd, char random[11])
+{
+	char	*name;
+
+	random[10] = '\0';
+	name = ft_strjoin(HDNAME, random);
+	if (cmd->tempfile_name)
+	{
+		custom_unlink(cmd->tempfile_name);
+		free(cmd->tempfile_name);
+		cmd->tempfile_name = NULL;
+	}
+	if (!name)
+		perror_context("malloc", NULL, 2);
+	return (name);
+}
+
 static char	*name_tempfile(t_cmd *cmd)
 {
-	static int	test = 0;
 	char	*name;
 	char	random[11];
 	int		random_fd;
@@ -42,25 +58,20 @@ static char	*name_tempfile(t_cmd *cmd)
 	random_fd = open("/dev/urandom", O_RDONLY);
 	if (random_fd == -1)
 	{
-		perror_context("open", "/dev/urandom");
+		perror_context("open", "/dev/urandom", 2);
 		return (NULL);
 	}
 	count = read(random_fd, random, 11);
 	close(random_fd);
 	if (count == -1)
 	{
-		perror_context("read", "/dev/urandom");
+		perror_context("read", "/dev/urandom", 2);
 		return (NULL);
 	}
-	random[10] = '\0';
-	name = ft_strjoin(HDNAME, random);
-	cmd->tempfile_name = ft_strjoin(HDNAME, ft_itoa(test));//name;
-	if (!name)
-		perror_context("malloc", NULL);
+	name = release_prev_tempfile(cmd, random);
+	cmd->tempfile_name = name;
 	sanitise_tempfile_name(cmd);
-	test++;
 	return (cmd->tempfile_name);
-	//return (name);
 }
 
 static int	open_temp(char *filename, t_cmd *cmd)
@@ -70,18 +81,21 @@ static int	open_temp(char *filename, t_cmd *cmd)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror_context("open", filename);
+		perror_context("open", filename, 2);
 		free(filename);
 		cmd->tempfile_name = NULL;
 	}
+	else
+		cmd->in = filename;
 	return (fd);
 }
 
-int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
+int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell)
 {
-	int		tmp_fd;
-	char	*line;
-	char	*tmp_filename;
+	int				tmp_fd;
+	char			*line;
+	char			*tmp_filename;
+	struct termios	term_og;
 
 	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
@@ -89,20 +103,30 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_list *envp)
 	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
-	cmd->in = tmp_filename;
+	if (get_og_termsettings(&term_og))
+		return (1);
+	if (modify_termio(shell))
+		return (1);
+	line = NULL;
 	while (1)
 	{
-		write(1, "> ", 2);
+		if (errno != EINTR || (errno == EINTR && line))
+			write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
-		if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
-			&& line[ft_strlen(delimiter->content)] == '\n')
-		{
-			free(line);
+		if (gnl_line_handler(delimiter, line))
 			break ;
+		else if (line)
+		{
+			expand_dollars_heredocs(tmp_fd, line, shell->envp, delimiter->quote_removed);
+			free(line);
 		}
-		delimiter->quote_removed = 0;
-		expand_dollars_heredocs(tmp_fd, line, envp, delimiter->quote_removed);
-		free(line);
+	}
+	shell->catcher.sa_sigaction = handler;
+	reset_termsettings(&term_og);
+	if (errno == EINTR && g_current_sig == 130)
+	{
+		close(tmp_fd);
+		return (1);
 	}
 	return (close(tmp_fd));
 }

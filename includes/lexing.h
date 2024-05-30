@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:51 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 18:20:10 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 13:49:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_lexer
 		HEREDOC = 264,
 		APPEND = 265,
 		DELIMITER = 266,
-
 	} e_flag;
 	int			quote_removed;
 	char		*content;
@@ -107,7 +106,7 @@ typedef struct s_to_free
 int				is_builtin1(char *word, t_words *words, t_to_free *values);
 int				is_builtin(char *word);
 // quotes
-char			*manage_quotes(char *command);
+char			*manage_quotes(char *command, int *has_quotes);
 int				check_quotes(char *command, t_list *envp);
 
 // words spliting

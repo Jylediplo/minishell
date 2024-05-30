@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_main.c                                         :+:      :+:    :+:   */
+/*   execute_error_pipes_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 20:55:25 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/28 16:34:39 by pantoine         ###   ########.fr       */
+/*   Created: 2024/05/28 18:40:26 by pantoine          #+#    #+#             */
+/*   Updated: 2024/05/29 15:59:11 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,24 @@
 #include "../../includes/evars.h"
 #include "../../includes/execute.h"
 
-void	get_pwd(int fd)
+static void	free_close_partial_pipe_array(t_shell *shell, int i)
 {
-	char	path[4096];
+	int	j;
 
-	if (!getcwd(path, 4096))
+	j = 0;
+	while (j < i)
+		close_pipe(shell->children[j++].error_pipe);
+	free(shell->children);
+	shell->children = NULL;
+}
+
+int	open_error_pipes(t_shell *shell, int i)
+{
+	if (pipe(shell->children[i].error_pipe) == -1)
 	{
-		perror_context("getcwd", NULL, fd);
-		g_current_sig = 1;
+		free_close_partial_pipe_array(shell, i);
+		perror_context("pipe", NULL, 2);
+		return (1);
 	}
-	else
-		printf("%s\n", path);
+	return (0);
 }

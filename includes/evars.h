@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 14:27:09 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:13:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-extern int	g_current_sig;
 typedef struct s_evar
 {
 	enum
@@ -28,7 +27,6 @@ typedef struct s_evar
 		BAD_SUBSTITUTION,
 		UNCLOSED_QUOTE,
 		UNCLOSED_BRACE,
-		STOP,
 		INVALID_IDENTIFIER,
 	}	e_error;
 	struct
@@ -53,19 +51,7 @@ typedef struct s_evar
 	char	*dol_expansion_value;
 	char	*set_next;
 }	t_evar;
-# ifndef T_SHELL
-#  define T_SHELL
 
-typedef struct s_shell
-{
-	int		argc;
-	char	**argv;
-	t_list	*envp;
-	int		previous_pipe;
-}	t_shell;
-# endif
-
-char	*parse_evar(t_evar *evar, char *newvalue, t_list *envp);
 void	get_evar(t_evar *evar, t_list *envp);
 void	find_next_quotes(t_evar *evar, char *string, int index);
 void	get_next_quotetype(t_evar *evar);
@@ -73,7 +59,7 @@ char	current_char(t_evar *evar);
 void	copy_char(t_evar *evar);
 
 //export_getsize.c
-void	init_evar(t_evar *evar, char *newvalue);
+void	init_evar(t_evar *evar, char *newvalue, t_list *envp);
 
 //export_utils.c
 void	increase_expanded_var_size(t_evar *evar);
@@ -87,7 +73,6 @@ void	expand_dol(t_evar *evar, int inside, t_list *envp);
 void	substitute_var(t_evar *evar, t_list *envp);
 
 //export_substitutions_utils.c
-int		is_whitespace(char c);
 int		count_single_dollar(t_evar *evar, int inside);
 int		copy_single_dollar(t_evar *evar, int inside);
 
@@ -100,56 +85,63 @@ void	trigger_exitsig_size_handler(t_evar *evar, t_list *envp);
 //export_sub_lastsig_utils.c
 int		handle_questionmarks_in_braces_size(t_evar *evar);
 int		handle_questionmarks_in_braces_copy(t_evar *evar);
-int		is_legal_sigsub_count(t_evar *evar);
-int		is_legal_sigsub_copy(t_evar *evar);
 
 //export_identifier.c
-int		valid_identifier(char *identifier, char operator);
 int		valid_identifier_char(char c);
-int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command);
-
-//export_identifier_utils.c
-char	*save_next_evar(t_evar *evar);
+int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command, int fd);
 
 //handle_errors.c
-void	evar_error_message(t_evar *evar, char *context);
+void	evar_error_message(t_evar *evar, char *context, int fd);
 void	malloc_error_dol(t_evar *evar);
 void	set_err_status(t_evar *evar, int status);
 
 //free_utils_export.c
-void	free_list(t_list *lst);
 void	free_envp(t_list *envp);
 void	free_envp_exit(t_list *head);
 void	free_envp_value_exit(t_list *head, char *value);
-void	free_value_exit(char *value);
 
 //export_main.c
 int		export_envar(t_cmd *cmd, t_shell *shell);
 
 //modify_envp.c
-void	print_envp(t_list *envp);
-void	free_envp(t_list *envp);
-void	add_to_envp(t_shell *shell, t_evar *evar, char *value);
+void	add_to_envp(t_shell *shell, t_evar *evar, char *value, int fd);
 char	*get_envvar_value(t_list **envp, char *envvar);
 
 //modify_envp_utils.c
-char	*strjoin_free(char *s1, const char *s2);
-void	modify_envvar(t_list *envp, t_list *newvar);
+char	*strjoin_free(char *s1, const char *s2, int fd);
+void	modify_envvar(t_list *envp, t_list *newvar, int fd);
 
 //echo_getsize.c
-char	*parse_echo(t_list *envp, char *to_echo);
 void	get_echo_size(t_evar *evar, t_list *envp);
+char	*parse_echo(t_list *envp, char *to_echo, int fd);
 
 //echo_setnew.c
-void	get_echo(t_evar *evar, t_list *envp);
+void	get_echo(t_evar *evar, t_list *envp, int fd);
 
 //echo_main.c
 int		efftee_echo(char **cmd);
 
 //unset_main.c
-void	remove_envvar(t_list **envp, char *to_remove);
-int		unset_envvar(t_cmd *cmd, t_shell *shell);
+int		unset_envvar(t_cmd *cmd, t_shell *shell, int fd);
 
 //env_main.c
 int		show_me_the_way(t_list *envp);
+//
+//cd_main.c
+int		change_directory(t_cmd *cmd, t_shell *shell);
+
+//cd_utils.c
+int		change_pwd(t_shell *shell, int fd, t_cmd *cmd);
+int		change_oldpwd(t_shell *shell, char *old, t_cmd *cmd, int valid_current);
+int		cd_error_message(char *message, int fd);
+
+//exit_main.c
+void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell,
+			int is_child);
+int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
+			t_lexer **lexer, t_shell *shell);
+
+//pwd_main.c
+void	get_pwd(int fd);
+
 #endif

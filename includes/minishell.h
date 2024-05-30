@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/16 14:28:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 10:52:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,59 +22,71 @@
 // signal
 # include <signal.h>
 // basic i/o
+# include <termios.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
 // libft
 # include "../libft/libft.h"
-//errors
+//parsing 
+# include "lexing.h"
+
+typedef struct s_childprocess
+{
+	int		error_pipe[2];
+	pid_t	childprocess_pid;
+}	t_childprocess;
+
 # ifndef T_SHELL
 #  define T_SHELL
-typedef struct  s_shell
+typedef struct s_shell
 {
-    int     argc;
-    char    **argv;
-    t_list	*envp;
-	int		previous_pipe;
-}   t_shell;
+	int					argc;
+	char				**argv;
+	t_list				*envp;
+	struct sigaction	catcher;
+	char				**envp_char;
+	int					previous_pipe;
+	int					pipe_fds[2];
+	t_childprocess		*children;
+}	t_shell;
 # endif
 
 /// functions prototype
 // signals
-extern int	g_current_sig;
-void		handle_signals(void);
+extern unsigned char	g_current_sig;
+void	handle_signals(t_shell *shell);
+void	free_history_data(void *data);
 
-void		free_history_data(void *data);
-
-// env variables and export functions
-t_list  *copy_env(char **envp);
+// copy and free envp
+t_list	*copy_env(char **envp);
 void	free_envp(t_list *envp);
-char	*set_new_evar(t_shell *shell, char *newvalue);
 
 // history
 typedef struct s_data_h
 {
-    int nb;
-    char    *line;
-}   t_data_h;
+	int		nb;
+	char	*line;
+}	t_data_h;
 
 typedef struct s_history
 {
-    int fd;
-    int size;
-    t_list  *list;
-    t_list  *node;
-    t_data_h   *data;
-}   t_history;
+	int			fd;
+	int			size;
+	t_list		*list;
+	t_list		*node;
+	t_data_h	*data;
+}	t_history;
 
 void	ft_lst_display(t_list *lst);
-void    free_history_data(void	*data);
-void    restore_history(t_history *history);
+void	free_history_data(void	*data);
+void	restore_history(t_history *history);
 void	handle_history_error(t_list **list);
-void    add_to_list(char *command, t_history *history);
-void    add_to_history(char *command, t_history *history);
+void	add_to_list(char *command, t_history *history);
+void	add_to_history(char *command, t_history *history);
+//
 //get_next_line
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
@@ -87,7 +99,23 @@ char	*helper(int fd, char *buffer, int bytes_read);
 size_t	index_for_n(char *buffer);
 
 //parsing
-#include "lexing.h"
 void	split_word(char *command, t_shell *shell);
+typedef struct s_cwds
+{
+	char	**sentence;
+	int		i;
+	int		j;
+	int		count;
+}			t_cwds;
+typedef struct s_store_delim
+{
+	int			db_quote_open;
+	int			s_quote_open;
+	int			i;
+	char		*delimiter;
+	t_delims	**delims;
+	int			cursor_tab;
+
+}				t_store_delim;
 
 #endif

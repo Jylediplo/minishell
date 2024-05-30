@@ -6,13 +6,40 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/14 22:45:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:11:05 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
+
+void	custom_unlink(char *to_unlink)
+{
+	if (unlink(to_unlink) == -1)
+		perror_context("unlink", NULL, 2);
+}
+
+int	gnl_line_handler(t_lexer *delimiter, char *line)
+{
+	if (!line && errno != EINTR)
+	{
+		printf("\npetitcoq: warning: here-document delimited ");
+		printf("by end-of-file (wanted `%s')\n", delimiter->content);
+		return (1);
+	}
+	else if (errno == EINTR && g_current_sig == 130 && !line)
+		return (1);
+	else if (errno == EINTR && g_current_sig == 131 && !line)
+		return (0);
+	if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
+		&& line[ft_strlen(delimiter->content)] == '\n')
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
+}
 
 static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 {
@@ -29,7 +56,7 @@ static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 	to_expand = malloc(sizeof(char *) * (*i - j + 1));
 	if (!to_expand)
 	{
-		ft_putstr_fd("petitcoq: malloc error\n", 2);
+		perror_context("malloc", NULL, 2);
 		return (1);
 	}
 	while (valid_identifier_char(input[j]))

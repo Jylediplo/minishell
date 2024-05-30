@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:24:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 14:34:35 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 14:14:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	create_words(t_words *words, int *i, t_list *envp, char *command)
 
 void	split_words(t_words *words, t_list *envp, char *command)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	check_words(words, envp, command);
