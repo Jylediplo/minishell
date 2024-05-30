@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:49:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:42:35 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 		perror_context("fork", NULL, 2);
 		return (1);
 	}
+	signal(SIGINT, SIG_IGN);
 	wait_update_exitsig();
+	signal(SIGINT, SIG_DFL);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 14:33:54 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:38:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,18 +121,7 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell)
 			free(line);
 		}
 	}
-	//reset normal handler
 	shell->catcher.sa_sigaction = handler;
-	if ((sigaction(SIGINT, &shell->catcher, 0)) == -1)
-	{
-		close(tmp_fd);
-		return (1);
-	}
-	if ((sigaction(SIGQUIT, &shell->catcher, 0)) == -1)
-	{
-		close(tmp_fd);
-		return (1);
-	}
 	reset_termsettings(&term_og);
 	if (errno == EINTR && g_current_sig == 130)
 	{

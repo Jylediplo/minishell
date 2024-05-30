@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:55:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 13:24:43 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:38:44 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,10 @@ int	modify_termio(t_shell *shell)
 {
 	//change the signal handler
 	
+	signal(SIGQUIT, SIG_IGN);
 	shell->catcher.sa_sigaction = handler_heredoc;
 	//shell->catcher.sa_flags = SA_RESTART;
 	if ((sigaction(SIGINT, &shell->catcher, 0)) == -1)
-		return (1);
-	if ((sigaction(SIGQUIT, &shell->catcher, 0)) == -1)
 		return (1);
 	if (terminal_init())
 		return (1);

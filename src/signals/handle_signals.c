@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/30 14:08:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:56:06 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	handle_signals(t_shell *shell)
 {
 	struct sigaction	catch;
 
+	signal(SIGQUIT, SIG_IGN);
 	sigemptyset(&catch.sa_mask);
 	catch.sa_flags = SA_SIGINFO;
 	catch.sa_sigaction = handler;
@@ -55,7 +56,5 @@ void	handle_signals(t_shell *shell)
 	if ((sigaction(SIGUSR2, &catch, 0)) == -1)
 		return ;
 	if ((sigaction(SIGINT, &catch, 0)) == -1)
-		return ;
-	if ((sigaction(SIGQUIT, &catch, 0)) == -1)
 		return ;
 }
