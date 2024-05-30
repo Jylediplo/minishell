@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:05:54 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:48:01 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 00:10:34 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell, int is_chil
 	free_command_arrays(cmdlist);
 	free_cmdlist(cmdlist, is_child);
 	free_envp(shell->envp);
+	ft_lstclear(&shell->history.list, free_history_data);
 	exit(g_current_sig);
 }
 

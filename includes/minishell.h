@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 10:52:05 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 00:03:39 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,6 @@ typedef struct s_childprocess
 	pid_t	childprocess_pid;
 }	t_childprocess;
 
-# ifndef T_SHELL
-#  define T_SHELL
-typedef struct s_shell
-{
-	int					argc;
-	char				**argv;
-	t_list				*envp;
-	struct sigaction	catcher;
-	char				**envp_char;
-	int					previous_pipe;
-	int					pipe_fds[2];
-	t_childprocess		*children;
-}	t_shell;
-# endif
-
-/// functions prototype
-// signals
-extern unsigned char	g_current_sig;
-void	handle_signals(t_shell *shell);
-void	free_history_data(void *data);
-
-// copy and free envp
-t_list	*copy_env(char **envp);
-void	free_envp(t_list *envp);
-
 // history
 typedef struct s_data_h
 {
@@ -78,6 +53,32 @@ typedef struct s_history
 	t_list		*node;
 	t_data_h	*data;
 }	t_history;
+
+# ifndef T_SHELL
+#  define T_SHELL
+typedef struct s_shell
+{
+	int					argc;
+	char				**argv;
+	t_list				*envp;
+	struct sigaction	catcher;
+	char				**envp_char;
+	int					previous_pipe;
+	int					pipe_fds[2];
+	t_childprocess		*children;
+	t_history			history;
+}	t_shell;
+# endif
+
+/// functions prototype
+// signals
+extern unsigned char	g_current_sig;
+void	handle_signals(t_shell *shell);
+void	free_history_data(void *data);
+
+// copy and free envp
+t_list	*copy_env(char **envp);
+void	free_envp(t_list *envp);
 
 void	ft_lst_display(t_list *lst);
 void	free_history_data(void	*data);

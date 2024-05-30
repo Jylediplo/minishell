@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/17 13:09:01 by lefabreg         ###   ########lyon.fr   */
-=======
-/*   Updated: 2024/05/30 17:56:06 by pantoine         ###   ########.fr       */
->>>>>>> execute
+/*   Updated: 2024/05/30 23:40:33 by jyjy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
