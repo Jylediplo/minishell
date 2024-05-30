@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 18:33:13 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:13:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ int		show_me_the_way(t_list *envp);
 int		change_directory(t_cmd *cmd, t_shell *shell);
 
 //cd_utils.c
-int		change_pwd(t_shell *shell, int fd);
-int		change_oldpwd(t_shell *shell, char *old, int fd);
+int		change_pwd(t_shell *shell, int fd, t_cmd *cmd);
+int		change_oldpwd(t_shell *shell, char *old, t_cmd *cmd, int valid_current);
 int		cd_error_message(char *message, int fd);
 
 //exit_main.c

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 17:26:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:13:34 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,21 @@ int	change_directory(t_cmd *cmd, t_shell *shell)
 {
 	char	old[4096];
 	int		len;
+	int		valid_current;
 
+	valid_current = 1;
 	if (!getcwd(old, 4096))
 	{
 		perror_context("getcwd", NULL, cmd->error_pipe[1]);
 		g_current_sig = 1;
-		return (1);
+		valid_current = 0;
 	}
 	len = count_args_cd(cmd);
 	if (get_chdir_status(len, cmd, &shell->envp))
 		return (1);
-	if (change_oldpwd(shell, old, cmd->error_pipe[1]))
+	if (change_oldpwd(shell, old, cmd, valid_current))
 		return (1);
-	if (change_pwd(shell, cmd->error_pipe[1]))
+	if (change_pwd(shell, cmd->error_pipe[1], cmd))
 		return (1);
 	return (0);
 }
