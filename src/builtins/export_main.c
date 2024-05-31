@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:19:17 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 19:43:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:31:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,27 @@
 static int	empty_envp(t_list **head)
 {
 	char	*value;
+	char	current[4096];
 	t_list	*envvar;
 
 	value = ft_strdup("SHLVL=1");
+	if (!value)
+		free_envp_exit(*head);
 	envvar = ft_lstnew(value);
+	if (!envvar)
+		free_envp_value_exit(*head, value);
 	ft_lstadd_back(head, envvar);
-	value = ft_strdup("PWD=LOOOOL");
+	if (!getcwd(current, 4096))
+	{
+		perror_context("getcwd", NULL, 2);
+		return (0);
+	}
+	value = ft_strjoin("PWD=", current);
+	if (!value)
+		free_envp_exit(*head);
 	envvar = ft_lstnew(value);
+	if (!envvar)
+		free_envp_value_exit(*head, value);
 	ft_lstadd_back(head, envvar);
 	return (0);
 }
