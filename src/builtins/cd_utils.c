@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 19:16:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:56:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	change_oldpwd(t_shell *shell, char *old, t_cmd *cmd, int valid_current)
 	char	*to_export;
 	t_evar	evar;
 
-	//we just changed directory, but do not know where we are right now.
 	if (!valid_current)
 		to_export = ft_strjoin("OLPWD=", get_envvar_value(&shell->envp, "PWD"));
 	else

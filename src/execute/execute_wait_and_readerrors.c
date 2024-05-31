@@ -6,21 +6,35 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:12:16 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 16:16:15 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:42:48 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/execute.h"
 
-void	update_current_sig(int status)
+void	update_current_sig(int *status)
 {
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
+	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 2)
 		g_current_sig = 127;
-	else if (WIFEXITED(status) && WEXITSTATUS(status) == 13)
+	else if (WIFEXITED(*status) && WEXITSTATUS(*status) == 13)
 		g_current_sig = 126;
+	else if (WIFSIGNALED(*status))
+	{
+		if (WCOREDUMP(*status))
+		{
+			printf("Quit (core dumped)\n");
+			g_current_sig = 131;
+		}
+		else
+		{
+			printf("\n");
+			g_current_sig = 130;
+		}
+	}
 	else
-		g_current_sig = WEXITSTATUS(status);
+		g_current_sig = WEXITSTATUS(*status);
+	*status = 0;
 }
 
 void	wait_for_children(t_shell *shell, t_list *cmdlist)
@@ -47,7 +61,7 @@ void	wait_for_children(t_shell *shell, t_list *cmdlist)
 		i = 0;
 		remaining_children--;
 	}
-	update_current_sig(status);
+	update_current_sig(&status);
 }
 
 int	read_error_messages(t_shell *shell, pid_t pid, int i)

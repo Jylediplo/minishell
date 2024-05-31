@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:58:33 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/27 19:02:56 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:06:00 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char	*strjoin_free(char *s1, const char *s2, int fd)
 	return (res);
 }
 
-static void	replace_content(t_list *current, t_list *to_del, char *newvalue, int fd)
+static void	replace_content(t_list *current, t_list *to_del,
+				char *newvalue, int fd)
 {
 	char	*temp;
 

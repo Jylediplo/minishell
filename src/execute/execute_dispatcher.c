@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:34:22 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 23:00:11 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:33:24 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int	fork_it_all(t_cmd *cmd, t_shell *shell,
 		}
 		return (0);
 	}
+	handle_signals(SIG_EXEC);
 	shell->children[cmd->nb - 1].childprocess_pid = fork();
 	if (!shell->children[cmd->nb - 1].childprocess_pid)
 	{
@@ -98,8 +99,7 @@ int	dispatch_commands(t_list *cmdlist, t_shell *shell, t_lexer **lexer)
 		iter = iter->next;
 	}
 	close_write_error_pipes(shell, cmdlist);
-	signal(SIGINT, SIG_IGN);
+	ignore_sigint();
 	wait_for_children(shell, cmdlist);
-	signal(SIGINT, SIG_DFL);
 	return (1);
 }

@@ -26,6 +26,7 @@ SRCS 				= main.c \
 					builtins/cd_utils.c \
 					builtins/pwd_main.c \
 					builtins/exit_main.c \
+					builtins/exit_utils.c \
 					execute/execute_main_size.c \
 					execute/execute_flags.c \
 					execute/execute_flags_utils.c \

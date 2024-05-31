@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 00:40:40 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 12:54:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_history
 
 # ifndef T_SHELL
 #  define T_SHELL
+
 typedef struct s_shell
 {
 	int					argc;
@@ -70,10 +71,20 @@ typedef struct s_shell
 }	t_shell;
 # endif
 
+typedef enum
+{
+	SIG_FG,
+	SIG_HD,
+	SIG_EXEC,
+}	e_sig_mode;
 /// functions prototype
 // signals
+# ifndef GLOBAL_SIG
+#  define GLOBAL_SIG
+
 extern unsigned char	g_current_sig;
-void	handle_signals(t_shell *shell);
+# endif
+
 void	free_history_data(void *data);
 
 // copy and free envp

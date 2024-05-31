@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/29 18:35:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:57:58 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	mainloop(t_shell *shell)
 	restore_history(&shell->history);
 	while (1)
 	{
-		handle_signals(shell);
+		handle_signals(SIG_FG);
 		command = readline("Super prompt > ");
 		if (!command)
 			return (g_current_sig);

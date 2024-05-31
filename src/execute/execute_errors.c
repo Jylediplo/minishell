@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:06:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 00:07:34 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 18:19:01 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ void	perror_context(char *failed_command, char *context, int fd)
 		g_current_sig = 1;
 	else
 	{
-		if (errno == 2 && !g_current_sig)
-			g_current_sig = 2;
-		else if (errno == 13 && !g_current_sig)
-			g_current_sig = 13;
+		if (errno == 2 || errno == 13)
+		{
+			if (!g_current_sig || g_current_sig == 130 || g_current_sig == 131)
+				g_current_sig = errno;
+		}
 	}
 }

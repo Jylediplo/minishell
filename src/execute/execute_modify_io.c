@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:55:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 17:38:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:25:50 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	get_og_termsettings(struct termios *term_og)
 	return (0);
 }
 
-static int	terminal_init(void)
+int	terminal_init(void)
 {
 	int				terminal_fd;
 	struct termios	term_settings;
@@ -67,16 +67,14 @@ static int	terminal_init(void)
 	return (0);
 }
 
+/*
 int	modify_termio(t_shell *shell)
 {
-	//change the signal handler
-	
 	signal(SIGQUIT, SIG_IGN);
 	shell->catcher.sa_sigaction = handler_heredoc;
-	//shell->catcher.sa_flags = SA_RESTART;
 	if ((sigaction(SIGINT, &shell->catcher, 0)) == -1)
 		return (1);
 	if (terminal_init())
 		return (1);
 	return (0);
-}
+}*/

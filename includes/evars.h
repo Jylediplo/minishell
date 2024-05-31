@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 17:00:24 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 19:13:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:14:54 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ int		handle_questionmarks_in_braces_copy(t_evar *evar);
 
 //export_identifier.c
 int		valid_identifier_char(char c);
-int		init_change_evar(t_shell *shell, t_evar *evar, char *parsed_command, int fd);
+int		init_change_evar(t_shell *shell, t_evar *evar,
+			char *parsed_command, int fd);
 
 //handle_errors.c
 void	evar_error_message(t_evar *evar, char *context, int fd);
@@ -140,6 +141,13 @@ void	free_all_exit(t_lexer **lexer, t_list *cmdlist, t_shell *shell,
 			int is_child);
 int		exit_petitcoq(t_cmd *cmd, t_list *cmdlist,
 			t_lexer **lexer, t_shell *shell);
+
+//exit_utils.c
+int		count_args_exit(t_cmd *cmd);
+void	exit_single_arg(t_shell *shell, t_lexer **lexer,
+			t_list *cmdlist, t_cmd *cmd);
+void	exit_no_arg(t_shell *shell, t_lexer **lexer,
+			t_list *cmdlist, t_cmd *cmd);
 
 //pwd_main.c
 void	get_pwd(int fd);

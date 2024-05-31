@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:51 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 00:41:22 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 11:14:22 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,9 @@ typedef struct s_to_free
 
 int				is_builtin1(char *word, t_words *words, t_to_free *values);
 int				is_builtin(char *word);
-void			check_for_previous_builtins(t_words *words, int *previous_is_builtin,
-		t_lexer **lexer, t_to_free *values);
+void			check_for_previous_builtins(t_words *words,
+					int *previous_is_builtin,
+					t_lexer **lexer, t_to_free *values);
 // quotes
 char			*manage_quotes(char *command, int *has_quotes);
 int				check_quotes(char *command, t_list *envp);

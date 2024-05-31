@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 11:52:17 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:38:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define HDNAME ".hdtmp"
 # include "minishell.h"
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 
 typedef struct s_cmd
 {
@@ -35,8 +36,13 @@ typedef struct s_outfile
 }	t_outfile;
 
 //handle_signals.c
-void	handler(int sig, siginfo_t *siginfo, void *unused);
-void	handler_heredoc(int sig, siginfo_t *siginfo, void *unused);
+void	set_signal_mode(e_sig_mode mode);
+void	handle_signals(e_sig_mode mode);
+//void	handler(int sig, siginfo_t *siginfo, void *unused);
+void	handler_heredoc(int sig);
+void	ignore_sigint(void);
+void	handler_exec(int sig);
+void	handler_foreground(int sig);
 
 //execute_main_size.c
 int		add_arg_to_cmd(int *lexer_pos, t_cmd *cmd, char *newarg_content);
@@ -129,14 +135,15 @@ int		find_executable_path(t_cmd *cmd, t_shell *shell);
 //execute_redirect_utils.c
 int		transfer_pipes(t_cmd *cmd, t_shell *shell,
 			t_list *cmdlist, int pipe_fds[2]);
-int		write_and_read_pipe(t_list *cmdlist, int nb_cmd, t_shell *shell, t_cmd *cmd);
+int		write_and_read_pipe(t_list *cmdlist, int nb_cmd,
+			t_shell *shell, t_cmd *cmd);
 int		open_outfile(t_outfile *outfile, int fd);
 
 //execute_redirect.c
 int		dup_redirections(t_cmd *cmd);
 
 //execute_wait_and_readerrors.c
-void	update_current_sig(int status);
+void	update_current_sig(int *status);
 void	wait_for_children(t_shell *shell, t_list *cmdlist);
 int		read_error_messages(t_shell *shell, pid_t pid, int i);
 

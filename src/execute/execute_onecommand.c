@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:01:15 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/30 17:42:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:38:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,27 @@ static int	wait_update_exitsig(void)
 	int		status;
 
 	waitpid(-1, &status, 0);
-	update_current_sig(status);
+	update_current_sig(&status);
 	return (0);
+}
+
+void	handler_fork(int sig)
+{
+	g_current_sig = 128 + sig;
+	if (sig == SIGQUIT)
+	{
+		printf("Quit (core dumped)\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		exit(g_current_sig);
+	}
 }
 
 static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 								t_list *cmdlist, t_lexer **lexer)
 {
+	handle_signals(SIG_EXEC);
 	shell->children[cmd->nb - 1].childprocess_pid = fork();
 	if (!shell->children[cmd->nb - 1].childprocess_pid)
 	{
@@ -40,9 +54,8 @@ static int	fork_one_command(t_cmd *cmd, t_shell *shell,
 		perror_context("fork", NULL, 2);
 		return (1);
 	}
-	signal(SIGINT, SIG_IGN);
+	ignore_sigint();
 	wait_update_exitsig();
-	signal(SIGINT, SIG_DFL);
 	return (0);
 }
 
