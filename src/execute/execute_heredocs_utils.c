@@ -6,13 +6,23 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 18:23:35 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 18:57:04 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execute.h"
 #include "../../includes/minishell.h"
 #include "../../includes/evars.h"
+
+char	*custom_gnl(char *line)
+{
+	char	*res;
+
+	if (errno != EINTR || (errno == EINTR && line))
+		write(1, "> ", 2);
+	res = get_next_line(STDIN_FILENO);
+	return (res);
+}
 
 void	custom_unlink(char *to_unlink)
 {
@@ -69,7 +79,7 @@ static int	start_dollar_sequence(int fd, char *input, int *i, t_list *envp)
 	return (0);
 }
 
-int	expand_dollars_heredocs(int fd, char *input, t_list *envp, int noexpand)
+int	exp_hd(int fd, char *input, t_list *envp, int noexpand)
 {
 	int	i;
 
@@ -81,5 +91,6 @@ int	expand_dollars_heredocs(int fd, char *input, t_list *envp, int noexpand)
 		else
 			write(fd, &input[i++], 1);
 	}
+	free(input);
 	return (0);
 }

@@ -6,13 +6,26 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 10:56:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:09:27 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 #include "../../includes/execute.h"
+
+static int	is_currently_valid(char current[4096], int fd)
+{
+	int	res;
+
+	res = 1;
+	if (!getcwd(current, 4096))
+	{
+		res = 0;
+		perror_context("getcwd", NULL, fd);
+	}
+	return (res);
+}
 
 int	change_pwd(t_shell *shell, int fd, t_cmd *cmd)
 {
@@ -21,12 +34,7 @@ int	change_pwd(t_shell *shell, int fd, t_cmd *cmd)
 	t_evar	evar;
 	int		valid_current;
 
-	valid_current = 1;
-	if (!getcwd(current, 4096))
-	{
-		valid_current = 0;
-		perror_context("getcwd", NULL, fd);
-	}
+	valid_current = is_currently_valid(current, cmd->error_pipe[1]);
 	if (valid_current)
 		to_export = ft_strjoin("PWD=", current);
 	else

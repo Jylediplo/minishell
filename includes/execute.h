@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 17:38:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:00:14 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ typedef struct s_outfile
 }	t_outfile;
 
 //handle_signals.c
-void	set_signal_mode(e_sig_mode mode);
-void	handle_signals(e_sig_mode mode);
-//void	handler(int sig, siginfo_t *siginfo, void *unused);
+void	handle_signals(t_sig_mode mode);
 void	handler_heredoc(int sig);
 void	ignore_sigint(void);
 void	handler_exec(int sig);
@@ -78,8 +76,8 @@ int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell);
 
 //execute_heredocs_utils.c
 void	custom_unlink(char *to_unlink);
-int		expand_dollars_heredocs(int fd, char *input,
-			t_list *envp, int noexpand);
+char	*custom_gnl(char *line);
+int		exp_hd(int fd, char *input, t_list *envp, int noexpand);
 int		gnl_line_handler(t_lexer *delimiter, char *line);
 
 //execute_errors.c

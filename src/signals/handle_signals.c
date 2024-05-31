@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:58:42 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 18:28:08 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:00:35 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	handler_foreground(int sig)
 	}
 }
 
-void	handle_signals(e_sig_mode mode)
+void	handle_signals(t_sig_mode mode)
 {
 	struct sigaction	sig;
 
