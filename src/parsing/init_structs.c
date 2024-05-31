@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:49:47 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:13:20 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 22:19:09 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	init_struct_del(t_delim *delim, char *str)
 	delim->tokens = malloc((ft_strlen(str) + 1) * sizeof(char *));
 	if (!delim->tokens)
 	{
-		printf("Memory allocation error\n");
-		exit(EXIT_FAILURE);
+		write(2, "petitcoq: malloc: failure\n", 26);
+		exit(1);
 	}
 }

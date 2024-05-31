@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:04:58 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:11:10 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 23:42:43 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void	init_cmd(t_quote *cmd, char *command)
 	cmd->output = malloc(sizeof(char) * (cmd->input_length + 1));
 	if (!cmd->output)
 	{
-		printf("Memory allocation failed.\n");
+		write(2, "petitcoq: malloc: failure\n", 26);
 		exit(1);
 	}
 }
 
-int	check_quotes(char *command, t_list *envp)
+int	check_quotes(char *command, t_to_free *values)
 {
 	char	*quotes;
 	int		has_quotes;
@@ -36,9 +36,9 @@ int	check_quotes(char *command, t_list *envp)
 	quotes = manage_quotes(command, &has_quotes);
 	if (!quotes)
 	{
-		free_envp(envp);
+		free_envp(values->shell->envp);
 		free(command);
-		printf("Error malloc !\n");
+		ft_lstclear(&values->shell->history.list, free_history_data);
 		exit(1);
 	}
 	if (quotes)
@@ -100,7 +100,7 @@ char	*manage_quotes(char *command, int *has_quotes)
 	if (cmd.quote_open)
 	{
 		free(cmd.output);
-		printf("Error: Quote not properly closed.\n");
+		write(2, "petitcoq: quotes: not closed\n", 29);
 		return (NULL);
 	}
 	cmd.output[cmd.output_index] = '\0';
