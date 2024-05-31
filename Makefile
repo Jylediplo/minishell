@@ -112,6 +112,6 @@ fclean: clean
 re: fclean all
 
 valgrind:       $(NAME)
-	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp env -i ./$(NAME)
+	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
 .PHONY: all clean fclean re libft testexport

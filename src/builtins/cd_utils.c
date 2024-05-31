@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 19:09:27 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/01 00:00:30 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	is_currently_valid(char current[4096], int fd)
 	int	res;
 
 	res = 1;
-	if (!getcwd(current, 4096))
+	if (!getcwd(current, 4096) && errno != ENOENT)
 	{
 		res = 0;
 		perror_context("getcwd", NULL, fd);
@@ -35,7 +35,7 @@ int	change_pwd(t_shell *shell, int fd, t_cmd *cmd)
 	int		valid_current;
 
 	valid_current = is_currently_valid(current, cmd->error_pipe[1]);
-	if (valid_current)
+	if (valid_current && getcwd(current, 4096))
 		to_export = ft_strjoin("PWD=", current);
 	else
 		to_export = ft_strjoin("PWD+=", cmd->command[1]);
@@ -59,7 +59,8 @@ int	change_oldpwd(t_shell *shell, char *old, t_cmd *cmd, int valid_current)
 	t_evar	evar;
 
 	if (!valid_current)
-		to_export = ft_strjoin("OLPWD=", get_envvar_value(&shell->envp, "PWD"));
+		to_export = ft_strjoin("OLDPWD=",
+				get_envvar_value(&shell->envp, "PWD"));
 	else
 		to_export = ft_strjoin("OLDPWD=", old);
 	if (!to_export)
