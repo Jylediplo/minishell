@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:52:20 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/16 18:20:50 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/05/31 23:47:46 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	dollars_handler(t_lexer **lexer, t_to_free *values, t_words *words,
 	lexer[values->i]->content = ft_strdup(words->wds_delim[values->i]);
 	if (!lexer[values->i]->content)
 	{
-		split_words_free(words, values->envp, values->command);
+		split_words_free(words, values, values->command);
 		free_lexer1(words, values->i);
-		printf("error malloc !\n");
+		write(2, "petitcoq: malloc: failure\n", 26);
 		exit(1);
 	}
 	if (values->i == 0)

@@ -41,7 +41,7 @@ void	nb_words_with_delim(t_words *words, t_to_free *values)
 		nb_delim = count_delim(words->words[i]);
 		delim = create_tab_delim(words->words[i], nb_delim, values, words);
 		if (!delim)
-			split_words_free(words, values->envp, values->command);
+			split_words_free(words, values, values->command);
 		nb_words = count_with_delim(delim, nb_delim, words->words[i]);
 		if (!nb_delim)
 			nb_words += 1;
@@ -59,16 +59,16 @@ void	split_word(char *command, t_shell *shell)
 
 	words.wds_delim = NULL;
 	values.command = command;
-	values.envp = shell->envp;
+	values.shell = shell;
 	values.words = &words;
 	init_words_struct(&words, command);
-	if (check_quotes(command, shell->envp))
-		split_words(&words, shell->envp, command);
+	if (check_quotes(command, &values))
+		split_words(&words, &values, command);
 	nb_words_with_delim(&words, &values);
 	words.wds_delim = malloc(sizeof(char *) * (words.count_del + 1));
 	if (!words.wds_delim)
-		split_words_free(&words, shell->envp, command);
-	words.wds_delim[words.count_del] = 0;
+		split_words_free(&words, &values, command);
+	words.wds_delim[words.count_del] = NULL;
 	create_wds_lexer(&words, &values);
 	handle_lexer(&words, &previous_is_builtin, &values);
 	free_wds_delim(&words, words.count_del);

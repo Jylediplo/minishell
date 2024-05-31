@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   count_delim1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:20:24 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 00:23:12 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 22:24:48 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_delim_creation(t_delims **delims, char **sentence,
 {
 	free_delim(delims);
 	free_sentence(sentence);
-	split_words_free(values->words, values->envp, values->command);
+	split_words_free(values->words, values, values->command);
 }
 
 void	manage_first_delim(t_del *del, char *word, t_delims **delims)

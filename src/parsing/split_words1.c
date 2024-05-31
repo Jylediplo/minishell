@@ -6,18 +6,18 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:46:33 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:15:02 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 23:36:32 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	split_words_free(t_words *words, t_list *envp, char *command)
+void	split_words_free(t_words *words, t_to_free *values, char *command)
 {
 	int	i;
 
 	i = 0;
-	free_envp(envp);
+	free_envp(values->shell->envp);
 	if (words->words)
 		free_words(words);
 	if (words->wds_delim)
@@ -27,8 +27,9 @@ void	split_words_free(t_words *words, t_list *envp, char *command)
 		free(words->wds_delim);
 	}
 	free(command);
-	printf("Error MALLOC !\n");
-	exit(EXIT_FAILURE);
+	ft_lstclear(&values->shell->history.list, free_history_data);
+	write(2, "petitcoq: malloc: failure\n", 26);
+	exit(1);
 }
 
 static void	check_dolls(t_words *words, int i)
@@ -48,7 +49,7 @@ static void	handle_quote_inside_quote(t_words *words, int i)
 		words->in_s_q = !words->in_s_q;
 }
 
-void	check_words(t_words *words, t_list *envp, char *command)
+void	check_words(t_words *words, t_to_free *values, char *command)
 {
 	int	i;
 
@@ -71,5 +72,5 @@ void	check_words(t_words *words, t_list *envp, char *command)
 		(words->num_words)++;
 	words->words = malloc((words->num_words) * sizeof(char *));
 	if (!words->words)
-		split_words_free(words, envp, command);
+		split_words_free(words, values, command);
 }

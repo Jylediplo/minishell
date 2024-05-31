@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:24:01 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:14:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 22:27:42 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ void	handle_dolls(t_words *words, int *i)
 		words->in_dollar = 0;
 }
 
-void	words_create(t_words *words, int *i, t_list *envp, char *command)
+void	words_create(t_words *words, int *i, t_to_free *values, char *command)
 {
 	(words->words)[words->num_words] = malloc((*i - words->word_start + 1)
 			* sizeof(char));
 	if ((words->words)[words->num_words] == NULL)
 	{
-		split_words_free(words, envp, command);
-		printf("Memory allocation failed\n");
-		exit(EXIT_FAILURE);
+		split_words_free(words, values, command);
+		write(2, "petitcoq: malloc: failure\n", 26);
+		exit(1);
 	}
 	ft_strncpy((words->words)[words->num_words], words->command
 		+ words->word_start, *i - words->word_start);
@@ -53,7 +53,7 @@ void	words_create(t_words *words, int *i, t_list *envp, char *command)
 	(words->num_words)++;
 }
 
-void	create_words(t_words *words, int *i, t_list *envp, char *command)
+void	create_words(t_words *words, int *i, t_to_free *values, char *command)
 {
 	while (*i < words->len)
 	{
@@ -69,32 +69,32 @@ void	create_words(t_words *words, int *i, t_list *envp, char *command)
 			&& (words->command[*i] == ' ' || words->command[*i] == '\t'))
 		{
 			if (*i > words->word_start)
-				words_create(words, i, envp, command);
+				words_create(words, i, values, command);
 			words->word_start = *i + 1;
 		}
 		(*i)++;
 	}
 }
 
-void	split_words(t_words *words, t_list *envp, char *command)
+void	split_words(t_words *words, t_to_free *values, char *command)
 {
 	int	i;
 
 	i = 0;
-	check_words(words, envp, command);
+	check_words(words, values, command);
 	reset_values(words);
-	create_words(words, &i, envp, command);
+	create_words(words, &i, values, command);
 	if (i > words->word_start && (!words->in_s_q && !words->in_db_q))
 	{
 		(words->words)[words->num_words] = malloc((i - words->word_start + 1)
 				* sizeof(char));
 		if ((words->words)[words->num_words] == NULL)
-			split_words_free(words, envp, command);
+			split_words_free(words, values, command);
 		ft_strncpy((words->words)[words->num_words], words->command
 			+ words->word_start, i - words->word_start);
 		(words->words)[words->num_words][i - words->word_start] = '\0';
 		(words->num_words)++;
 	}
 	if (words->in_dollar)
-		split_words_free(words, envp, command);
+		split_words_free(words, values, command);
 }

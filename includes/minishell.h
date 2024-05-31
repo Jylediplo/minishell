@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 18:59:24 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:28:01 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,49 @@
 // signal
 # include <signal.h>
 // basic i/o
-# include <termios.h>
-# include <unistd.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-# include <errno.h>
+# include <termios.h>
+# include <unistd.h>
 // libft
 # include "../libft/libft.h"
-//parsing 
+// parsing
 # include "lexing.h"
+
+# ifndef T_CHILDPROCESS
+#  define T_CHILDPROCESS
 
 typedef struct s_childprocess
 {
-	int		error_pipe[2];
-	pid_t	childprocess_pid;
-}	t_childprocess;
+	int					error_pipe[2];
+	pid_t				childprocess_pid;
+}						t_childprocess;
+# endif
 
 // history
+# ifndef T_DATA_H
+#  define T_DATA_H
+
 typedef struct s_data_h
 {
-	int		nb;
-	char	*line;
-}	t_data_h;
+	int					nb;
+	char				*line;
+}						t_data_h;
+# endif
+
+# ifndef T_HISTORY
+#  define T_HISTORY
 
 typedef struct s_history
 {
-	int			fd;
-	int			size;
-	t_list		*list;
-	t_list		*node;
-	t_data_h	*data;
-}	t_history;
+	int					fd;
+	int					size;
+	t_list				*list;
+	t_list				*node;
+	t_data_h			*data;
+}						t_history;
+# endif
 
 # ifndef T_SHELL
 #  define T_SHELL
@@ -68,7 +80,7 @@ typedef struct s_shell
 	int					pipe_fds[2];
 	t_childprocess		*children;
 	t_history			history;
-}	t_shell;
+}						t_shell;
 # endif
 
 typedef enum s_sig_mode
@@ -76,7 +88,7 @@ typedef enum s_sig_mode
 	SIG_FG,
 	SIG_HD,
 	SIG_EXEC,
-}	t_sig_mode;
+}						t_sig_mode;
 /// functions prototype
 // signals
 # ifndef GLOBAL_SIG
@@ -85,49 +97,52 @@ typedef enum s_sig_mode
 extern unsigned char	g_current_sig;
 # endif
 
-void	free_history_data(void *data);
+void					free_history_data(void *data);
 
 // copy and free envp
-t_list	*copy_env(char **envp);
-void	free_envp(t_list *envp);
+t_list					*copy_env(char **envp);
+void					free_envp(t_list *envp);
 
-void	ft_lst_display(t_list *lst);
-void	free_history_data(void	*data);
-void	restore_history(t_history *history);
-void	handle_history_error(t_list **list);
-void	add_to_list(char *command, t_history *history);
-void	add_to_history(char *command, t_history *history);
+void					ft_lst_display(t_list *lst);
+void					free_history_data(void *data);
+void					restore_history(t_history *history);
+void					handle_history_error(t_list **list);
+void					add_to_list(char *command, t_history *history);
+void					add_to_history(char *command, t_history *history);
 
-//get_next_line
+// get_next_line
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
 
-char	*get_next_line(int fd);
-char	*manage_line_with_n_for_buffer(char *buffer, size_t index);
-char	*manage_line_with_n_for_line(char *buffer, size_t index);
-char	*read_line(int fd, char *buffer, char *previous_line, int *bytes_read);
-char	*helper(int fd, char *buffer, int bytes_read);
-size_t	index_for_n(char *buffer);
+char					*get_next_line(int fd);
+char					*manage_line_with_n_for_buffer(char *buffer,
+							size_t index);
+char					*manage_line_with_n_for_line(char *buffer,
+							size_t index);
+char					*read_line(int fd, char *buffer, char *previous_line,
+							int *bytes_read);
+char					*helper(int fd, char *buffer, int bytes_read);
+size_t					index_for_n(char *buffer);
 
-//parsing
-void	split_word(char *command, t_shell *shell);
+// parsing
+void					split_word(char *command, t_shell *shell);
 typedef struct s_cwds
 {
-	char	**sentence;
-	int		i;
-	int		j;
-	int		count;
-}			t_cwds;
+	char				**sentence;
+	int					i;
+	int					j;
+	int					count;
+}						t_cwds;
 typedef struct s_store_delim
 {
-	int			db_quote_open;
-	int			s_quote_open;
-	int			i;
-	char		*delimiter;
-	t_delims	**delims;
-	int			cursor_tab;
+	int					db_quote_open;
+	int					s_quote_open;
+	int					i;
+	char				*delimiter;
+	t_delims			**delims;
+	int					cursor_tab;
 
-}				t_store_delim;
+}						t_store_delim;
 
 #endif

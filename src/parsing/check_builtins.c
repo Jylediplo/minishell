@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:10:28 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 00:39:58 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 23:22:31 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	check_for_previous_builtins(t_words *words, int *previous_is_builtin,
 		if (!lexer[values->i]->content)
 		{
 			free_lexer1(words, values->i);
-			split_words_free(words, values->envp, values->command);
+			split_words_free(words, values, values->command);
 		}
 	}
 	else
@@ -36,7 +36,7 @@ void	check_for_previous_builtins(t_words *words, int *previous_is_builtin,
 		if (!lexer[values->i]->content)
 		{
 			free_lexer1(words, values->i);
-			split_words_free(words, values->envp, values->command);
+			split_words_free(words, values, values->command);
 		}
 	}
 }
@@ -61,7 +61,7 @@ int	is_builtin1(char *word, t_words *words, t_to_free *values)
 	if (!builtins)
 	{
 		free_lexer1(words, values->i);
-		split_words_free(words, values->envp, values->command);
+		split_words_free(words, values, values->command);
 	}
 	fill_builtins(builtins);
 	i = 0;
@@ -98,7 +98,7 @@ int	is_builtin(char *word)
 	builtins = malloc(sizeof(char *) * 7);
 	if (!builtins)
 	{
-		printf("error Malloc, free avec ce que t as besoin\n");
+		write(2, "petitcoq: malloc: failure\n", 26);
 		exit(1);
 	}
 	fill_builtins(builtins);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:56:34 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 00:38:50 by jyjy             ###   ########.fr       */
+/*   Updated: 2024/05/31 23:20:53 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ void	handle_lexer(t_words *words, int *previous_is_builtin,
 	values->i = -1;
 	words->lexer = malloc(sizeof(t_lexer *) * (words->count_del + 1));
 	if (!words->lexer)
-		split_words_free(words, values->envp, values->command);
+		split_words_free(words, values, values->command);
 	while (++values->i < words->count_del)
 	{
 		words->lexer[values->i] = malloc(sizeof(t_lexer) * 1);
 		if (!words->lexer[values->i])
 		{
-			split_words_free(words, values->envp, values->command);
+			split_words_free(words, values, values->command);
 			free(words->lexer);
 		}
 		words->lexer[values->i]->quote_removed = 0;
@@ -83,7 +83,7 @@ void	copy_to_wds_delim(int *b, char **word, t_words *words,
 			while (word[k])
 				free(word[k++]);
 			free(word);
-			split_words_free(words, values->envp, values->command);
+			split_words_free(words, values, values->command);
 		}
 		free(word[d]);
 		*b += 1;
@@ -102,13 +102,13 @@ void	manage_if_no_delim(char ***word, t_to_free *values, t_words *words,
 	nb_delim = count_delim(words->words[i]);
 	delim = create_tab_delim(words->words[i], nb_delim, values, words);
 	if (!delim)
-		split_words_free(words, values->envp, values->command);
+		split_words_free(words, values, values->command);
 	values->nb_words = count_with_delim(delim, nb_delim, words->words[i]);
 	*word = create_words_tab(delim, nb_delim, words->words[i], values);
 	if (!*word)
 	{
 		free_delim(delim);
-		split_words_free(words, values->envp, values->command);
+		split_words_free(words, values, values->command);
 	}
 	free_delim(delim);
 }
@@ -129,12 +129,12 @@ void	create_wds_lexer(t_words *words, t_to_free *values)
 			free_temp_word(word);
 			word = malloc(sizeof(char *) * 2);
 			if (!word)
-				split_words_free(words, values->envp, values->command);
+				split_words_free(words, values, values->command);
 			word[0] = ft_strdup(words->words[i]);
 			if (!word[0])
 			{
 				free(word);
-				split_words_free(words, values->envp, values->command);
+				split_words_free(words, values, values->command);
 			}
 			word[1] = NULL;
 		}

@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:06:48 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/27 14:16:34 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/05/31 23:37:40 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	init_cwds(t_cwds *wds, t_to_free *values, t_delims **delims)
 	if (!wds->sentence)
 	{
 		free_delim(delims);
-		split_words_free(values->words, values->envp, values->command);
+		split_words_free(values->words, values, values->command);
 	}
 	wds->sentence[values->nb_words] = NULL;
 }
