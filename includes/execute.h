@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/02 16:56:59 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:56:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,15 @@ int		modify_termio(t_shell *shell);
 int		create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell);
 
 //execute_heredocs_utils.c
-void	custom_unlink(char *to_unlink);
 char	*custom_gnl(char *line);
+void	custom_unlink(char *to_unlink);
 int		exp_hd(int fd, char *input, t_list *envp, int noexpand);
 int		gnl_line_handler(t_lexer *delimiter, char *line);
+
+//execute_heredocs_termsettings.c
+char	*ignore_ctrl_slash(char *line);
+int		write_to_tempfile(t_shell *shell, t_lexer *delimiter, int fd);
+void	set_heredoc_attributes(struct termios og);
 
 //execute_errors.c
 int		newcmd_malloc_err(t_cmd *cmd);

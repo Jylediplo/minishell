@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/02 16:58:21 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:53:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ char	*custom_gnl(char *line)
 
 void	custom_unlink(char *to_unlink)
 {
-	printf("to unlink: %s\n", to_unlink);
 	if (unlink(to_unlink) == -1)
 		perror_context("unlink", NULL, 2);
 }
@@ -41,8 +40,6 @@ int	gnl_line_handler(t_lexer *delimiter, char *line)
 	}
 	else if (errno == EINTR && g_current_sig == 130 && !line)
 		return (1);
-	else if (errno == EINTR && g_current_sig == 131 && !line)
-		return (0);
 	if (!ft_strncmp(line, delimiter->content, ft_strlen(delimiter->content))
 		&& line[ft_strlen(delimiter->content)] == '\n')
 	{

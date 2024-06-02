@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/02 17:05:07 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:55:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,9 @@ static int	open_temp(char *filename, t_cmd *cmd)
 int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell)
 {
 	int				tmp_fd;
-	char			*line;
 	char			*tmp_filename;
+	int				status;
+	struct termios	og;
 
 	tmp_filename = name_tempfile(cmd);
 	if (!tmp_filename)
@@ -102,19 +103,14 @@ int	create_heredoc(t_lexer *delimiter, t_cmd *cmd, t_shell *shell)
 	tmp_fd = open_temp(tmp_filename, cmd);
 	if (tmp_fd == -1)
 		return (1);
+	tcgetattr(STDIN_FILENO, &og);
+	set_heredoc_attributes(og);
 	handle_signals(SIG_HD);
-	line = NULL;
-	while (1)
-	{
-		line = custom_gnl(line);
-		if (gnl_line_handler(delimiter, line))
-			break ;
-		else if (line)
-			exp_hd(tmp_fd, line, shell->envp, delimiter->quote_removed);
-	}
+	status = write_to_tempfile(shell, delimiter, tmp_fd);
 	handle_signals(SIG_FG);
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &og);
 	close(tmp_fd);
-	if (g_current_sig == 130)
+	if (g_current_sig == 130 || status == 1)
 		return (1);
 	return (0);
 }

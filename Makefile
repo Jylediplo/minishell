@@ -32,6 +32,7 @@ SRCS 				= main.c \
 					execute/execute_flags_utils.c \
 					execute/execute_heredocs.c \
 					execute/execute_heredocs_utils.c \
+					execute/execute_heredocs_termsettings.c \
 					execute/execute_errors.c \
 					execute/execute_free_utils.c \
 					execute/execute_set_redirections.c \
@@ -83,16 +84,20 @@ CFLAGS				+= -I$(READLINEDIR)/include
 LIBREADLINE			= -lreadline -lhistory -L $(READLINEDIR)/lib
 LIBFT				= -lft -L./libft
 
-HEADERS 			= minishell.h \
+HEADERS 			= $(INCLUDEDIR)/minishell.h \
+					  $(INCLUDEDIR)/evars.h \
+					  $(INCLUDEDIR)/execute.h \
+					  $(INCLUDEDIR)/get_next_line.h \
+					  $(INCLUDEDIR)/lexing.h \
 
 all: libft
 	@make --no-print-directory $(NAME)
 
-$(OBJ_D)%.o: $(SRC_D)%.c $(INCLUDEDIR)/$(HEADERS)
+$(OBJ_D)%.o: $(SRC_D)%.c $(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) -c $< -o $@
 
-$(NAME): $(OBJ_D) $(OBJS) Makefile includes/minishell.h libft/libft.a
+$(NAME): $(OBJ_D) $(OBJS) Makefile $(HEADERS) libft/libft.a
 	$(CC) $(CFLAGS) -I./$(INCLUDEDIR) $(OBJS) -o $(NAME) $(LIBFT) $(LIBREADLINE)
 
 libft:	
@@ -114,4 +119,4 @@ re: fclean all
 valgrind:       $(NAME)
 	valgrind --track-fds=yes --trace-children=yes --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=./ignore_leaks.supp ./$(NAME)
 
-.PHONY: all clean fclean re libft testexport
+.PHONY: all clean fclean re libft
