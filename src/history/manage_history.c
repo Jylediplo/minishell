@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:35:45 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/10 13:42:07 by lefabreg         ###   ########.fr       */
+/*   Updated: 2024/06/02 11:22:38 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	restore_history(t_history *history)
 	char	*line;
 	char	*word;
 
-	history->fd = open(".history", O_RDONLY | O_CREAT, 0644);
+	history->fd = open("/tmp/.history", O_RDONLY | O_CREAT, 0644);
 	if (history->fd == -1)
 		return ((void)perror_context("open", ".history", 2));
 	line = "init";

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:49:05 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/01 00:00:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 12:32:41 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	is_currently_valid(char current[4096], int fd)
 
 int	change_pwd(t_shell *shell, int fd, t_cmd *cmd)
 {
+	char	*temp;
 	char	*to_export;
 	char	current[4096];
 	t_evar	evar;
@@ -38,7 +39,16 @@ int	change_pwd(t_shell *shell, int fd, t_cmd *cmd)
 	if (valid_current && getcwd(current, 4096))
 		to_export = ft_strjoin("PWD=", current);
 	else
-		to_export = ft_strjoin("PWD+=", cmd->command[1]);
+	{
+		temp = ft_strjoin("/", cmd->command[1]);
+		if (!temp)
+		{
+			perror_context("malloc", NULL, fd);
+			return (1);
+		}
+		to_export = ft_strjoin("PWD+=", temp);
+		free(temp);
+	}
 	if (!to_export)
 	{
 		perror_context("malloc", NULL, fd);

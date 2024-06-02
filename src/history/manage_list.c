@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:31:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/10 13:39:17 by lefabreg         ###   ########.fr       */
+/*   Updated: 2024/06/02 11:22:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	add_to_history(char *command, t_history *history)
 {
 	int	fd;
 
-	fd = open(".history", O_APPEND | O_WRONLY | O_CREAT, 0644);
+	fd = open("/tmp/.history", O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (fd == -1)
 		return ((void)perror_context("open", ".history", 2));
 	write(fd, command, ft_strlen(command));

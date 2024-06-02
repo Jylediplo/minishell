@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 23:59:06 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 12:14:32 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,12 @@ int	change_directory(t_cmd *cmd, t_shell *shell)
 			return (1);
 		return (0);
 	}
-	if (change_oldpwd(shell, old, cmd, 1))
-		return (1);
-	if (change_pwd(shell, cmd->error_pipe[1], cmd))
-		return (1);
+	else 
+	{
+		if (change_oldpwd(shell, old, cmd, 0))
+			return (1);
+		if (change_pwd(shell, cmd->error_pipe[1], cmd))
+			return (1);
+	}
 	return (0);
 }
