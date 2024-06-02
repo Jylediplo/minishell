@@ -6,14 +6,14 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:37:51 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 19:00:14 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 16:56:59 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
-# define HDNAME ".hdtmp"
+# define HDNAME "/tmp/.hdtmp"
 # include "minishell.h"
 # include <sys/stat.h>
 # include <sys/ioctl.h>

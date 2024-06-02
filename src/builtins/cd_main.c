@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:12:42 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/02 12:14:32 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 16:45:16 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,31 @@ static int	get_chdir_status(int len, t_cmd *cmd, t_list **envp)
 	return (0);
 }
 
+static int	changedir_validcurrent(t_shell *shell, t_cmd *cmd,
+										char old[4096], int len)
+{
+	if (len == -1)
+		return (1);
+	if (change_oldpwd(shell, old, cmd, 1))
+		return (1);
+	if (get_chdir_status(len, cmd, &shell->envp))
+		return (1);
+	if (change_pwd(shell, cmd->error_pipe[1], cmd))
+		return (1);
+	return (0);
+}
+
+static int	changedir_parenterror(t_shell *shell, t_cmd *cmd, char old[4096])
+{
+	ft_putstr_fd("petitcoq: error retrieving current/parent directories\n",
+		cmd->error_pipe[1]);
+	if (change_oldpwd(shell, old, cmd, 0))
+		return (1);
+	if (change_pwd(shell, cmd->error_pipe[1], cmd))
+		return (1);
+	return (0);
+}
+
 int	change_directory(t_cmd *cmd, t_shell *shell)
 {
 	char	old[4096];
@@ -68,26 +93,10 @@ int	change_directory(t_cmd *cmd, t_shell *shell)
 		already_changed = 1;
 	}
 	if (!getcwd(old, 4096) && errno == ENOENT)
-	{
-		ft_putstr_fd("petitcoq: error retrieving current/parent directories\n",
-			cmd->error_pipe[1]);
-		if (change_oldpwd(shell, old, cmd, 0))
-			return (1);
-		if (change_pwd(shell, cmd->error_pipe[1], cmd))
-			return (1);
-		return (0);
-	}
+		return (changedir_parenterror(shell, cmd, old));
 	if (!already_changed)
-	{
-		if (change_oldpwd(shell, old, cmd, 1))
-			return (1);
-		if (get_chdir_status(len, cmd, &shell->envp))
-			return (1);
-		if (change_pwd(shell, cmd->error_pipe[1], cmd))
-			return (1);
-		return (0);
-	}
-	else 
+		return (changedir_validcurrent(shell, cmd, old, len));
+	else
 	{
 		if (change_oldpwd(shell, old, cmd, 0))
 			return (1);

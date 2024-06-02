@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 22:33:58 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 18:57:04 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 16:58:21 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*custom_gnl(char *line)
 
 void	custom_unlink(char *to_unlink)
 {
+	printf("to unlink: %s\n", to_unlink);
 	if (unlink(to_unlink) == -1)
 		perror_context("unlink", NULL, 2);
 }

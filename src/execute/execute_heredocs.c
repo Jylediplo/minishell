@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:25:30 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 18:57:37 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/02 17:05:07 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 static void	sanitise_tempfile_name(t_cmd *cmd)
 {
-	int	i;
+	int		i;
 
-	i = 0;
+	i = 11;
 	if (!cmd->tempfile_name)
 		return ;
 	while (cmd->tempfile_name[i])
