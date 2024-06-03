@@ -20,3 +20,10 @@ La jyj.
 
     -   A single `$` will output `$`.
     -   `$$$` will output `$$$`.
+
+- To fix
+        << $HOME
+        $HOME
+
+        invalid command
+        exit

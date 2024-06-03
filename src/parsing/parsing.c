@@ -74,6 +74,6 @@ void	split_word(char *command, t_shell *shell)
 	free_wds_delim(&words, words.count_del);
 	free_words(&words);
 	if (!words.lexer[0])
-		return ;
+		return (free(words.lexer), (void)0);
 	get_cmdlist(words.lexer, shell);
 }
