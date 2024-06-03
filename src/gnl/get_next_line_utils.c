@@ -6,11 +6,26 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:45:23 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/10 13:46:08 by lefabreg         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:26:18 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	check_eof(char *buffer, int bytes_read)
+{
+	int	i;
+
+	i = 0;
+	while (i < bytes_read)
+	{
+		if (buffer[i] == 28)
+			i++;
+		else if (buffer[i] != 28)
+			return (0);
+	}
+	return (1);
+}
 
 size_t	index_for_n(char *buffer)
 {

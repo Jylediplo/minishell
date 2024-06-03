@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 19:31:21 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/02 19:58:51 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/03 12:53:49 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ void	set_heredoc_attributes(struct termios og)
 	modified = og;
 	modified.c_lflag &= ~(ECHOCTL);
 	modified.c_cc[VQUIT] = _POSIX_VDISABLE;
+	modified.c_cc[VEOF] = 4;
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &modified);
 }

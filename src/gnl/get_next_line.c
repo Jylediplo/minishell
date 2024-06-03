@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:57:21 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/04/10 13:44:09 by lefabreg         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:26:02 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ char	*helper(int fd, char *buffer, int bytes_read)
 	char	*temp;
 
 	line = NULL;
+	if (check_eof(buffer, bytes_read))
+		return (NULL);
 	while (!index_for_n(line) && bytes_read > 0)
 	{
 		line = read_line(fd, buffer, line, &bytes_read);
