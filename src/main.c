@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 21:31:44 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/03 11:41:15 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int	mainloop(t_shell *shell)
 	while (1)
 	{
 		handle_signals(SIG_FG);
-		command = readline("Super prompt > ");
+		command = readline(ONE TWO THREE FOUR FIVE \
+					SIX SEVEN EIGHT NINE TEN EL TW THIR FOURT FIFT END);
 		if (!command)
 			return (g_current_sig);
 		add_to_history(command, &shell->history);

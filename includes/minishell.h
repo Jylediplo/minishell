@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 23:57:50 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/06/03 13:26:57 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,23 @@
 # include "../libft/libft.h"
 // parsing
 # include "lexing.h"
+
+# define ONE "\001\033[0;31m\002p⃤"
+# define TWO "\033[0;36me⃠꙱"
+# define THREE "\033[0;93mt"
+# define FOUR "\033[0;35mi⃞"
+# define FIVE "\033[0;31mt⃟ "
+# define SIX "\033[0;36m_꙱c꙱"
+# define SEVEN "\033[0;93mo꙲"
+# define EIGHT "\033[0;35mq⃢"
+# define NINE "\033[0;31mu⃦"
+# define TEN "\033[0;36mi⃫"
+# define EL "\033[0;93ml⃞"
+# define TW "\033[0;35ml"
+# define THIR "\033[0;31ma⃐"
+# define FOURT "\033[0;36mg⃫⃔"
+# define FIFT "\033[0;93me⃡⃡⃡⃡⃕⃕"
+# define END " \033[1;36m> \001\033[0m\002"
 
 # ifndef T_CHILDPROCESS
 #  define T_CHILDPROCESS
@@ -112,7 +129,7 @@ void					add_to_history(char *command, t_history *history);
 
 // get_next_line
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 1000
 # endif
 
 char					*get_next_line(int fd);
@@ -124,6 +141,7 @@ char					*read_line(int fd, char *buffer, char *previous_line,
 							int *bytes_read);
 char					*helper(int fd, char *buffer, int bytes_read);
 size_t					index_for_n(char *buffer);
+int						check_eof(char *buffer, int bytes_read);
 
 // parsing
 void					split_word(char *command, t_shell *shell);
