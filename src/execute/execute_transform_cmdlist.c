@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_transform_cmdlist.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/29 16:44:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/03 19:16:21 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,14 @@ static char	**init_cmd_array(t_cmd *cmd)
 	while (args)
 	{
 		cmd_arg = args->content;
-		if (cmd_arg[0])
-		{
-			if (copy_arg(res, &i, cmd_arg))
-				return (NULL);
-		}
+		printf("Arg: <%s>\n", cmd_arg);
+		copy_arg(res, &i, cmd_arg);
+		printf("res : %s\n", res[i]);
+		// if (cmd_arg[0])
+		// {
+		// 	if (copy_arg(res, &i, cmd_arg))
+		// 		return (NULL);
+		// }
 		args = args->next;
 	}
 	res[i] = NULL;

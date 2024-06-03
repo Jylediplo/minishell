@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:56:34 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 23:20:53 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/06/03 19:59:31 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	handle_lexer(t_words *words, int *previous_is_builtin,
 			split_words_free(words, values, values->command);
 			free(words->lexer);
 		}
+		words->lexer[values->i]->size_lexer = words->count_del;
 		words->lexer[values->i]->quote_removed = 0;
 		words->lexer[values->i]->dollar = 0;
 		if (count_dollars(words->wds_delim[values->i]))

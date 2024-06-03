@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:02:40 by pantoine          #+#    #+#             */
-/*   Updated: 2024/05/31 11:04:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:12:12 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	exit_single_arg(t_shell *shell, t_lexer **lexer,
 void	exit_no_arg(t_shell *shell, t_lexer **lexer,
 			t_list *cmdlist, t_cmd *cmd)
 {
-	g_current_sig = 0;
+	//g_current_sig = 0;
 	close(cmd->error_pipe[1]);
 	if (ft_lstsize(cmdlist->next) == 1)
 	{

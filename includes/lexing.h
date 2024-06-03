@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:51 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/05/31 23:53:20 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/06/03 19:58:19 by lefabreg         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_lexer
 	char			*content;
 	int				dollar;
 	int				index;
+	int				size_lexer;
 }					t_lexer;
 
 typedef struct s_words

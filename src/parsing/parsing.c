@@ -75,5 +75,8 @@ void	split_word(char *command, t_shell *shell)
 	free_words(&words);
 	if (!words.lexer[0])
 		return (free(words.lexer), (void)0);
+	//printf("words[1] %d\n", words.lexer[1]->content[1]);
+	//words.lexer[1]->content = ft_strdup("a");
+	//words.lexer[1]->content[1] = '\0';
 	get_cmdlist(words.lexer, shell);
 }
