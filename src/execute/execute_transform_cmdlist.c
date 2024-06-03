@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 19:16:21 by lefabreg         ###   ########lyon.fr   */
+/*   Updated: 2024/06/03 23:23:53 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,6 @@ static char	**free_previous_args(char **tofree, int i)
 	free(tofree);
 	perror_context("malloc", NULL, 2);
 	return (NULL);
-}
-
-static int	count_nonempty_args(t_list *args)
-{
-	int		res;
-	t_list	*iter;
-	char	*cmd_arg;
-
-	iter = args;
-	res = 0;
-	while (iter)
-	{
-		cmd_arg = iter->content;
-		if (cmd_arg[0])
-			res++;
-		iter = iter->next;
-	}
-	return (res);
 }
 
 static int	copy_arg(char **res, int *index, char *to_copy)
@@ -65,7 +47,7 @@ static char	**init_cmd_array(t_cmd *cmd)
 
 	i = 0;
 	args = cmd->cmd_args;
-	res = malloc(sizeof(char *) * (count_nonempty_args(args) + 1));
+	res = malloc(sizeof(char *) * (ft_lstsize(args) + 1));
 	if (!res)
 	{
 		perror_context("malloc", NULL, 2);
@@ -76,7 +58,6 @@ static char	**init_cmd_array(t_cmd *cmd)
 		cmd_arg = args->content;
 		printf("Arg: <%s>\n", cmd_arg);
 		copy_arg(res, &i, cmd_arg);
-		printf("res : %s\n", res[i]);
 		// if (cmd_arg[0])
 		// {
 		// 	if (copy_arg(res, &i, cmd_arg))
