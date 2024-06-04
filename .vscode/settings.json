@@ -1,9 +1,0 @@
-{
-    "C_Cpp.errorSquiggles": "disabled",
-    "files.associations": {
-		"stdlib.h": "c",
-		"minishell.h": "c",
-		"readline.h": "c",
-		"lexing.h": "c"
-	}
-}

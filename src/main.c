@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 02:28:18 by lefabreg          #+#    #+#             */
-/*   Updated: 2024/06/03 11:41:15 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 14:52:45 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 unsigned char	g_current_sig = 0;
 
-int	is_only_white_space(char *command)
+static int	is_only_white_space(char *command)
 {
 	int	i;
 	int	count;
