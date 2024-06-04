@@ -16,6 +16,24 @@
 
 unsigned char	g_current_sig = 0;
 
+int	is_only_white_space(char *command)
+{
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (command[i])
+	{
+		if ((command[i] >= 9 && command[i] <= 13) || (command[i] == 32))
+			count++;
+		i++;
+	}
+	if (count == (int)ft_strlen(command))
+		return (1);
+	return (0);
+}
+
 static int	mainloop(t_shell *shell)
 {
 	char		*command;
@@ -29,7 +47,8 @@ static int	mainloop(t_shell *shell)
 					SIX SEVEN EIGHT NINE TEN EL TW THIR FOURT FIFT END);
 		if (!command)
 			return (g_current_sig);
-		add_to_history(command, &shell->history);
+		if (!is_only_white_space(command))
+			add_to_history(command, &shell->history);
 		if (!is_same_str(command, "\0"))
 			split_word(command, shell);
 		free(command);
