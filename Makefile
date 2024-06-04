@@ -57,6 +57,7 @@ SRCS 				= main.c \
 					gnl/get_next_line_utils.c \
 					parsing/parsing.c \
 					parsing/manage_quotes.c \
+					parsing/manage_quotes_utils.c \
 					parsing/free_words.c \
 					parsing/split_words.c \
 					parsing/split_words1.c \

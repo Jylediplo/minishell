@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 19:31:21 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/04 11:49:55 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 12:13:13 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	write_to_tempfile(t_shell *shell, t_lexer *delimiter, int fd)
 	char	*line;
 
 	line = NULL;
+	printf("delimiter: %s\n", delimiter->content);
 	while (1)
 	{
 		line = custom_gnl(line);

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 10:46:13 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 22:59:30 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 12:39:33 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,18 @@ int	replace_parsed_content(t_lexer **lexer,
 int	parse_dollar_sequence(t_lexer **lexer, int *index, t_list *envp)
 {
 	char	*temp;
+	int		has_quotes;
 
-	temp = parse_echo(envp, lexer[*index]->content, 2);
+	has_quotes = 0;
+	if (*index - 1 >= 0)
+	{
+		if (lexer[*index - 1]->e_flag == HEREDOC)
+			temp = manage_quotes_pantoine(lexer[*index]->content, &has_quotes);
+		else
+			temp = parse_echo(envp, lexer[*index]->content, 2);
+	}
+	else
+		temp = parse_echo(envp, lexer[*index]->content, 2);
 	if (!temp)
 	{
 		free_lexer(lexer);

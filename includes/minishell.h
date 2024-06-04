@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/04 11:32:29 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 12:55:03 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,9 @@ int						check_eof(char *buffer, int bytes_read);
 
 // parsing
 void					split_word(char *command, t_shell *shell);
+char					*manage_quotes_pantoine(char *command, int *has_quotes);
+void					current_is_quote(t_quote *cmd, char *command);
+void					current_is_not_quote(t_quote *cmd, char *command);
 typedef struct s_cwds
 {
 	char				**sentence;
