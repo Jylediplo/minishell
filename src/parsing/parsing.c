@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 17:56:02 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 20:06:47 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:49:17 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,5 @@ void	split_word(char *command, t_shell *shell)
 	free_words(&words);
 	if (!words.lexer[0])
 		return (free(words.lexer), (void)0);
-	//printf("words[1] %d\n", words.lexer[1]->content[1]);
-	//words.lexer[1]->content = ft_strdup("a");
-	//words.lexer[1]->content[1] = '\0';
 	get_cmdlist(words.lexer, shell);
 }

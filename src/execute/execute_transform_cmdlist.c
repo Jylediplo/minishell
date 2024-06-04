@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:39:10 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 23:23:53 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:33:44 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,8 @@ static char	**init_cmd_array(t_cmd *cmd)
 	while (args)
 	{
 		cmd_arg = args->content;
-		printf("Arg: <%s>\n", cmd_arg);
-		copy_arg(res, &i, cmd_arg);
-		// if (cmd_arg[0])
-		// {
-		// 	if (copy_arg(res, &i, cmd_arg))
-		// 		return (NULL);
-		// }
+		if (copy_arg(res, &i, cmd_arg))
+			return (NULL);
 		args = args->next;
 	}
 	res[i] = NULL;

@@ -6,7 +6,7 @@
 /*   By: lefabreg <lefabreg@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 14:44:56 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 13:26:57 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:32:29 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@
 # include "lexing.h"
 
 # define ONE "\001\033[0;31m\002p⃤"
-# define TWO "\033[0;36me⃠꙱"
-# define THREE "\033[0;93mt"
-# define FOUR "\033[0;35mi⃞"
-# define FIVE "\033[0;31mt⃟ "
-# define SIX "\033[0;36m_꙱c꙱"
-# define SEVEN "\033[0;93mo꙲"
-# define EIGHT "\033[0;35mq⃢"
-# define NINE "\033[0;31mu⃦"
-# define TEN "\033[0;36mi⃫"
-# define EL "\033[0;93ml⃞"
-# define TW "\033[0;35ml"
-# define THIR "\033[0;31ma⃐"
-# define FOURT "\033[0;36mg⃫⃔"
-# define FIFT "\033[0;93me⃡⃡⃡⃡⃕⃕"
-# define END " \033[1;36m> \001\033[0m\002"
+# define TWO "\001\033[0;36m\002e⃠꙱"
+# define THREE "\001\033[0;93m\002t"
+# define FOUR "\001\033[0;35m\002i⃞"
+# define FIVE "\001\033[0;31m\002t⃟ "
+# define SIX "\001\033[0;36m\002_꙱c꙱"
+# define SEVEN "\001\033[0;93m\002o꙲"
+# define EIGHT "\001\033[0;35m\002q⃢"
+# define NINE "\001\033[0;31m\002u⃦"
+# define TEN "\001\033[0;36m\002i⃫"
+# define EL "\001\033[0;93m\002l⃞"
+# define TW "\001\033[0;35m\002l"
+# define THIR "\001\033[0;31m\002a⃐"
+# define FOURT "\001\033[0;36m\002g⃫⃔"
+# define FIFT "\001\033[0;93m\002e⃡⃡⃡⃡⃕⃕"
+# define END " \001\033[1;36m\002> \001\033[0m\002"
 
 # ifndef T_CHILDPROCESS
 #  define T_CHILDPROCESS

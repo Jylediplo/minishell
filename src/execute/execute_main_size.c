@@ -6,7 +6,7 @@
 /*   By: jyjy <jyjy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 23:52:18 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 23:54:36 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:45:39 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	get_cmdlist(t_lexer **lexer, t_shell *shell)
 	lexer = init_lex(shell->envp, lexer);
 	if (!lexer || (lexer && !lexer[0]))
 	{
+		free(lexer);
 		free_cmdlist(head, 0);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: pantoine <pantoine@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:36 by pantoine          #+#    #+#             */
-/*   Updated: 2024/06/03 23:37:23 by pantoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:49:25 by pantoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,40 @@
 #include "../../includes/evars.h"
 #include "../../includes/minishell.h"
 
-static t_lexer	**remove_nulls(t_lexer **lexer, int size)
+static t_lexer	**init_nonnull_lexer(t_lexer **lexer, int size)
 {
-	int	i;
-	int	j;
-	int	count;
+	int		i;
+	int		count;
 	t_lexer	**res;
 
 	i = 0;
-	j = 0;
 	count = 0;
-	res = NULL;
 	while (i < size)
 	{
 		if (lexer[i++]->content)
 			count++;
 	}
 	res = malloc(sizeof(t_lexer *) * (count + 1));
+	if (!res)
+	{
+		free_lexer(lexer);
+		perror_context("malloc", NULL, 2);
+		return (NULL);
+	}
+	return (res);
+}
+
+static t_lexer	**remove_nulls(t_lexer **lexer, int size)
+{
+	int		i;
+	int		j;
+	t_lexer	**res;
+
 	i = 0;
+	j = 0;
+	res = init_nonnull_lexer(lexer, size);
+	if (!res)
+		return (NULL);
 	while (i < size)
 	{
 		if (lexer[i]->content)
